@@ -1,5 +1,7 @@
 package com.babyblackdog.ddogdog.review;
 
+import org.springframework.data.domain.Page;
+
 public interface ReviewService {
 
   /**

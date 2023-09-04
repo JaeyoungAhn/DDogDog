@@ -12,6 +12,7 @@ import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PlaceName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.PlaceRepository;
+import com.babyblackdog.ddogdog.place.hotel.service.dto.PlaceResult;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class PlaceServiceImplTest {
   @Autowired
   private PlaceRepository placeRepository;
 
-  Place place;
+  private Place place;
 
   @BeforeEach
   void setUp() {

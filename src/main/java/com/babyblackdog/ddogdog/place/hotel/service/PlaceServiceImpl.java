@@ -6,6 +6,7 @@ import com.babyblackdog.ddogdog.global.exception.PlaceException;
 import com.babyblackdog.ddogdog.place.hotel.model.Place;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.PlaceRepository;
+import com.babyblackdog.ddogdog.place.hotel.service.dto.PlaceResult;
 import com.babyblackdog.ddogdog.place.room.RoomBookingResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

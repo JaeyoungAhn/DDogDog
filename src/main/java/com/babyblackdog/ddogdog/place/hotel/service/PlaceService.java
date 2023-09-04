@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.place.hotel.service;
 
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
+import com.babyblackdog.ddogdog.place.hotel.service.dto.PlaceResult;
 import com.babyblackdog.ddogdog.place.room.RoomBookingResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
