@@ -69,13 +69,13 @@ class PlaceRestControllerTest {
 
   @Test
   @DisplayName("지역 이름으로 숙소를 조회한다.")
-  void getPlacesByProvince_Province_ReturnResponses() throws Exception {
+  void getPlacesByProvince_ReadSuccess() throws Exception {
     // Given
     String provinceName = savedPlace.getAddressValue();
 
     // When & Then
     mockMvc.perform(get("/places")
-            .param("province", "서울")
+            .param("province", provinceName)
             .param("page", "0")
             .param("size", "5")
             .accept(APPLICATION_JSON_VALUE)
@@ -158,7 +158,7 @@ class PlaceRestControllerTest {
 
   @Test
   @DisplayName("숙소 아이디로 숙소를 조회한다.")
-  void getPlacesByProvince_Id_ReturnResponse() throws Exception {
+  void getPlace_ReadSuccess() throws Exception {
     // Given
     Long placeId = savedPlace.getId();
 

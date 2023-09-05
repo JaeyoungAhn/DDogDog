@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.place.hotel.model.vo;
 
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_BUSINESS_NAME;
+import static com.babyblackdog.ddogdog.place.exception.ErrorCode.INVALID_BUSINESS_NAME;
 
-import com.babyblackdog.ddogdog.global.exception.PlaceException;
+import com.babyblackdog.ddogdog.place.exception.PlaceException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;

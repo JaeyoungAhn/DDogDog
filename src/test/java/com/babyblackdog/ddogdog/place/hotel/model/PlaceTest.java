@@ -2,20 +2,21 @@ package com.babyblackdog.ddogdog.place.hotel.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
-import static org.junit.jupiter.api.Assertions.*;
 
-import com.babyblackdog.ddogdog.global.exception.PlaceException;
+import com.babyblackdog.ddogdog.place.exception.PlaceException;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PlaceName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class PlaceTest {
 
   @Test
-  void createPlaceEntity_Success() {
+  @DisplayName("유효한 숙소 정보로 생성할 수 있다.")
+  void createPlaceEntity_CreateSuccess() {
     // Given & When
     Place place = new Place(
         new PlaceName("신라호텔"),
@@ -31,7 +32,8 @@ class PlaceTest {
   }
 
   @Test
-  void createPlaceEntity_Fail() {
+  @DisplayName("유효하지 않은 숙소 정보로는 생성할 수 없다.")
+  void createPlaceEntity_CreateFail() {
     // Given & When
     Exception exception = catchException(() -> new Place(
         new PlaceName(""),

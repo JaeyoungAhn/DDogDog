@@ -1,10 +1,10 @@
 package com.babyblackdog.ddogdog.place.hotel.service;
 
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.PLACE_NOT_FOUND;
+import static com.babyblackdog.ddogdog.place.exception.ErrorCode.PLACE_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.babyblackdog.ddogdog.global.exception.PlaceException;
+import com.babyblackdog.ddogdog.place.exception.PlaceException;
 import com.babyblackdog.ddogdog.place.hotel.model.Place;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
@@ -53,8 +53,8 @@ class PlaceServiceImplTest {
   }
 
   @Test
-  @DisplayName("유효한 지역 이름으로 숙소를 조회하면 성공한다.")
-  void findPlaceByProvince_ProvinceName_Success() {
+  @DisplayName("[findPlaceByProvince] 유효한 지역 이름으로 숙소를 조회하면 성공한다.")
+  void findPlaceByProvince_ReadSuccess() {
     // Given
     Place savedPlace = placeRepository.save(place);
 
@@ -67,12 +67,12 @@ class PlaceServiceImplTest {
     assertThat(result)
         .isNotNull()
         .isNotEmpty();
-    assertThat(result.getContent().size()).isEqualTo(1);
+    assertThat(result.getContent()).hasSize(1);
   }
 
   @Test
-  @DisplayName("유효하지 않은 지역 이름으로 숙소를 조회하면 실패한다.")
-  void findPlaceByProvince_ProvinceName_Exception() {
+  @DisplayName("[findPlaceByProvince] 유효하지 않은 지역 이름으로 숙소를 조회하면 실패한다.")
+  void findPlaceByProvince_ReadException() {
     // Given
     Province invalidProvince = new Province("평양");
 
@@ -88,8 +88,8 @@ class PlaceServiceImplTest {
   }
 
   @Test
-  @DisplayName("유효한 숙소 아이디를 이용해 숙소를 조회하면 성공한다.")
-  void findPlaceById_Id_Success() {
+  @DisplayName("[findPlaceById] 유효한 숙소 아이디를 이용해 숙소를 조회하면 성공한다.")
+  void findPlaceById_ReadSuccess() {
     // Given
     Place savedPlace = placeRepository.save(place);
 
@@ -101,8 +101,8 @@ class PlaceServiceImplTest {
   }
 
   @Test
-  @DisplayName("유효하지 않은 숙소 아이디를 이용해 숙소를 조회하면 실패한다.")
-  void findPlaceById_Id_Exception() {
+  @DisplayName("[findPlaceById] 유효하지 않은 숙소 아이디를 이용해 숙소를 조회하면 실패한다.")
+  void findPlaceById_ReadException() {
     // Given
     Long invalidId = 1L;
 

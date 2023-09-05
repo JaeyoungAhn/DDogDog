@@ -1,10 +1,10 @@
 package com.babyblackdog.ddogdog.place.hotel.model.vo;
 
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_PHONE_NUMBER_BLANK;
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_PHONE_NUMBER_DIGIT;
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_PHONE_NUMBER_LENGTH;
+import static com.babyblackdog.ddogdog.place.exception.ErrorCode.INVALID_PHONE_BLANK;
+import static com.babyblackdog.ddogdog.place.exception.ErrorCode.INVALID_PHONE_DIGIT;
+import static com.babyblackdog.ddogdog.place.exception.ErrorCode.INVALID_PHONE_LENGTH;
 
-import com.babyblackdog.ddogdog.global.exception.PlaceException;
+import com.babyblackdog.ddogdog.place.exception.PlaceException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
@@ -32,19 +32,19 @@ public class PhoneNumber {
     boolean isAllDigit = IntStream.range(0, value.length())
         .allMatch(i -> Character.isDigit(value.charAt(i)));
     if (!isAllDigit) {
-      throw new PlaceException(INVALID_PHONE_NUMBER_DIGIT);
+      throw new PlaceException(INVALID_PHONE_DIGIT);
     }
   }
 
   private void validateLength(String value) {
     if (value.length() != 11) {
-      throw new PlaceException(INVALID_PHONE_NUMBER_LENGTH);
+      throw new PlaceException(INVALID_PHONE_LENGTH);
     }
   }
 
   private void validateBlank(String value) {
     if (value == null || value.isBlank()) {
-      throw new PlaceException(INVALID_PHONE_NUMBER_BLANK);
+      throw new PlaceException(INVALID_PHONE_BLANK);
     }
   }
 

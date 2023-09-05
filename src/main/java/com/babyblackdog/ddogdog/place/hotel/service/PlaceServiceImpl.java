@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.place.hotel.service;
 
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.PLACE_NOT_FOUND;
+import static com.babyblackdog.ddogdog.place.exception.ErrorCode.PLACE_NOT_FOUND;
 
-import com.babyblackdog.ddogdog.global.exception.PlaceException;
+import com.babyblackdog.ddogdog.place.exception.PlaceException;
 import com.babyblackdog.ddogdog.place.hotel.model.Place;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.PlaceRepository;
@@ -23,7 +23,7 @@ public class PlaceServiceImpl implements PlaceService {
 
   @Override
   public Page<PlaceResult> findPlaceByProvince(Province province, Pageable pageable) {
-    Page<Place> places = repository.findPlaceByAddressContains("서울", pageable);
+    Page<Place> places = repository.findContainsAddress("서울", pageable);
     return places.map(PlaceResult::of);
   }
 
