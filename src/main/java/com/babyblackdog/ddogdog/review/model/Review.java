@@ -52,20 +52,16 @@ public class Review {
     return id;
   }
 
-  public Content getContent() {
-    return content;
+  public String getContent() {
+    return content.getValue();
   }
 
-  public Rating getRating() {
-    return rating;
+  public Double getRating() {
+    return rating.getValue();
   }
 
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
+  public LocalDateTime getCreatedDate() { return createdDate; }
 
-  public Reservation getReservation() {
-    return reservation;
-  }
+  public Long getReservation() { return reservation.getId(); }
 
 }
