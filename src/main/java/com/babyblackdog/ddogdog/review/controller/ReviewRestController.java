@@ -27,7 +27,7 @@ public class ReviewRestController {
     ReviewResult addedReview = reviewService.addReview(reservationId, content, rating);
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(addedReview);
+        .body(ReviewResponse.of(addedReview));
   }
 
 }
