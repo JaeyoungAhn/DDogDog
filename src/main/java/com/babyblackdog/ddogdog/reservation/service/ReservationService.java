@@ -1,5 +1,6 @@
-package com.babyblackdog.ddogdog.reservation;
+package com.babyblackdog.ddogdog.reservation.service;
 
+import com.babyblackdog.ddogdog.place.RoomBookingResult;
 import java.time.LocalDate;
 
 public interface ReservationService {
@@ -11,7 +12,11 @@ public interface ReservationService {
 
     /**
      * 특정 reservationId를 userId가 정상적으로 가지고 있는지
+     *
      * @return 예약 아이디가 있고, 그 예약 아이디에 유저가 있다면 true, 아니라면 false
      */
     boolean isReservationForUser(Long reservationId, Long userId);
+
+    Long create(Long userId, Long roomId, RoomBookingResult roomInfo, LocalDate checkIn,
+            LocalDate checkOut);
 }
