@@ -2,12 +2,12 @@ package com.babyblackdog.ddogdog.place.hotel.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.babyblackdog.ddogdog.place.hotel.controller.dto.AddUserRequest;
 import com.babyblackdog.ddogdog.place.hotel.controller.dto.PlaceResponse;
 import com.babyblackdog.ddogdog.place.hotel.controller.dto.PlaceResponses;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.service.PlaceService;
 import com.babyblackdog.ddogdog.place.hotel.service.dto.PlaceResult;
+import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,12 +46,6 @@ public class PlaceRestController {
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(PlaceResponse.of(result));
-  }
-
-  @PostMapping(consumes = APPLICATION_JSON_VALUE)
-  public String postUser(@RequestBody AddUserRequest request) {
-    LoggerFactory.getLogger(getClass()).info("내꺼 - {}", request);
-    return request.getName();
   }
 
 }
