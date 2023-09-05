@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 
+import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_CONTENT;
+
 @Embeddable
 public class Content {
 

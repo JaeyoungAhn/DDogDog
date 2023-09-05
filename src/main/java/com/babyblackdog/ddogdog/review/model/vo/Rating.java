@@ -5,6 +5,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 
+import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_DECIMAL_POINT;
+import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_RATING;
+
 @Embeddable
 public class Rating {
 
@@ -23,6 +26,11 @@ public class Rating {
   private void validate(Double value) {
     if (value == null) {
       throw new ReviewException(INVALID_RATING);
+    }
+
+    double multipliedValue = value * 10;
+    if (multipliedValue != Math.floor(multipliedValue)) {
+      throw new ReviewException(INVALID_DECIMAL_POINT);
     }
   }
 
