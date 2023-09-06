@@ -1,11 +1,3 @@
-jasypt:
-  encryptor:
-    bean: jasyptStringEncryptor
-    algorithm: PBEWithMD5AndDES
-    provider-name: SunJCE
-    pool-size: 2
-    key-obtention-iterations: 1000
-    string-output-type: base64
 
 spring:
   datasource:
@@ -23,7 +15,6 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
-  #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
   logging:
     level:
