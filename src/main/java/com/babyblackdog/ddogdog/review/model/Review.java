@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,7 +35,7 @@ public class Review {
   private Rating rating;
 
   @CreatedDate
-  private LocalDateTime createdDate;
+  private LocalDate createdDate;
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "reservation_id", nullable = false)
@@ -60,7 +62,7 @@ public class Review {
     return rating.getValue();
   }
 
-  public LocalDateTime getCreatedDate() { return createdDate; }
+  public LocalDate getCreatedDate() { return createdDate; }
 
   public Long getReservation() { return reservation.getId(); }
 

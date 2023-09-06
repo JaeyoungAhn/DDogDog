@@ -7,13 +7,14 @@ import com.babyblackdog.ddogdog.review.model.Review;
 import com.babyblackdog.ddogdog.review.model.vo.Content;
 import com.babyblackdog.ddogdog.review.model.vo.Rating;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record ReviewResult(
         Long id,
         String content,
         Double rating,
-        LocalDateTime createdDate,
+        LocalDate createdDate,
         Long reservation
 ) {
 
