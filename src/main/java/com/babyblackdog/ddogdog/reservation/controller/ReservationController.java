@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/reservation", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReservationController {
 
     private final ReservationFacade facade;
@@ -34,8 +34,8 @@ public class ReservationController {
         this.timeProvider = timeProvider;
     }
 
-    @GetMapping("/new")
-    public ResponseEntity<RoomOrderPageResponse> loadReservationContext(
+    @GetMapping()
+    public ResponseEntity<RoomOrderPageResponse> getRoomOrderPageInfo(
             @RequestParam Long placeId, @RequestParam Long roomId,
             @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate checkIn,
             @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate checkOut) {
@@ -43,11 +43,12 @@ public class ReservationController {
 
         RoomOrderPageResult result = facade.findRoomInfo(placeId, roomId, stayPeriod);
 
-        return ResponseEntity.ok(RoomOrderPageResponse.of(result));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(RoomOrderPageResponse.of(result));
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<OrderedReservationResponse> orderReservation(
+    @PostMapping()
+    public ResponseEntity<OrderedReservationResponse> createReservation(
             @RequestBody @Valid ReservationOrderRequest request) {
         StayPeriod stayPeriod = new StayPeriod(request.checkIn(), request.checkOut(), timeProvider);
 
