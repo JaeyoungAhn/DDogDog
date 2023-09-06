@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
 import com.babyblackdog.ddogdog.common.Point;
-import com.babyblackdog.ddogdog.place.hotel.service.HotelService;
-import com.babyblackdog.ddogdog.place.room.RoomSimpleResult;
+import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
+import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.StayPeriod;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservationResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;
@@ -13,25 +13,28 @@ import org.springframework.stereotype.Service;
 public class ReservationFacade {
 
   private final ReservationService service;
-  private final HotelService hotelService;
+  private final PlaceReaderService placeService;
   private final UserService userService;
 
-  public ReservationFacade(ReservationService service,
-      HotelService hotelService,
-      UserService userService) {
+  public ReservationFacade(
+      ReservationService service,
+      PlaceReaderService placeService,
+      UserService userService
+  ) {
     this.service = service;
-    this.hotelService = hotelService;
+    this.placeService = placeService;
     this.userService = userService;
   }
 
   public RoomOrderPageResult findRoomInfo(Long placeId, Long roomId, StayPeriod stayPeriod) {
     validateStay(roomId, stayPeriod);
 
-    RoomSimpleResult roomSimpleResult = hotelService.findRoomInfo(placeId, roomId);
+    RoomSimpleResult roomSimpleResult = placeService.findRoomSimpleInfo(roomId);
     return new RoomOrderPageResult(
         roomSimpleResult.hotelName(),
-        roomSimpleResult.roomName(),
+        roomSimpleResult.roomType(),
         roomSimpleResult.roomDescription(),
+        roomSimpleResult.roomNumber(),
         roomSimpleResult.point(),
         stayPeriod.checkIn(),
         stayPeriod.checkOut()
@@ -47,7 +50,7 @@ public class ReservationFacade {
     }
 
     // room의 금액 가져오기
-    RoomSimpleResult roomInfo = hotelService.findRoomInfo(placeId, roomId);
+    RoomSimpleResult roomInfo = placeService.findRoomSimpleInfo(roomId);
 
     // 숙박 가능한 지 검사
     validateStay(roomId, stayPeriod);

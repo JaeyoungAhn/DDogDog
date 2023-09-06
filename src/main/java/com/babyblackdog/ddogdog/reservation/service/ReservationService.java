@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
-import com.babyblackdog.ddogdog.place.room.RoomSimpleResult;
+import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import java.time.LocalDate;
 
 public interface ReservationService {

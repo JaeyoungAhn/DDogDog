@@ -1,13 +1,12 @@
 package com.babyblackdog.ddogdog.place.hotel.service;
 
-import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.HOTEL_NOT_FOUND;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.HOTEL_NOT_FOUND;
 
 import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
-import com.babyblackdog.ddogdog.place.room.RoomSimpleResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,8 +33,4 @@ public class HotelServiceImpl implements HotelService {
     return HotelResult.of(hotel);
   }
 
-  @Override
-  public RoomSimpleResult findRoomInfo(Long placeId, Long roomId) {
-    return null;
-  }
 }

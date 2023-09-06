@@ -2,7 +2,6 @@ package com.babyblackdog.ddogdog.place.hotel.service;
 
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
-import com.babyblackdog.ddogdog.place.room.RoomSimpleResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,12 +22,5 @@ public interface HotelService {
    * @return HotelResult
    */
   HotelResult findHotelById(Long id);
-
-  /**
-   * 예약 페이지에 들어올 때, 해당 정보를 받아 예약 페이지를 구성해야 함
-   *
-   * @return 숙소, 객실 이름과 객실의 가격
-   */
-  RoomSimpleResult findRoomInfo(Long placeId, Long roomId);
 
 }

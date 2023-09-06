@@ -6,6 +6,7 @@ public record RoomOrderPageResult(
     String placeName,
     String roomName,
     String roomDescription,
+    String roomNumber,
     long roomPoint,
     LocalDate checkIn,
     LocalDate checkOut) {
