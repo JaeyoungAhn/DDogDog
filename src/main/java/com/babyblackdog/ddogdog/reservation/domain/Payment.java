@@ -34,12 +34,12 @@ public class Payment {
   @Column(nullable = false)
   private LocalDate paymentDate;
 
-  protected Payment() {
-  }
-
   public Payment(Point originPoint, Point paymentPoint, LocalDate paymentDate) {
     this.originPoint = originPoint;
     this.paymentPoint = paymentPoint;
     this.paymentDate = paymentDate;
+  }
+
+  protected Payment() {
   }
 }

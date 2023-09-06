@@ -1,10 +1,11 @@
 package com.babyblackdog.ddogdog.place.hotel.model.vo;
 
-import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.INVALID_PHONE_BLANK;
-import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.INVALID_PHONE_DIGIT;
-import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.INVALID_PHONE_LENGTH;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_PHONE_BLANK;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_PHONE_DIGIT;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_PHONE_LENGTH;
 
 import com.babyblackdog.ddogdog.global.exception.HotelException;
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
@@ -46,7 +47,7 @@ public class PhoneNumber {
   }
 
   private void validateBlank(String value) {
-    if (value == null || value.isBlank()) {
+    if (StringUtils.isBlank(value)) {
       throw new HotelException(INVALID_PHONE_BLANK);
     }
   }
