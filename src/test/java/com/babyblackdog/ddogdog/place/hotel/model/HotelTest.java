@@ -3,23 +3,23 @@ package com.babyblackdog.ddogdog.place.hotel.model;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
 
-import com.babyblackdog.ddogdog.place.exception.PlaceException;
+import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
+import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.PlaceName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class PlaceTest {
+class HotelTest {
 
   @Test
   @DisplayName("유효한 숙소 정보로 생성할 수 있다.")
   void createPlaceEntity_CreateSuccess() {
     // Given & When
-    Place place = new Place(
-        new PlaceName("신라호텔"),
+    Hotel hotel = new Hotel(
+        new HotelName("신라호텔"),
         new Province("서울"),
         1L,
         new PhoneNumber("01012341234"),
@@ -28,15 +28,15 @@ class PlaceTest {
     );
 
     // Then
-    assertThat(place.getAddressValue()).isEqualTo("서울");
+    assertThat(hotel.getAddressValue()).isEqualTo("서울");
   }
 
   @Test
   @DisplayName("유효하지 않은 숙소 정보로는 생성할 수 없다.")
   void createPlaceEntity_CreateFail() {
     // Given & When
-    Exception exception = catchException(() -> new Place(
-        new PlaceName(""),
+    Exception exception = catchException(() -> new Hotel(
+        new HotelName(""),
         new Province(null),
         -1L,
         new PhoneNumber("0dfs"),
@@ -45,7 +45,7 @@ class PlaceTest {
     ));
 
     // Then
-    assertThat(exception).isInstanceOf(PlaceException.class);
+    assertThat(exception).isInstanceOf(HotelException.class);
   }
 
 }

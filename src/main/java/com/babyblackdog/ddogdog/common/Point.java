@@ -1,20 +1,29 @@
 package com.babyblackdog.ddogdog.common;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.Positive;
 
 @Embeddable
 public class Point {
 
-    private long value;
+  @Positive
+  private long value;
 
-    protected Point() {
-    }
+  public Point(long value) {
+    validate(value);
+    this.value = value;
+  }
 
-    public Point(long value) {
-        this.value = value;
-    }
+  protected Point() {
+  }
 
-    public long getValue() {
-        return value;
+  private void validate(long value) {
+    if (value < 0) {
+      throw new IllegalArgumentException("포인트 값은 양수여야 합니다.");
     }
+  }
+
+  public long getValue() {
+    return value;
+  }
 }

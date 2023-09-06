@@ -1,12 +1,12 @@
 package com.babyblackdog.ddogdog.review.model.vo;
 
-import com.babyblackdog.ddogdog.review.exception.ReviewException;
+import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.INVALID_DECIMAL_POINT;
+import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.INVALID_RATING;
+
+import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
-
-import static com.babyblackdog.ddogdog.review.error.ReviewErrorCode.INVALID_DECIMAL_POINT;
-import static com.babyblackdog.ddogdog.review.error.ReviewErrorCode.INVALID_RATING;
 
 @Embeddable
 public class Rating {

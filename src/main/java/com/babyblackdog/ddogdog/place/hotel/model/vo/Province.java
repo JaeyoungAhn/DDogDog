@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.place.hotel.model.vo;
 
-import static com.babyblackdog.ddogdog.place.exception.ErrorCode.INVALID_PROVINCE_VALUE;
+import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.INVALID_PROVINCE_VALUE;
 
-import com.babyblackdog.ddogdog.place.exception.PlaceException;
+import com.babyblackdog.ddogdog.global.exception.HotelException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +24,7 @@ public class Province {
 
   private void validate(String value) {
     if (value == null || value.isBlank()) {
-      throw new PlaceException(INVALID_PROVINCE_VALUE);
+      throw new HotelException(INVALID_PROVINCE_VALUE);
     }
   }
 

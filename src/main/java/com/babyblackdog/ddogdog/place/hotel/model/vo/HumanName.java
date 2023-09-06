@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.place.hotel.model.vo;
 
-import static com.babyblackdog.ddogdog.place.exception.ErrorCode.INVALID_HUMAN_NAME;
+import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.INVALID_HUMAN_NAME;
 
-import com.babyblackdog.ddogdog.place.exception.PlaceException;
+import com.babyblackdog.ddogdog.global.exception.HotelException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
@@ -19,13 +19,13 @@ public class HumanName {
     this.value = value;
   }
 
-  private void validate(String value) {
-    if (value == null || value.isBlank()) {
-      throw new PlaceException(INVALID_HUMAN_NAME);
-    }
+  protected HumanName() {
   }
 
-  protected HumanName() {
+  private void validate(String value) {
+    if (value == null || value.isBlank()) {
+      throw new HotelException(INVALID_HUMAN_NAME);
+    }
   }
 
   public String getValue() {

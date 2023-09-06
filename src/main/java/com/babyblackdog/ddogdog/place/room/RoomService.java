@@ -10,9 +10,9 @@ public interface RoomService {
    *
    * @param placeId
    * @param roomId
-   * @return RoomBookingResult
+   * @return RoomSimpleResult
    */
-  RoomBookingResult findRoomById(Long placeId, Long roomId);
+  RoomSimpleResult findRoomById(Long placeId, Long roomId);
 
   /**
    * 특정 기간 동안 특정 숙소 아이디에 대한 모든 객실 리스트를 조회한다

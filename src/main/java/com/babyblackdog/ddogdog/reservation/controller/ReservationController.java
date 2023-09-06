@@ -26,37 +26,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReservationController {
 
-    private final ReservationFacade facade;
-    private final TimeProvider timeProvider;
+  private final ReservationFacade facade;
+  private final TimeProvider timeProvider;
 
-    public ReservationController(ReservationFacade facade, TimeProvider timeProvider) {
-        this.facade = facade;
-        this.timeProvider = timeProvider;
-    }
+  public ReservationController(ReservationFacade facade, TimeProvider timeProvider) {
+    this.facade = facade;
+    this.timeProvider = timeProvider;
+  }
 
-    @GetMapping()
-    public ResponseEntity<RoomOrderPageResponse> getRoomOrderPageInfo(
-            @RequestParam Long placeId, @RequestParam Long roomId,
-            @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate checkIn,
-            @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate checkOut) {
-        StayPeriod stayPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
+  @GetMapping()
+  public ResponseEntity<RoomOrderPageResponse> getRoomOrderPageInfo(
+      @RequestParam Long placeId, @RequestParam Long roomId,
+      @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate checkIn,
+      @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate checkOut) {
+    StayPeriod stayPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
 
-        RoomOrderPageResult result = facade.findRoomInfo(placeId, roomId, stayPeriod);
+    RoomOrderPageResult result = facade.findRoomInfo(placeId, roomId, stayPeriod);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(RoomOrderPageResponse.of(result));
-    }
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(RoomOrderPageResponse.of(result));
+  }
 
-    @PostMapping()
-    public ResponseEntity<OrderedReservationResponse> createReservation(
-            @RequestBody @Valid ReservationOrderRequest request) {
-        StayPeriod stayPeriod = new StayPeriod(request.checkIn(), request.checkOut(), timeProvider);
+  @PostMapping()
+  public ResponseEntity<OrderedReservationResponse> createReservation(
+      @RequestBody @Valid ReservationOrderRequest request) {
+    StayPeriod stayPeriod = new StayPeriod(request.checkIn(), request.checkOut(), timeProvider);
 
-        OrderedReservationResult result = facade.order(request.userId(),
-                request.placeId(), request.roomId(), stayPeriod);
+    OrderedReservationResult result = facade.order(request.userId(),
+        request.placeId(), request.roomId(), stayPeriod);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(OrderedReservationResponse.of(result));
-    }
+    return ResponseEntity
+        .status(HttpStatus.CREATED)
+        .body(OrderedReservationResponse.of(result));
+  }
 }

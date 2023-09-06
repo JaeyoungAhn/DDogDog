@@ -21,13 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.babyblackdog.ddogdog.place.hotel.model.Place;
+import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
+import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.PlaceName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
-import com.babyblackdog.ddogdog.place.hotel.repository.PlaceRepository;
+import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
 import jakarta.transaction.Transactional;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,37 +44,37 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @Transactional
-class PlaceRestControllerTest {
+class HotelRestControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
 
   @Autowired
-  private PlaceRepository repository;
+  private HotelRepository repository;
 
-  private Place savedPlace;
+  private Hotel savedHotel;
 
   @BeforeEach
   void setUp() {
-    Place place = new Place(
-        new PlaceName("신라호텔"),
+    Hotel hotel = new Hotel(
+        new HotelName("신라호텔"),
         new Province("서울"),
         1L,
         new PhoneNumber("01012341234"),
         new HumanName("이부진"),
         new BusinessName("신세계")
     );
-    savedPlace = repository.save(place);
+    savedHotel = repository.save(hotel);
   }
 
   @Test
   @DisplayName("지역 이름으로 숙소를 조회한다.")
   void getPlacesByProvince_ReadSuccess() throws Exception {
     // Given
-    String provinceName = savedPlace.getAddressValue();
+    String provinceName = savedHotel.getAddressValue();
 
     // When & Then
-    mockMvc.perform(get("/places")
+    mockMvc.perform(get("/hotels")
             .param("province", provinceName)
             .param("page", "0")
             .param("size", "5")
@@ -160,15 +160,15 @@ class PlaceRestControllerTest {
   @DisplayName("숙소 아이디로 숙소를 조회한다.")
   void getPlace_ReadSuccess() throws Exception {
     // Given
-    Long placeId = savedPlace.getId();
+    Long placeId = savedHotel.getId();
 
     // When & Then
-    mockMvc.perform(get("/places/{placeId}", placeId)
+    mockMvc.perform(get("/hotels/{placeId}", placeId)
             .accept(APPLICATION_JSON_VALUE)
             .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
-        .andExpect(jsonPath("$.name").value(savedPlace.getName()))
+        .andExpect(jsonPath("$.name").value(savedHotel.getName()))
         .andDo(print())
         .andDo(document("place-get",
             preprocessRequest(prettyPrint()),

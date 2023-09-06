@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.user;
+package com.babyblackdog.ddogdog.user.service;
 
 import com.babyblackdog.ddogdog.common.Point;
 

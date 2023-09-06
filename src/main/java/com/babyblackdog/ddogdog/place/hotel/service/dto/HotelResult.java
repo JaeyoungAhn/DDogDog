@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.place.hotel.service.dto;
 
-import com.babyblackdog.ddogdog.place.hotel.model.Place;
+import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 
-public record PlaceResult(
+public record HotelResult(
     Long id,
     String name,
     String address,
@@ -12,8 +12,8 @@ public record PlaceResult(
     String businessName
 ) {
 
-  public static PlaceResult of(Place entity) {
-    return new PlaceResult(
+  public static HotelResult of(Hotel entity) {
+    return new HotelResult(
         entity.getId(),
         entity.getName(),
         entity.getAddressValue(),

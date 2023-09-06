@@ -1,18 +1,18 @@
 package com.babyblackdog.ddogdog.place.hotel.service;
 
-import static com.babyblackdog.ddogdog.place.exception.ErrorCode.PLACE_NOT_FOUND;
+import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.HOTEL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.babyblackdog.ddogdog.place.exception.PlaceException;
-import com.babyblackdog.ddogdog.place.hotel.model.Place;
+import com.babyblackdog.ddogdog.global.exception.HotelException;
+import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
+import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.PlaceName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
-import com.babyblackdog.ddogdog.place.hotel.repository.PlaceRepository;
-import com.babyblackdog.ddogdog.place.hotel.service.dto.PlaceResult;
+import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
+import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,20 +25,20 @@ import org.springframework.data.domain.PageRequest;
 
 @SpringBootTest
 @Transactional
-class PlaceServiceImplTest {
+class HotelServiceImplTest {
 
   @Autowired
-  private PlaceService placeService;
+  private HotelService hotelService;
 
   @Autowired
-  private PlaceRepository placeRepository;
+  private HotelRepository hotelRepository;
 
-  private Place place;
+  private Hotel hotel;
 
   @BeforeEach
   void setUp() {
-    this.place = new Place(
-        new PlaceName("신라호텔"),
+    this.hotel = new Hotel(
+        new HotelName("신라호텔"),
         new Province("서울"),
         1L,
         new PhoneNumber("01012341234"),
@@ -49,18 +49,18 @@ class PlaceServiceImplTest {
 
   @AfterEach
   void tearDown() {
-    placeRepository.deleteAll();
+    hotelRepository.deleteAll();
   }
 
   @Test
   @DisplayName("[findPlaceByProvince] 유효한 지역 이름으로 숙소를 조회하면 성공한다.")
   void findPlaceByProvince_ReadSuccess() {
     // Given
-    Place savedPlace = placeRepository.save(place);
+    Hotel savedHotel = hotelRepository.save(hotel);
 
     // When
-    Page<PlaceResult> result = placeService.findPlaceByProvince(
-        savedPlace.getAddress(),
+    Page<HotelResult> result = hotelService.findHotelByProvince(
+        savedHotel.getAddress(),
         PageRequest.of(0, 2));
 
     // Then
@@ -77,7 +77,7 @@ class PlaceServiceImplTest {
     Province invalidProvince = new Province("평양");
 
     // When
-    Page<PlaceResult> result = placeService.findPlaceByProvince(
+    Page<HotelResult> result = hotelService.findHotelByProvince(
         invalidProvince,
         PageRequest.of(0, 2));
 
@@ -91,13 +91,13 @@ class PlaceServiceImplTest {
   @DisplayName("[findPlaceById] 유효한 숙소 아이디를 이용해 숙소를 조회하면 성공한다.")
   void findPlaceById_ReadSuccess() {
     // Given
-    Place savedPlace = placeRepository.save(place);
+    Hotel savedHotel = hotelRepository.save(hotel);
 
     // When
-    PlaceResult result = placeService.findPlaceById(savedPlace.getId());
+    HotelResult result = hotelService.findHotelById(savedHotel.getId());
 
     // Then
-    assertThat(result).isEqualTo(PlaceResult.of(savedPlace));
+    assertThat(result).isEqualTo(HotelResult.of(savedHotel));
   }
 
   @Test
@@ -107,9 +107,9 @@ class PlaceServiceImplTest {
     Long invalidId = 1L;
 
     // When & Then
-    assertThatThrownBy(() -> placeService.findPlaceById(invalidId))
-        .isInstanceOf(PlaceException.class)
-        .hasMessage(PLACE_NOT_FOUND.toString());
+    assertThatThrownBy(() -> hotelService.findHotelById(invalidId))
+        .isInstanceOf(HotelException.class)
+        .hasMessage(HOTEL_NOT_FOUND.toString());
   }
 
 }

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    @Query("SELECT r FROM Reservation r WHERE r.roomId = :roomId AND r.checkIn <= :checkOut AND r.checkOut >= :checkIn")
-    List<Reservation> findOverlappingReservations(Long roomId, LocalDate checkIn,
-            LocalDate checkOut);
+  @Query("SELECT r FROM Reservation r WHERE r.roomId = :roomId AND r.checkIn <= :checkOut AND r.checkOut >= :checkIn")
+  List<Reservation> findOverlappingReservations(Long roomId, LocalDate checkIn, LocalDate checkOut);
 }

@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.reservation.domain;
 
 import com.babyblackdog.ddogdog.common.Point;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -12,9 +13,9 @@ import java.time.LocalDate;
 @Entity
 public class Payment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
     /*
     추후 쿠폰이 추가된다면 예약에 추가가 될 것이라 생각함(룸 정보에 따른 쿠폰 적용이라)
@@ -22,21 +23,23 @@ public class Payment {
     결제된 금액이 결제에 있어야 하지 않나 생각됨
      */
 
-    @Embedded
-    private Point originPoint;
+  @Embedded
+  @AttributeOverride(name = "value", column = @Column(name = "origin_point"))
+  private Point originPoint;
 
-    @Embedded
-    private Point paymentPoint;
+  @Embedded
+  @AttributeOverride(name = "value", column = @Column(name = "payment_point"))
+  private Point paymentPoint;
 
-    @Column(nullable = false)
-    private LocalDate paymentDate;
+  @Column(nullable = false)
+  private LocalDate paymentDate;
 
-    protected Payment() {
-    }
+  protected Payment() {
+  }
 
-    public Payment(Point originPoint, Point paymentPoint, LocalDate paymentDate) {
-        this.originPoint = originPoint;
-        this.paymentPoint = paymentPoint;
-        this.paymentDate = paymentDate;
-    }
+  public Payment(Point originPoint, Point paymentPoint, LocalDate paymentDate) {
+    this.originPoint = originPoint;
+    this.paymentPoint = paymentPoint;
+    this.paymentDate = paymentDate;
+  }
 }

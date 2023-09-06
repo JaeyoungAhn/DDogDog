@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.place.hotel.controller.dto;
 
-import com.babyblackdog.ddogdog.place.hotel.service.dto.PlaceResult;
+import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
 
-public record PlaceResponse(
+public record HotelResponse(
     Long id,
     String name,
     String address,
@@ -12,8 +12,8 @@ public record PlaceResponse(
     String businessName
 ) {
 
-  public static PlaceResponse of(PlaceResult result) {
-    return new PlaceResponse(
+  public static HotelResponse of(HotelResult result) {
+    return new HotelResponse(
         result.id(),
         result.name(),
         result.address(),

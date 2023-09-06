@@ -1,9 +1,9 @@
 package com.babyblackdog.ddogdog.place.hotel.model;
 
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
+import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.PlaceName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -14,15 +14,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "places")
-public class Place {
+@Table(name = "hotels")
+public class Hotel {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Embedded
-  private PlaceName name;
+  private HotelName name;
 
   @Embedded
   private Province address;
@@ -39,7 +39,7 @@ public class Place {
   @Embedded
   private BusinessName businessName;
 
-  public Place(PlaceName name, Province address, Long adminId, PhoneNumber contact,
+  public Hotel(HotelName name, Province address, Long adminId, PhoneNumber contact,
       HumanName representative, BusinessName businessName) {
     this.name = name;
     this.address = address;
@@ -49,7 +49,7 @@ public class Place {
     this.businessName = businessName;
   }
 
-  protected Place() {
+  protected Hotel() {
   }
 
   public Long getId() {
