@@ -1,6 +1,8 @@
 package com.babyblackdog.ddogdog.reservation.domain;
 
+import com.babyblackdog.ddogdog.common.Point;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,11 +21,12 @@ public class Payment {
     그렇게 될 경우 실질적 원래 가격과 적용된 쿠폰은 예약에 있고,
     결제된 금액이 결제에 있어야 하지 않나 생각됨
      */
-    @Column(nullable = false)
-    private long originPoint;
 
-    @Column(nullable = false)
-    private long paymentPoint;
+    @Embedded
+    private Point originPoint;
+
+    @Embedded
+    private Point paymentPoint;
 
     @Column(nullable = false)
     private LocalDate paymentDate;
@@ -31,7 +34,7 @@ public class Payment {
     protected Payment() {
     }
 
-    public Payment(long originPoint, long paymentPoint, LocalDate paymentDate) {
+    public Payment(Point originPoint, Point paymentPoint, LocalDate paymentDate) {
         this.originPoint = originPoint;
         this.paymentPoint = paymentPoint;
         this.paymentDate = paymentDate;
