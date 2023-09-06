@@ -1,7 +1,7 @@
 package com.babyblackdog.ddogdog.review.model.vo;
 
-import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.INVALID_DECIMAL_POINT;
-import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.INVALID_RATING;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_DECIMAL_POINT;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_RATING;
 
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import jakarta.persistence.Column;

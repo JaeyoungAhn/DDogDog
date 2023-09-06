@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.global.exception;
 
-import com.babyblackdog.ddogdog.global.error.HotelErrorCode;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INTERNAL_SERVER_ERROR;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,27 @@ public class GlobalExceptionHandler {
         .body(errorResponse);
   }
 
+  @ExceptionHandler(ReviewException.class)
+  public ResponseEntity<ErrorResponse> reviewExceptionHandler(ReviewException exception) {
+    ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode());
+    logger.info("ReviewException: {}", errorResponse);
+    return ResponseEntity
+        .status(errorResponse.getStatusCode())
+        .body(errorResponse);
+  }
+
+  @ExceptionHandler(RoomException.class)
+  public ResponseEntity<ErrorResponse> roomExceptionHandler(RoomException exception) {
+    ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode());
+    logger.info("ReviewException: {}", errorResponse);
+    return ResponseEntity
+        .status(errorResponse.getStatusCode())
+        .body(errorResponse);
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> internalServerErrorExceptionHandler(Exception exception) {
-    ErrorResponse errorResponse = ErrorResponse.of(HotelErrorCode.INTERNAL_SERVER_ERROR);
+    ErrorResponse errorResponse = ErrorResponse.of(INTERNAL_SERVER_ERROR);
     logger.info("Exception: {}", errorResponse);
     return ResponseEntity
         .status(errorResponse.getStatusCode())

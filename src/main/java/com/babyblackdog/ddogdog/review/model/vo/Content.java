@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.review.model.vo;
 
-import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.INVALID_CONTENT;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_CONTENT;
 
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import jakarta.persistence.Column;

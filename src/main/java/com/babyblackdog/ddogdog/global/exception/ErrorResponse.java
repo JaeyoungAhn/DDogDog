@@ -1,29 +1,28 @@
 package com.babyblackdog.ddogdog.global.exception;
 
-import com.babyblackdog.ddogdog.global.error.HotelErrorCode;
 import java.util.StringJoiner;
 import org.springframework.http.HttpStatus;
 
 public class ErrorResponse {
 
-  private final HotelErrorCode hotelErrorCode;
+  private final ErrorCode errorCode;
 
-  protected ErrorResponse(HotelErrorCode hotelErrorCode) {
-    this.hotelErrorCode = hotelErrorCode;
+  protected ErrorResponse(ErrorCode errorCode) {
+    this.errorCode = errorCode;
   }
 
-  protected static ErrorResponse of(HotelErrorCode hotelErrorCode) {
-    return new ErrorResponse(hotelErrorCode);
+  protected static ErrorResponse of(ErrorCode errorCode) {
+    return new ErrorResponse(errorCode);
   }
 
   protected HttpStatus getStatusCode() {
-    return hotelErrorCode.getHttpStatus();
+    return errorCode.getHttpStatus();
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", ErrorResponse.class.getSimpleName() + "[", "]")
-        .add("hotelErrorCode=" + hotelErrorCode)
+        .add("errorCode=" + errorCode)
         .toString();
   }
 }
