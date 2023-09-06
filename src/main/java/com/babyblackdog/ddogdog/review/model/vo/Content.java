@@ -1,11 +1,11 @@
 package com.babyblackdog.ddogdog.review.model.vo;
 
-import com.babyblackdog.ddogdog.global.exception.ReviewException;
+import com.babyblackdog.ddogdog.review.exception.ReviewException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_CONTENT;
+import static com.babyblackdog.ddogdog.review.error.ReviewErrorCode.INVALID_CONTENT;
 
 @Embeddable
 public class Content {
