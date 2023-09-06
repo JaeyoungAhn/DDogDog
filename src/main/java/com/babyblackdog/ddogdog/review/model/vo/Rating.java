@@ -1,12 +1,12 @@
 package com.babyblackdog.ddogdog.review.model.vo;
 
-import com.babyblackdog.ddogdog.global.exception.ReviewException;
+import com.babyblackdog.ddogdog.review.exception.ReviewException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_DECIMAL_POINT;
-import static com.babyblackdog.ddogdog.global.error.ErrorCode.INVALID_RATING;
+import static com.babyblackdog.ddogdog.review.error.ReviewErrorCode.INVALID_DECIMAL_POINT;
+import static com.babyblackdog.ddogdog.review.error.ReviewErrorCode.INVALID_RATING;
 
 @Embeddable
 public class Rating {
@@ -16,18 +16,21 @@ public class Rating {
   private Double value;
 
   public Rating(Double value) {
-    validate(value);
+    validateNotNull(value);
+    validateDecimalPoint(value);
     this.value = value;
   }
 
   protected Rating() {
   }
 
-  private void validate(Double value) {
+  private void validateNotNull(Double value) {
     if (value == null) {
       throw new ReviewException(INVALID_RATING);
     }
+  }
 
+  private void validateDecimalPoint(Double value) {
     double multipliedValue = value * 10;
     if (multipliedValue != Math.floor(multipliedValue)) {
       throw new ReviewException(INVALID_DECIMAL_POINT);
