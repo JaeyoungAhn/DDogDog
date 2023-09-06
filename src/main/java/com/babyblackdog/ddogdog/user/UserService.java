@@ -1,5 +1,7 @@
 package com.babyblackdog.ddogdog.user;
 
+import com.babyblackdog.ddogdog.common.Point;
+
 public interface UserService {
 
   /**
@@ -13,5 +15,5 @@ public interface UserService {
    * @param pointsToDeduct 삭감할 포인트
    * @return 삭감하였다면 true, 삭감하지 못헀다면 false
    */
-  boolean deductUserPoints(Long userId, int pointsToDeduct);
+  boolean deductUserPoints(Long userId, Point pointsToDeduct);
 }
