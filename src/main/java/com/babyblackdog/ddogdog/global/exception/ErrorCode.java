@@ -12,9 +12,7 @@ public enum ErrorCode {
   HOTEL_NOT_FOUND(HttpStatus.NOT_FOUND, "PL-100", "존재하지 않는 숙소입니다."),
   INVALID_BUSINESS_NAME(HttpStatus.BAD_REQUEST, "PL-200", "사업장 이름은 반드시 주어져야 합니다."),
   INVALID_HUMAN_NAME(HttpStatus.BAD_REQUEST, "PL-210", "사람 이름은 반드시 주어져야 합니다."),
-  INVALID_PHONE_BLANK(HttpStatus.BAD_REQUEST, "PL-220", "전화번호는 반드시 주어져야 합니다."),
-  INVALID_PHONE_LENGTH(HttpStatus.BAD_REQUEST, "PL-221", "전화번호는 11 자리여야 합니다."),
-  INVALID_PHONE_DIGIT(HttpStatus.BAD_REQUEST, "PL-222", "전화번호는 모두 숫자여야 합니다."),
+  INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "PL-220", "올바르지 않은 전화번호 형식입니다."),
   INVALID_HOTEL_NAME(HttpStatus.BAD_REQUEST, "PL-230", "숙소 이름은 반드시 주어져야 합니다."),
   INVALID_PROVINCE_VALUE(HttpStatus.BAD_REQUEST, "PL-240", "지역 이름은 반드시 주어져야 합니다."),
 

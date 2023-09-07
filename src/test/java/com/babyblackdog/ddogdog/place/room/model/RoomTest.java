@@ -29,7 +29,7 @@ class RoomTest {
         new HotelName("신라호텔"),
         new Province("서울"),
         1L,
-        new PhoneNumber("01012341234"),
+        new PhoneNumber("010-1234-1234"),
         new HumanName("이부진"),
         new BusinessName("신세계")
     );
