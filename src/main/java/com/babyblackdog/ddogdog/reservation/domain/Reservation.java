@@ -9,6 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.el.util.Validation;
 
 @Entity
 public class Reservation {
@@ -38,6 +42,8 @@ public class Reservation {
 
   public Reservation(Long paymentId, Long userId, Long roomId,
       LocalDate checkIn, LocalDate checkOut) {
+    validate(paymentId, userId, roomId, checkIn, checkOut);
+
     this.paymentId = paymentId;
     this.userId = userId;
     this.roomId = roomId;
@@ -48,4 +54,13 @@ public class Reservation {
   public Long getId() {
     return id;
   }
+
+  private void validate(Long paymentId, Long userId, Long roomId, LocalDate checkIn, LocalDate checkOut) {
+    Validate.notNull(paymentId, "paymentId는 Null일 수 없습니다.");
+    Validate.notNull(userId, "userId는 Null일 수 없습니다.");
+    Validate.notNull(roomId, "roomId는 Null일 수 없습니다.");
+    Validate.notNull(checkIn, "checkIn은 Null일 수 없습니다.");
+    Validate.notNull(checkOut, "checkOut은 Null일 수 없습니다.");
+  }
+
 }
