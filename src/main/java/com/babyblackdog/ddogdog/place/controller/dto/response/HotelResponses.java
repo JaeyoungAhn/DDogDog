@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.place.hotel.controller.dto;
+package com.babyblackdog.ddogdog.place.controller.dto.response;
 
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
 import org.springframework.data.domain.Page;

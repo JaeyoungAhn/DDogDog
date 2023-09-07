@@ -35,8 +35,8 @@ class PlaceReaderServiceImplTest {
 
   @BeforeEach
   void setUp() {
-    hotel = placeTestData.getHotel();
-    rooms = placeTestData.getRooms();
+    hotel = placeTestData.getHotelEntity();
+    rooms = placeTestData.getRoomEntities();
   }
 
   @Test

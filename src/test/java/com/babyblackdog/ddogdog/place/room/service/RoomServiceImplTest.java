@@ -50,7 +50,7 @@ class RoomServiceImplTest {
 
   @BeforeEach
   void setUp() {
-    savedHotel = hotelRepository.save(placeTestData.getHotel());
+    savedHotel = hotelRepository.save(placeTestData.getHotelEntity());
     rooms = placeTestData.bindHotelToRooms(savedHotel);
   }
 

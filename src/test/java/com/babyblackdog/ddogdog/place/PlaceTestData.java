@@ -1,12 +1,14 @@
 package com.babyblackdog.ddogdog.place;
 
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.place.controller.dto.request.AddHotelRequest;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
+import com.babyblackdog.ddogdog.place.hotel.service.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.room.model.Room;
 import com.babyblackdog.ddogdog.place.room.model.vo.Occupancy;
 import com.babyblackdog.ddogdog.place.room.model.vo.RoomNumber;
@@ -17,12 +19,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlaceTestData {
 
-  private final Hotel hotel;
-  private List<Room> rooms;
+  private final Hotel hotelEntity;
+  private final AddHotelRequest addHotelRequest;
+  private final AddHotelParam addHotelParam;
+  private List<Room> roomEntities;
 
   public PlaceTestData() {
-    this.hotel = instanceofHotel();
-    this.rooms = instanceofRooms();
+    this.hotelEntity = instanceofHotel();
+    this.addHotelRequest = instanceofHotelRequest();
+    this.addHotelParam = AddHotelRequest.to(addHotelRequest);
+    this.roomEntities = instanceofRooms();
+  }
+
+  private AddHotelRequest instanceofHotelRequest() {
+    return new AddHotelRequest(
+        "신라호텔",
+        "서울",
+        1L,
+        "010-1234-4321",
+        "이부진",
+        "신세계"
+    );
   }
 
   private List<Room> instanceofRooms() {
@@ -63,16 +80,24 @@ public class PlaceTestData {
     );
   }
 
-  public Hotel getHotel() {
-    return hotel;
+  public Hotel getHotelEntity() {
+    return hotelEntity;
   }
 
-  public List<Room> getRooms() {
-    return rooms;
+  public List<Room> getRoomEntities() {
+    return roomEntities;
+  }
+
+  public AddHotelRequest getAddHotelRequest() {
+    return addHotelRequest;
+  }
+
+  public AddHotelParam getAddHotelParam() {
+    return addHotelParam;
   }
 
   public List<Room> bindHotelToRooms(Hotel hotel) {
-    this.rooms = rooms.stream()
+    this.roomEntities = roomEntities.stream()
         .map(room -> new Room(
             hotel,
             room.getRoomType(),
@@ -84,6 +109,6 @@ public class PlaceTestData {
             new RoomNumber(room.getRoomNumber()),
             new Point(room.getPoint())
         )).toList();
-    return this.rooms;
+    return this.roomEntities;
   }
 }

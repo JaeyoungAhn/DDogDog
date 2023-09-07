@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.place;
+package com.babyblackdog.ddogdog.place.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -15,6 +16,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -25,10 +27,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.babyblackdog.ddogdog.mapping.MappingService;
+import com.babyblackdog.ddogdog.place.PlaceTestData;
+import com.babyblackdog.ddogdog.place.controller.dto.request.AddHotelRequest;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
 import com.babyblackdog.ddogdog.place.room.model.Room;
 import com.babyblackdog.ddogdog.place.room.repository.RoomRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -61,15 +66,56 @@ class PlaceRestControllerTest {
   private MappingService mappingService;
   @Autowired
   private PlaceTestData placeTestData;
+  @Autowired
+  private ObjectMapper objectMapper;
 
   private Hotel savedHotel;
   private List<Room> savedRooms;
 
   @BeforeEach
   void setUp() {
-    savedHotel = hotelRepository.save(placeTestData.getHotel());
+    savedHotel = hotelRepository.save(placeTestData.getHotelEntity());
     List<Room> rooms = placeTestData.bindHotelToRooms(savedHotel);
     savedRooms = roomRepository.saveAll(rooms);
+  }
+
+  @Test
+  @DisplayName("숙소 추가 요청으로 숙소를 등록한다.")
+  void addHotel_CreateSuccess() throws Exception {
+    // Given
+    AddHotelRequest request = placeTestData.getAddHotelRequest();
+
+    // When
+    mockMvc.perform(post("/places")
+            .content(objectMapper.writeValueAsString(request))
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE))
+        .andExpect(status().isCreated())
+        .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+        .andExpect(jsonPath("$.name").value(request.hotelName()))
+        .andExpect(jsonPath("$.businessName").value(request.businessName()))
+        .andDo(print())
+        .andDo(document("post-hotel",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            requestFields(
+                fieldWithPath("hotelName").type(STRING).description("숙소 이름"),
+                fieldWithPath("province").type(STRING).description("지역 이름"),
+                fieldWithPath("adminId").type(NUMBER).description("관리자 아이디"),
+                fieldWithPath("contact").type(STRING).description("문의처"),
+                fieldWithPath("representative").type(STRING).description("대표자명"),
+                fieldWithPath("businessName").type(STRING).description("사업장명")
+            ),
+            responseFields(
+                fieldWithPath("id").type(NUMBER).description("숙소 아이디"),
+                fieldWithPath("name").type(STRING).description("숙소 이름"),
+                fieldWithPath("address").type(STRING).description("숙소 지역 이름"),
+                fieldWithPath("adminId").type(NUMBER).description("관리자 아이디"),
+                fieldWithPath("contact").type(STRING).description("숙소 문의번호"),
+                fieldWithPath("representative").type(STRING).description("숙소 대표자명"),
+                fieldWithPath("businessName").type(STRING).description("숙소 사업장명")
+            )
+        ));
   }
 
   @Test
