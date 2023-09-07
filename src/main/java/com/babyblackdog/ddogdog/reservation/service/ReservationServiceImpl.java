@@ -5,6 +5,7 @@ import com.babyblackdog.ddogdog.place.room.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.domain.Payment;
 import com.babyblackdog.ddogdog.reservation.domain.Reservation;
 import com.babyblackdog.ddogdog.reservation.domain.ReservationRepository;
+import com.babyblackdog.ddogdog.reservation.service.reader.ReservationReaderService;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class ReservationServiceImpl implements ReservationService {
   public boolean isRoomAvailableOnDate(Long roomId, LocalDate checkIn, LocalDate checkOut) {
     // 비즈니스 로직으로 뺄 수 있음
     List<Reservation> overlappingReservationList = repository.findOverlappingReservations(
-        roomId,
-        checkIn, checkOut);
+            roomId,
+            checkIn, checkOut);
 
     return overlappingReservationList.isEmpty();
   }
