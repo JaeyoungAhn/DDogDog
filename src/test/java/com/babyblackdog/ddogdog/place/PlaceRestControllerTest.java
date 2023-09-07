@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.place.room.controller;
+package com.babyblackdog.ddogdog.place;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.babyblackdog.ddogdog.mapping.MappingService;
-import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
 import com.babyblackdog.ddogdog.place.room.model.Room;
@@ -33,6 +32,7 @@ import com.babyblackdog.ddogdog.place.room.repository.RoomRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,11 +44,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
 @SpringBootTest
+@AutoConfigureRestDocs
+@AutoConfigureMockMvc
 @Transactional
-class RoomRestControllerTest {
+class PlaceRestControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -73,6 +73,127 @@ class RoomRestControllerTest {
   }
 
   @Test
+  @DisplayName("숙소 아이디로 숙소를 조회한다.")
+  void getPlace_ReadSuccess() throws Exception {
+    // Given
+    Long hotelId = savedHotel.getId();
+
+    // When & Then
+    mockMvc.perform(get("/places/{hotelId}", hotelId)
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+        .andExpect(jsonPath("$.name").value(savedHotel.getName()))
+        .andDo(print())
+        .andDo(document("hotel-get",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("hotelId").description("숙소 아이디")
+            ),
+            responseFields(
+                fieldWithPath("id").type(NUMBER).description("숙소 아이디"),
+                fieldWithPath("name").type(STRING).description("숙소 이름"),
+                fieldWithPath("address").type(STRING).description("숙소 지역 이름"),
+                fieldWithPath("adminId").type(NUMBER).description("관리자 아이디"),
+                fieldWithPath("contact").type(STRING).description("숙소 문의번호"),
+                fieldWithPath("representative").type(STRING).description("숙소 대표자명"),
+                fieldWithPath("businessName").type(STRING).description("숙소 사업장명")
+            )
+        ));
+  }
+
+  @Test
+  @DisplayName("지역 이름으로 숙소를 조회한다.")
+  void getPlacesByProvince_ReadSuccess() throws Exception {
+    // Given
+    String provinceName = savedHotel.getAddressValue();
+
+    // When & Then
+    mockMvc.perform(get("/places")
+            .param("province", provinceName)
+            .param("page", "0")
+            .param("size", "5")
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
+        .andExpect(jsonPath("$.hotelResponses.content", Matchers.hasSize(1)))
+        .andDo(print())
+        .andDo(document("hotel-get-by-province",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            queryParameters(
+                parameterWithName("province").description("지역 이름"),
+                parameterWithName("page").description("페이지"),
+                parameterWithName("size").description("크기")
+            ),
+            responseFields(
+                fieldWithPath("hotelResponses").type(OBJECT).description("숙소 응답"),
+                fieldWithPath("hotelResponses.content").type(ARRAY).description("숙소 정보 배열"),
+                fieldWithPath("hotelResponses.content[].id").type(NUMBER).description("숙소 아이디"),
+                fieldWithPath("hotelResponses.content[].name").type(STRING).description("숙소 이름"),
+                fieldWithPath("hotelResponses.content[].address").type(STRING)
+                    .description("숙소 지역 이름"),
+                fieldWithPath("hotelResponses.content[].adminId").type(NUMBER)
+                    .description("관리자 아이디"),
+                fieldWithPath("hotelResponses.content[].contact").type(STRING)
+                    .description("숙소 문의번호"),
+                fieldWithPath("hotelResponses.content[].representative").type(STRING)
+                    .description("숙소 대표자명"),
+                fieldWithPath("hotelResponses.content[].businessName").type(STRING)
+                    .description("숙소 사업장명"),
+
+                fieldWithPath("hotelResponses.pageable").type(OBJECT)
+                    .description("pageable").ignored(),
+                fieldWithPath("hotelResponses.pageable.pageNumber").type(NUMBER)
+                    .description("pageNumber"),
+                fieldWithPath("hotelResponses.pageable.pageSize").type(NUMBER)
+                    .description("pageSize"),
+                fieldWithPath("hotelResponses.pageable.sort").type(OBJECT)
+                    .description("pageSize"),
+                fieldWithPath("hotelResponses.pageable.sort.empty").type(BOOLEAN)
+                    .description("pageSize"),
+                fieldWithPath("hotelResponses.pageable.sort.unsorted").type(BOOLEAN)
+                    .description("pageSize"),
+                fieldWithPath("hotelResponses.pageable.sort.sorted").type(BOOLEAN)
+                    .description("pageSize"),
+                fieldWithPath("hotelResponses.pageable.offset").type(NUMBER)
+                    .description("offset"),
+                fieldWithPath("hotelResponses.pageable.paged").type(BOOLEAN)
+                    .description("paged"),
+                fieldWithPath("hotelResponses.pageable.unpaged").type(BOOLEAN)
+                    .description("unpaged"),
+                fieldWithPath("hotelResponses.last").type(BOOLEAN).description("last")
+                    .ignored(),
+                fieldWithPath("hotelResponses.totalPages").type(JsonFieldType.NUMBER)
+                    .description("totalPages"),
+                fieldWithPath("hotelResponses.totalElements").type(JsonFieldType.NUMBER)
+                    .description("totalElements"),
+                fieldWithPath("hotelResponses.first").type(BOOLEAN)
+                    .description("first").ignored(),
+                fieldWithPath("hotelResponses.size").type(JsonFieldType.NUMBER).description("size")
+                    .ignored(),
+                fieldWithPath("hotelResponses.number").type(JsonFieldType.NUMBER)
+                    .description("number").ignored(),
+                fieldWithPath("hotelResponses.sort").type(OBJECT)
+                    .description("sort"),
+                fieldWithPath("hotelResponses.sort.empty").type(BOOLEAN)
+                    .description("sort.empty").ignored(),
+                fieldWithPath("hotelResponses.sort.unsorted").type(BOOLEAN)
+                    .description("sort.unsorted").ignored(),
+                fieldWithPath("hotelResponses.sort.sorted").type(BOOLEAN)
+                    .description("sort.sorted").ignored(),
+                fieldWithPath("hotelResponses.numberOfElements").type(JsonFieldType.NUMBER)
+                    .description("numberOfElements").ignored(),
+                fieldWithPath("hotelResponses.empty").type(BOOLEAN)
+                    .description("empty").ignored()
+            )
+        ));
+  }
+
+  @Test
   @DisplayName("[getRoomForDuration] 특정 기간 동안 객실에 대한 정보를 조회한다.")
   void getRoomForDuration_Success() throws Exception {
     // Given
@@ -83,7 +204,7 @@ class RoomRestControllerTest {
         .willReturn(true);
 
     // When & Then
-    mockMvc.perform(get("/rooms/{roomId}", room.getId())
+    mockMvc.perform(get("/places/{hotelId}/{roomId}", room.getHotel().getId(), room.getId())
             .param("checkIn", today.toString())
             .param("checkOut", today.plusDays(1L).toString())
             .accept(APPLICATION_JSON_VALUE)
@@ -97,6 +218,7 @@ class RoomRestControllerTest {
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
             pathParameters(
+                parameterWithName("hotelId").description("숙소 아이디"),
                 parameterWithName("roomId").description("객실 아이디")
             ),
             queryParameters(
@@ -129,8 +251,7 @@ class RoomRestControllerTest {
         .willReturn(true);
 
     // When
-    mockMvc.perform(get("/rooms")
-            .param("hotelId", String.valueOf(savedHotel.getId()))
+    mockMvc.perform(get("/places/{hotelId}/rooms", savedHotel.getId())
             .param("checkIn", today.toString())
             .param("checkOut", today.plusDays(1L).toString())
             .param("page", "0")
@@ -146,8 +267,10 @@ class RoomRestControllerTest {
         .andDo(document("room-get-all-of-hotel-for-duration",
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("hotelId").description("호텔 아이디")
+            ),
             queryParameters(
-                parameterWithName("hotelId").description("호텔 아이디"),
                 parameterWithName("checkIn").description("체크인 날짜"),
                 parameterWithName("checkOut").description("체크 아웃 날짜"),
                 parameterWithName("page").description("페이지"),
@@ -222,8 +345,6 @@ class RoomRestControllerTest {
                     .description("empty").ignored()
             )
         ));
-    // Then
-
   }
 
 }
