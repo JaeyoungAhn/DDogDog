@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
-import com.babyblackdog.ddogdog.common.Point;
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.domain.Payment;
 import com.babyblackdog.ddogdog.reservation.domain.Reservation;

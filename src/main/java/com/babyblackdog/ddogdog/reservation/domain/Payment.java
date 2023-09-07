@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.reservation.domain;
 
-import com.babyblackdog.ddogdog.common.Point;
+import com.babyblackdog.ddogdog.common.point.Point;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.reservation.service;
+package com.babyblackdog.ddogdog.common.date;
 
 import java.time.LocalDate;
 
