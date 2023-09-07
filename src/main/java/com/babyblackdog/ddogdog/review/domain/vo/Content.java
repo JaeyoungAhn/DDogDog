@@ -1,11 +1,12 @@
-package com.babyblackdog.ddogdog.review.model.vo;
-
-import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.INVALID_CONTENT;
+package com.babyblackdog.ddogdog.review.domain.vo;
 
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
+
+import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.EMPTY_REVIEW_CONTENT;
+import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.INVALID_REVIEW_LENGTH;
 
 @Embeddable
 public class Content {
@@ -15,16 +16,23 @@ public class Content {
   private String value;
 
   public Content(String value) {
-    validate(value);
+    validateNull(value);
+    validateLength(value);
     this.value = value;
   }
 
   protected Content() {
   }
 
-  private void validate(String value) {
+  private void validateNull(String value) {
     if (value == null || value.isBlank()) {
-      throw new ReviewException(INVALID_CONTENT);
+      throw new ReviewException(EMPTY_REVIEW_CONTENT);
+    }
+  }
+
+  private void validateLength(String value) {
+    if (value.length() < 10) {
+      throw new ReviewException(INVALID_REVIEW_LENGTH);
     }
   }
 
