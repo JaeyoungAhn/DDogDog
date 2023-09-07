@@ -28,17 +28,17 @@ public class HotelRestController {
   }
 
   @GetMapping
-  public ResponseEntity<HotelResponses> getPlacesByProvince(@RequestParam String province,
+  public ResponseEntity<HotelResponses> getHotelsInProvince(@RequestParam String province,
       Pageable pageable) {
-    Page<HotelResult> result = hotelService.findHotelByProvince(new Province(province), pageable);
+    Page<HotelResult> result = hotelService.findHotelsInProvince(new Province(province), pageable);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(HotelResponses.of(result));
   }
 
-  @GetMapping("/{placeId}")
-  public ResponseEntity<HotelResponse> getPlace(@PathVariable Long placeId) {
-    HotelResult result = hotelService.findHotelById(placeId);
+  @GetMapping("/{hotelId}")
+  public ResponseEntity<HotelResponse> getHotel(@PathVariable Long hotelId) {
+    HotelResult result = hotelService.findHotelById(hotelId);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(HotelResponse.of(result));

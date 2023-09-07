@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HotelServiceImpl implements HotelService {
+class HotelServiceImpl implements HotelService {
 
   private final HotelRepository repository;
 
@@ -21,7 +21,7 @@ public class HotelServiceImpl implements HotelService {
   }
 
   @Override
-  public Page<HotelResult> findHotelByProvince(Province province, Pageable pageable) {
+  public Page<HotelResult> findHotelsInProvince(Province province, Pageable pageable) {
     Page<Hotel> hotels = repository.findContainsAddress("서울", pageable);
     return hotels.map(HotelResult::of);
   }

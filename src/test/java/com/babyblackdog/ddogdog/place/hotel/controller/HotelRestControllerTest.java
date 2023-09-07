@@ -21,12 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
 import jakarta.transaction.Transactional;
 import org.hamcrest.Matchers;
@@ -51,20 +47,14 @@ class HotelRestControllerTest {
 
   @Autowired
   private HotelRepository repository;
+  @Autowired
+  private PlaceTestData placeTestData;
 
   private Hotel savedHotel;
 
   @BeforeEach
   void setUp() {
-    Hotel hotel = new Hotel(
-        new HotelName("신라호텔"),
-        new Province("서울"),
-        1L,
-        new PhoneNumber("010-1234-1234"),
-        new HumanName("이부진"),
-        new BusinessName("신세계")
-    );
-    savedHotel = repository.save(hotel);
+    savedHotel = repository.save(placeTestData.getHotel());
   }
 
   @Test
@@ -82,9 +72,9 @@ class HotelRestControllerTest {
             .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
-        .andExpect(jsonPath("$.placeResponses.content", Matchers.hasSize(1)))
+        .andExpect(jsonPath("$.hotelResponses.content", Matchers.hasSize(1)))
         .andDo(print())
-        .andDo(document("place-get-by-province",
+        .andDo(document("hotel-get-by-province",
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
             queryParameters(
@@ -93,64 +83,64 @@ class HotelRestControllerTest {
                 parameterWithName("size").description("크기")
             ),
             responseFields(
-                fieldWithPath("placeResponses").type(OBJECT).description("숙소 응답"),
-                fieldWithPath("placeResponses.content").type(ARRAY).description("숙소 정보 배열"),
-                fieldWithPath("placeResponses.content[].id").type(NUMBER).description("숙소 아이디"),
-                fieldWithPath("placeResponses.content[].name").type(STRING).description("숙소 이름"),
-                fieldWithPath("placeResponses.content[].address").type(STRING)
+                fieldWithPath("hotelResponses").type(OBJECT).description("숙소 응답"),
+                fieldWithPath("hotelResponses.content").type(ARRAY).description("숙소 정보 배열"),
+                fieldWithPath("hotelResponses.content[].id").type(NUMBER).description("숙소 아이디"),
+                fieldWithPath("hotelResponses.content[].name").type(STRING).description("숙소 이름"),
+                fieldWithPath("hotelResponses.content[].address").type(STRING)
                     .description("숙소 지역 이름"),
-                fieldWithPath("placeResponses.content[].adminId").type(NUMBER)
+                fieldWithPath("hotelResponses.content[].adminId").type(NUMBER)
                     .description("관리자 아이디"),
-                fieldWithPath("placeResponses.content[].contact").type(STRING)
+                fieldWithPath("hotelResponses.content[].contact").type(STRING)
                     .description("숙소 문의번호"),
-                fieldWithPath("placeResponses.content[].representative").type(STRING)
+                fieldWithPath("hotelResponses.content[].representative").type(STRING)
                     .description("숙소 대표자명"),
-                fieldWithPath("placeResponses.content[].businessName").type(STRING)
+                fieldWithPath("hotelResponses.content[].businessName").type(STRING)
                     .description("숙소 사업장명"),
 
-                fieldWithPath("placeResponses.pageable").type(OBJECT)
+                fieldWithPath("hotelResponses.pageable").type(OBJECT)
                     .description("pageable").ignored(),
-                fieldWithPath("placeResponses.pageable.pageNumber").type(NUMBER)
+                fieldWithPath("hotelResponses.pageable.pageNumber").type(NUMBER)
                     .description("pageNumber"),
-                fieldWithPath("placeResponses.pageable.pageSize").type(NUMBER)
+                fieldWithPath("hotelResponses.pageable.pageSize").type(NUMBER)
                     .description("pageSize"),
-                fieldWithPath("placeResponses.pageable.sort").type(OBJECT)
+                fieldWithPath("hotelResponses.pageable.sort").type(OBJECT)
                     .description("pageSize"),
-                fieldWithPath("placeResponses.pageable.sort.empty").type(BOOLEAN)
+                fieldWithPath("hotelResponses.pageable.sort.empty").type(BOOLEAN)
                     .description("pageSize"),
-                fieldWithPath("placeResponses.pageable.sort.unsorted").type(BOOLEAN)
+                fieldWithPath("hotelResponses.pageable.sort.unsorted").type(BOOLEAN)
                     .description("pageSize"),
-                fieldWithPath("placeResponses.pageable.sort.sorted").type(BOOLEAN)
+                fieldWithPath("hotelResponses.pageable.sort.sorted").type(BOOLEAN)
                     .description("pageSize"),
-                fieldWithPath("placeResponses.pageable.offset").type(NUMBER)
+                fieldWithPath("hotelResponses.pageable.offset").type(NUMBER)
                     .description("offset"),
-                fieldWithPath("placeResponses.pageable.paged").type(BOOLEAN)
+                fieldWithPath("hotelResponses.pageable.paged").type(BOOLEAN)
                     .description("paged"),
-                fieldWithPath("placeResponses.pageable.unpaged").type(BOOLEAN)
+                fieldWithPath("hotelResponses.pageable.unpaged").type(BOOLEAN)
                     .description("unpaged"),
-                fieldWithPath("placeResponses.last").type(BOOLEAN).description("last")
+                fieldWithPath("hotelResponses.last").type(BOOLEAN).description("last")
                     .ignored(),
-                fieldWithPath("placeResponses.totalPages").type(JsonFieldType.NUMBER)
+                fieldWithPath("hotelResponses.totalPages").type(JsonFieldType.NUMBER)
                     .description("totalPages"),
-                fieldWithPath("placeResponses.totalElements").type(JsonFieldType.NUMBER)
+                fieldWithPath("hotelResponses.totalElements").type(JsonFieldType.NUMBER)
                     .description("totalElements"),
-                fieldWithPath("placeResponses.first").type(BOOLEAN)
+                fieldWithPath("hotelResponses.first").type(BOOLEAN)
                     .description("first").ignored(),
-                fieldWithPath("placeResponses.size").type(JsonFieldType.NUMBER).description("size")
+                fieldWithPath("hotelResponses.size").type(JsonFieldType.NUMBER).description("size")
                     .ignored(),
-                fieldWithPath("placeResponses.number").type(JsonFieldType.NUMBER)
+                fieldWithPath("hotelResponses.number").type(JsonFieldType.NUMBER)
                     .description("number").ignored(),
-                fieldWithPath("placeResponses.sort").type(OBJECT)
+                fieldWithPath("hotelResponses.sort").type(OBJECT)
                     .description("sort"),
-                fieldWithPath("placeResponses.sort.empty").type(BOOLEAN)
+                fieldWithPath("hotelResponses.sort.empty").type(BOOLEAN)
                     .description("sort.empty").ignored(),
-                fieldWithPath("placeResponses.sort.unsorted").type(BOOLEAN)
+                fieldWithPath("hotelResponses.sort.unsorted").type(BOOLEAN)
                     .description("sort.unsorted").ignored(),
-                fieldWithPath("placeResponses.sort.sorted").type(BOOLEAN)
+                fieldWithPath("hotelResponses.sort.sorted").type(BOOLEAN)
                     .description("sort.sorted").ignored(),
-                fieldWithPath("placeResponses.numberOfElements").type(JsonFieldType.NUMBER)
+                fieldWithPath("hotelResponses.numberOfElements").type(JsonFieldType.NUMBER)
                     .description("numberOfElements").ignored(),
-                fieldWithPath("placeResponses.empty").type(BOOLEAN)
+                fieldWithPath("hotelResponses.empty").type(BOOLEAN)
                     .description("empty").ignored()
             )
         ));
@@ -163,18 +153,18 @@ class HotelRestControllerTest {
     Long placeId = savedHotel.getId();
 
     // When & Then
-    mockMvc.perform(get("/hotels/{placeId}", placeId)
+    mockMvc.perform(get("/hotels/{hotelId}", placeId)
             .accept(APPLICATION_JSON_VALUE)
             .contentType(APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())
         .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON_VALUE))
         .andExpect(jsonPath("$.name").value(savedHotel.getName()))
         .andDo(print())
-        .andDo(document("place-get",
+        .andDo(document("hotel-get",
             preprocessRequest(prettyPrint()),
             preprocessResponse(prettyPrint()),
             pathParameters(
-                parameterWithName("placeId").description("숙소 아이디")
+                parameterWithName("hotelId").description("숙소 아이디")
             ),
             responseFields(
                 fieldWithPath("id").type(NUMBER).description("숙소 아이디"),

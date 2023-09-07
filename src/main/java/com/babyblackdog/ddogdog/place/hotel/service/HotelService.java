@@ -13,7 +13,7 @@ public interface HotelService {
    * @param province
    * @return Page<HotelResult> -> PlaceResults
    */
-  Page<HotelResult> findHotelByProvince(Province province, Pageable pageable);
+  Page<HotelResult> findHotelsInProvince(Province province, Pageable pageable);
 
   /**
    * 아이디로 특정 숙소 검색하기

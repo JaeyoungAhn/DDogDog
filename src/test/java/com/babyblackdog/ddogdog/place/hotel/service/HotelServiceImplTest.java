@@ -5,11 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.babyblackdog.ddogdog.global.exception.HotelException;
+import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
@@ -32,19 +29,14 @@ class HotelServiceImplTest {
 
   @Autowired
   private HotelRepository hotelRepository;
+  @Autowired
+  private PlaceTestData placeTestData;
 
   private Hotel hotel;
 
   @BeforeEach
   void setUp() {
-    this.hotel = new Hotel(
-        new HotelName("신라호텔"),
-        new Province("서울"),
-        1L,
-        new PhoneNumber("010-1234-1234"),
-        new HumanName("이부진"),
-        new BusinessName("신세계")
-    );
+    this.hotel = placeTestData.getHotel();
   }
 
   @AfterEach
@@ -59,7 +51,7 @@ class HotelServiceImplTest {
     Hotel savedHotel = hotelRepository.save(hotel);
 
     // When
-    Page<HotelResult> result = hotelService.findHotelByProvince(
+    Page<HotelResult> result = hotelService.findHotelsInProvince(
         savedHotel.getAddress(),
         PageRequest.of(0, 2));
 
@@ -77,7 +69,7 @@ class HotelServiceImplTest {
     Province invalidProvince = new Province("평양");
 
     // When
-    Page<HotelResult> result = hotelService.findHotelByProvince(
+    Page<HotelResult> result = hotelService.findHotelsInProvince(
         invalidProvince,
         PageRequest.of(0, 2));
 
