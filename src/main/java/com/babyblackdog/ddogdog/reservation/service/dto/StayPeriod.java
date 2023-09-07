@@ -12,7 +12,7 @@ public record StayPeriod(LocalDate checkIn, LocalDate checkOut, TimeProvider tim
   }
 
   private LocalDate adjustIfInvalid(LocalDate date, TimeProvider timeProvider) {
-    if (date == null || timeProvider.getCurrentDate().isBefore(date)) {
+    if (date == null || timeProvider.getCurrentDate().isAfter(date)) {
       return timeProvider.getCurrentDate();
     }
     return date;
