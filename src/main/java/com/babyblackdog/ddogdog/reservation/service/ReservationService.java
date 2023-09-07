@@ -6,6 +6,6 @@ import java.time.LocalDate;
 
 public interface ReservationService extends ReservationReaderService {
 
-  Long create(Long userId, Long roomId, RoomSimpleResult roomInfo, LocalDate checkIn,
-      LocalDate checkOut);
+    Long create(Long userId, Long roomId, RoomSimpleResult roomInfo,
+            LocalDate checkIn, LocalDate checkOut);
 }

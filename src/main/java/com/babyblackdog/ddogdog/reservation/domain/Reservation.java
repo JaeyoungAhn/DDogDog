@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.reservation.domain;
 
+import com.babyblackdog.ddogdog.payment.domain.Payment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,9 +18,8 @@ public class Reservation {
   private Long id;
 
 
-  @OneToOne
-  @JoinColumn(name = "payment_id", referencedColumnName = "id")
-  private Payment payment;
+  @Column(nullable = false)
+  private Long paymentId;
 
   @Column(nullable = false)
   private Long userId;
@@ -36,9 +36,9 @@ public class Reservation {
   protected Reservation() {
   }
 
-  public Reservation(Payment payment, Long userId, Long roomId,
+  public Reservation(Long paymentId, Long userId, Long roomId,
       LocalDate checkIn, LocalDate checkOut) {
-    this.payment = payment;
+    this.paymentId = paymentId;
     this.userId = userId;
     this.roomId = roomId;
     this.checkIn = checkIn;

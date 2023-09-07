@@ -1,6 +1,5 @@
-package com.babyblackdog.ddogdog.reservation.controller;
+package com.babyblackdog.ddogdog.common;
 
-import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
 import java.time.LocalDate;
 import org.springframework.stereotype.Component;
 

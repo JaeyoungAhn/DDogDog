@@ -4,7 +4,7 @@ import com.babyblackdog.ddogdog.reservation.controller.dto.request.ReservationOr
 import com.babyblackdog.ddogdog.reservation.controller.dto.response.OrderedReservationResponse;
 import com.babyblackdog.ddogdog.reservation.controller.dto.response.RoomOrderPageResponse;
 import com.babyblackdog.ddogdog.reservation.service.ReservationFacade;
-import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
+import com.babyblackdog.ddogdog.common.TimeProvider;
 import com.babyblackdog.ddogdog.reservation.service.dto.StayPeriod;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservationResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;

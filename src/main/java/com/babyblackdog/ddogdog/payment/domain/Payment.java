@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.reservation.domain;
+package com.babyblackdog.ddogdog.payment.domain;
 
 import com.babyblackdog.ddogdog.common.Point;
 import jakarta.persistence.AttributeOverride;

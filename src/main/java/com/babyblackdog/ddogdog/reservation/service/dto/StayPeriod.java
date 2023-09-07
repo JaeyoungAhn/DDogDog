@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.reservation.service.dto;
 
-import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
+import com.babyblackdog.ddogdog.common.TimeProvider;
 import java.time.LocalDate;
 
 public record StayPeriod(LocalDate checkIn, LocalDate checkOut, TimeProvider timeProvider) {
