@@ -31,7 +31,7 @@ public class Occupancy {
   }
 
   private void validateLower(int maxOccupancy) {
-    if (maxOccupancy <= 1) {
+    if (maxOccupancy < 1) {
       throw new RoomException(INVALID_OCCUPANCY_LOWER);
     }
   }

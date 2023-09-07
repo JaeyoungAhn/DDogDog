@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.place.room.model;
 
-import com.babyblackdog.ddogdog.common.Point;
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.room.model.vo.Occupancy;
 import com.babyblackdog.ddogdog.place.room.model.vo.RoomNumber;
@@ -27,7 +27,7 @@ public class Room {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "place_id")
+  @JoinColumn(name = "hotel_id")
   private Hotel hotel;
 
   @Enumerated
@@ -85,7 +85,11 @@ public class Room {
     return hotel.getName();
   }
 
-  public String getRoomType() {
+  public RoomType getRoomType() {
+    return roomType;
+  }
+
+  public String getRoomTypeName() {
     return roomType.getTypeName();
   }
 
