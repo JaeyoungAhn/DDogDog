@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.place.controller.dto.response;
+package com.babyblackdog.ddogdog.place.hotel.controller.dto;
 
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
 

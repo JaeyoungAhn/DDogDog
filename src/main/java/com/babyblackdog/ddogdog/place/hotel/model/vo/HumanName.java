@@ -7,6 +7,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Embeddable
 public class HumanName {
@@ -31,5 +32,22 @@ public class HumanName {
 
   public String getValue() {
     return value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    HumanName humanName = (HumanName) o;
+    return Objects.equals(value, humanName.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value);
   }
 }

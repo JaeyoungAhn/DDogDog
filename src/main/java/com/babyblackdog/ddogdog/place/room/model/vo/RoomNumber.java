@@ -6,6 +6,7 @@ import com.babyblackdog.ddogdog.global.exception.RoomException;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
+import java.util.Objects;
 
 public class RoomNumber {
 
@@ -29,5 +30,22 @@ public class RoomNumber {
 
   public String getValue() {
     return value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    RoomNumber that = (RoomNumber) o;
+    return Objects.equals(value, that.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value);
   }
 }

@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.place.hotel.service.dto;
+package com.babyblackdog.ddogdog.place.facade.dto;
 
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;

@@ -6,12 +6,10 @@ import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
-import com.babyblackdog.ddogdog.place.hotel.service.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 class HotelServiceImpl implements HotelService {
@@ -20,13 +18,6 @@ class HotelServiceImpl implements HotelService {
 
   public HotelServiceImpl(HotelRepository repository) {
     this.repository = repository;
-  }
-
-  @Override
-  @Transactional
-  public HotelResult registerHotel(AddHotelParam param) {
-    Hotel hotel = repository.save(AddHotelParam.to(param));
-    return HotelResult.of(hotel);
   }
 
   @Override

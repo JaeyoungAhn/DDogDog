@@ -9,7 +9,7 @@ import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
-import com.babyblackdog.ddogdog.place.hotel.service.dto.AddHotelParam;
+import com.babyblackdog.ddogdog.place.facade.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,20 +37,6 @@ class HotelServiceImplTest {
   @BeforeEach
   void setUp() {
     this.hotel = placeTestData.getHotelEntity();
-  }
-
-  @Test
-  @DisplayName("유효한 숙소 추가 요청으로 추가한다.")
-  void registerHotel_CreateSuccess() {
-    // Given
-    AddHotelParam param = placeTestData.getAddHotelParam();
-
-    // When
-    HotelResult hotelResult = hotelService.registerHotel(param);
-
-    // Then
-    assertThat(hotelResult.address()).isEqualTo(param.province().getValue());
-    assertThat(hotelResult.name()).isEqualTo(param.hotelName().getValue());
   }
 
   @Test

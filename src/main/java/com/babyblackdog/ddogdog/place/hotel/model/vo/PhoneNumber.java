@@ -6,6 +6,7 @@ import com.babyblackdog.ddogdog.global.exception.HotelException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Transient;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,5 +38,23 @@ public class PhoneNumber {
 
   public String getValue() {
     return value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    PhoneNumber that = (PhoneNumber) o;
+    return Objects.equals(REGEXP, that.REGEXP) && Objects.equals(value,
+        that.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(REGEXP, value);
   }
 }

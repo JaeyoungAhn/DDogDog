@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import java.util.Objects;
 
 @Embeddable
 public class Occupancy {
@@ -44,5 +45,22 @@ public class Occupancy {
 
   public int getMaxOccupancy() {
     return maxOccupancy;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Occupancy occupancy = (Occupancy) o;
+    return maxOccupancy == occupancy.maxOccupancy;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(maxOccupancy);
   }
 }

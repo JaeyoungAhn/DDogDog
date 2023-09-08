@@ -1,11 +1,11 @@
-package com.babyblackdog.ddogdog.place.controller.dto.request;
+package com.babyblackdog.ddogdog.place.hotel.controller.dto;
 
 import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
-import com.babyblackdog.ddogdog.place.hotel.service.dto.AddHotelParam;
+import com.babyblackdog.ddogdog.place.facade.dto.AddHotelParam;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

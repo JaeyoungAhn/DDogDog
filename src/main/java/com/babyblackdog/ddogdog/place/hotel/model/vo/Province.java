@@ -7,6 +7,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Embeddable
 public class Province {
@@ -33,4 +34,20 @@ public class Province {
     return value;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Province province = (Province) o;
+    return Objects.equals(value, province.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value);
+  }
 }
