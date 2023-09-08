@@ -10,5 +10,5 @@ public interface ReviewService {
    * @param reservationId, content, rating
    * @return ReviewResult
    */
-  ReviewResult registerReview(Long reservationId, String content, Double rating);
+  ReviewResult registerReview(Long roomId, Long reservationId, String content, Double rating);
 }
