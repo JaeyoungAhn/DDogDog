@@ -1,5 +1,7 @@
 package com.babyblackdog.ddogdog.review.domain.vo;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_CONTENT;
+
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

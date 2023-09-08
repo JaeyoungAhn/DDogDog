@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.common;
+package com.babyblackdog.ddogdog.common.point;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Positive;

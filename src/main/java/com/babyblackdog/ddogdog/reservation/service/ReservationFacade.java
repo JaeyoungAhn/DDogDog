@@ -1,10 +1,9 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
-import com.babyblackdog.ddogdog.common.Point;
-import com.babyblackdog.ddogdog.common.TimeProvider;
-import com.babyblackdog.ddogdog.place.hotel.service.HotelService;
-import com.babyblackdog.ddogdog.place.room.RoomSimpleResult;
-import com.babyblackdog.ddogdog.reservation.service.dto.StayPeriod;
+import com.babyblackdog.ddogdog.common.date.StayPeriod;
+import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
+import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservationResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;
 import com.babyblackdog.ddogdog.user.service.UserService;
@@ -15,10 +14,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ReservationFacade {
 
-    private final ReservationService service;
-    private final HotelService hotelService;
-    private final UserService userService;
+  private final ReservationService service;
+  private final PlaceReaderService placeService;
+  private final UserService userService;
 
+  public ReservationFacade(
+      ReservationService service,
+      PlaceReaderService placeService,
+      UserService userService
+  ) {
+    this.service = service;
+    this.placeService = placeService;
+    this.userService = userService;
+  }
 
     public ReservationFacade(ReservationService service, HotelService hotelService,
             UserService userService, TimeProvider timeProvider) {
@@ -27,8 +35,17 @@ public class ReservationFacade {
         this.userService = userService;
     }
 
-    public RoomOrderPageResult findRoomInfo(Long placeId, Long roomId, StayPeriod stayPeriod) {
-        validateStay(roomId, stayPeriod);
+    RoomSimpleResult roomSimpleResult = placeService.findRoomSimpleInfo(roomId);
+    return new RoomOrderPageResult(
+        roomSimpleResult.hotelName(),
+        roomSimpleResult.roomType(),
+        roomSimpleResult.roomDescription(),
+        roomSimpleResult.roomNumber(),
+        roomSimpleResult.point(),
+        stayPeriod.checkIn(),
+        stayPeriod.checkOut()
+    );
+  }
 
         RoomSimpleResult roomSimpleResult = hotelService.findRoomInfo(placeId, roomId);
         return new RoomOrderPageResult(
@@ -41,13 +58,8 @@ public class ReservationFacade {
         );
     }
 
-    // 현재 트랜잭션하지 않음
-    public OrderedReservationResult order(Long userId,
-            Long placeId, Long roomId, StayPeriod stayPeriod) {
-        // 유저가 존재하는지 검사
-        if (!userService.doesUserExist(userId)) {
-            throw new IllegalArgumentException("유저가 존재하지 않습니다.");
-        }
+    // room의 금액 가져오기
+    RoomSimpleResult roomInfo = placeService.findRoomSimpleInfo(roomId);
 
         // room의 금액 가져오기
         RoomSimpleResult roomInfo = hotelService.findRoomInfo(placeId, roomId);

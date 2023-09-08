@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.common;
+package com.babyblackdog.ddogdog.common.date;
 
 import java.time.LocalDate;
 import org.springframework.stereotype.Component;
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class TodayDateProvider implements TimeProvider {
 
-    @Override
-    public LocalDate getCurrentDate() {
-        return LocalDate.now();
-    }
+  @Override
+  public LocalDate getCurrentDate() {
+    return LocalDate.now();
+  }
 }

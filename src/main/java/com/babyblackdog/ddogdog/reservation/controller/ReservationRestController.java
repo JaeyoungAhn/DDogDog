@@ -1,6 +1,5 @@
 package com.babyblackdog.ddogdog.reservation.controller;
 
-import com.babyblackdog.ddogdog.common.TimeProvider;
 import com.babyblackdog.ddogdog.reservation.controller.dto.request.ReservationOrderRequest;
 import com.babyblackdog.ddogdog.reservation.controller.dto.response.OrderedReservationResponse;
 import com.babyblackdog.ddogdog.reservation.controller.dto.response.RoomOrderPageResponse;
@@ -52,8 +51,7 @@ public class ReservationRestController {
             @RequestBody @Valid ReservationOrderRequest request) {
         StayPeriod stayPeriod = new StayPeriod(request.checkIn(), request.checkOut(), timeProvider);
 
-        OrderedReservationResult result = facade.order(request.userId(),
-                request.placeId(), request.roomId(), stayPeriod);
+        OrderedReservationResult result = facade.order(request.userId(),request.roomId(), stayPeriod);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

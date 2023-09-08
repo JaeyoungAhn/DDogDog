@@ -1,20 +1,17 @@
 package com.babyblackdog.ddogdog.place.hotel.service;
 
-import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.HOTEL_NOT_FOUND;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.HOTEL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.babyblackdog.ddogdog.global.exception.HotelException;
+import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
+import com.babyblackdog.ddogdog.place.hotel.service.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,34 +29,38 @@ class HotelServiceImplTest {
 
   @Autowired
   private HotelRepository hotelRepository;
+  @Autowired
+  private PlaceTestData placeTestData;
 
   private Hotel hotel;
 
   @BeforeEach
   void setUp() {
-    this.hotel = new Hotel(
-        new HotelName("신라호텔"),
-        new Province("서울"),
-        1L,
-        new PhoneNumber("01012341234"),
-        new HumanName("이부진"),
-        new BusinessName("신세계")
-    );
-  }
-
-  @AfterEach
-  void tearDown() {
-    hotelRepository.deleteAll();
+    this.hotel = placeTestData.getHotelEntity();
   }
 
   @Test
-  @DisplayName("[findPlaceByProvince] 유효한 지역 이름으로 숙소를 조회하면 성공한다.")
-  void findPlaceByProvince_ReadSuccess() {
+  @DisplayName("유효한 숙소 추가 요청으로 추가한다.")
+  void registerHotel_CreateSuccess() {
+    // Given
+    AddHotelParam param = placeTestData.getAddHotelParam();
+
+    // When
+    HotelResult hotelResult = hotelService.registerHotel(param);
+
+    // Then
+    assertThat(hotelResult.address()).isEqualTo(param.province().getValue());
+    assertThat(hotelResult.name()).isEqualTo(param.hotelName().getValue());
+  }
+
+  @Test
+  @DisplayName("유효한 지역 이름으로 숙소를 조회하면 성공한다.")
+  void findHotelsInProvince_ReadSuccess() {
     // Given
     Hotel savedHotel = hotelRepository.save(hotel);
 
     // When
-    Page<HotelResult> result = hotelService.findHotelByProvince(
+    Page<HotelResult> result = hotelService.findHotelsInProvince(
         savedHotel.getAddress(),
         PageRequest.of(0, 2));
 
@@ -71,13 +72,13 @@ class HotelServiceImplTest {
   }
 
   @Test
-  @DisplayName("[findPlaceByProvince] 유효하지 않은 지역 이름으로 숙소를 조회하면 실패한다.")
-  void findPlaceByProvince_ReadException() {
+  @DisplayName("유효하지 않은 지역 이름으로 숙소를 조회하면 실패한다.")
+  void findHotelsInProvince_ReadException() {
     // Given
     Province invalidProvince = new Province("평양");
 
     // When
-    Page<HotelResult> result = hotelService.findHotelByProvince(
+    Page<HotelResult> result = hotelService.findHotelsInProvince(
         invalidProvince,
         PageRequest.of(0, 2));
 
@@ -88,7 +89,7 @@ class HotelServiceImplTest {
   }
 
   @Test
-  @DisplayName("[findPlaceById] 유효한 숙소 아이디를 이용해 숙소를 조회하면 성공한다.")
+  @DisplayName("유효한 숙소 아이디를 이용해 숙소를 조회하면 성공한다.")
   void findPlaceById_ReadSuccess() {
     // Given
     Hotel savedHotel = hotelRepository.save(hotel);
@@ -101,7 +102,7 @@ class HotelServiceImplTest {
   }
 
   @Test
-  @DisplayName("[findPlaceById] 유효하지 않은 숙소 아이디를 이용해 숙소를 조회하면 실패한다.")
+  @DisplayName("유효하지 않은 숙소 아이디를 이용해 숙소를 조회하면 실패한다.")
   void findPlaceById_ReadException() {
     // Given
     Long invalidId = 1L;

@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.user.service;
 
-import com.babyblackdog.ddogdog.common.Point;
+import com.babyblackdog.ddogdog.common.point.Point;
 import org.springframework.stereotype.Service;
 
 @Service

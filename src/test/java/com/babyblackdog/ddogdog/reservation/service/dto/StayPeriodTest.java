@@ -3,7 +3,6 @@ package com.babyblackdog.ddogdog.reservation.service.dto;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.babyblackdog.ddogdog.common.FixedTimeProvider;
-import com.babyblackdog.ddogdog.common.TimeProvider;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

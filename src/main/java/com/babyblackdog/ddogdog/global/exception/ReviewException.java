@@ -1,14 +1,20 @@
 package com.babyblackdog.ddogdog.global.exception;
 
-import com.babyblackdog.ddogdog.global.error.ReviewErrorCode;
-
 public class ReviewException extends RuntimeException {
 
-  public ReviewException(ReviewErrorCode reviewErrorCode) {
-    super(reviewErrorCode.toString());
+  private final ErrorCode errorCode;
+
+  public ReviewException(ErrorCode errorCode) {
+    super(errorCode.getMessage());
+    this.errorCode = errorCode;
   }
 
-  public ReviewException(ReviewErrorCode reviewErrorCode, Exception exception) {
-    super(reviewErrorCode.getMessage(), exception);
+  public ReviewException(ErrorCode errorCode, Exception exception) {
+    super(errorCode.toString(), exception);
+    this.errorCode = errorCode;
+  }
+
+  public ErrorCode getErrorCode() {
+    return errorCode;
   }
 }

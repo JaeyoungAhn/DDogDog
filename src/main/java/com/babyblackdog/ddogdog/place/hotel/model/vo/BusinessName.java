@@ -1,8 +1,9 @@
 package com.babyblackdog.ddogdog.place.hotel.model.vo;
 
-import static com.babyblackdog.ddogdog.global.error.HotelErrorCode.INVALID_BUSINESS_NAME;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_BUSINESS_NAME;
 
 import com.babyblackdog.ddogdog.global.exception.HotelException;
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +24,7 @@ public class BusinessName {
   }
 
   private void validate(String value) {
-    if (value == null || value.isBlank()) {
+    if (StringUtils.isBlank(value)) {
       throw new HotelException(INVALID_BUSINESS_NAME);
     }
   }
