@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 public interface TimeProvider {
 
-  LocalDate getCurrentDate();
+    LocalDate getCurrentDate();
 }

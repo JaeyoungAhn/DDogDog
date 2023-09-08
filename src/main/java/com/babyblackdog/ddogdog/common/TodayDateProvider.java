@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class TodayDateProvider implements TimeProvider {
 
-  @Override
-  public LocalDate getCurrentDate() {
-    return LocalDate.now();
-  }
+    @Override
+    public LocalDate getCurrentDate() {
+        return LocalDate.now();
+    }
 }

@@ -5,23 +5,23 @@ import java.time.LocalDate;
 
 public record StayPeriod(LocalDate checkIn, LocalDate checkOut, TimeProvider timeProvider) {
 
-  public StayPeriod {
-    checkIn = adjustIfInvalid(checkIn, timeProvider);
-    checkOut = adjustIfInvalid(checkOut, timeProvider);
-    checkOut = ensureCheckOutIsAfterCheckIn(checkIn, checkOut);
-  }
-
-  private LocalDate adjustIfInvalid(LocalDate date, TimeProvider timeProvider) {
-    if (date == null || timeProvider.getCurrentDate().isAfter(date)) {
-      return timeProvider.getCurrentDate();
+    public StayPeriod {
+        checkIn = adjustIfInvalid(checkIn, timeProvider);
+        checkOut = adjustIfInvalid(checkOut, timeProvider);
+        checkOut = ensureCheckOutIsAfterCheckIn(checkIn, checkOut);
     }
-    return date;
-  }
 
-  private LocalDate ensureCheckOutIsAfterCheckIn(LocalDate checkIn, LocalDate checkOut) {
-    if (!checkOut.isAfter(checkIn)) {
-      return checkIn.plusDays(1);
+    private LocalDate adjustIfInvalid(LocalDate date, TimeProvider timeProvider) {
+        if (date == null || timeProvider.getCurrentDate().isAfter(date)) {
+            return timeProvider.getCurrentDate();
+        }
+        return date;
     }
-    return checkOut;
-  }
+
+    private LocalDate ensureCheckOutIsAfterCheckIn(LocalDate checkIn, LocalDate checkOut) {
+        if (!checkOut.isAfter(checkIn)) {
+            return checkIn.plusDays(1);
+        }
+        return checkOut;
+    }
 }
