@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 public interface PaymentService {
 
-    Long create(long originPoint, long paymentPoint, LocalDate paymentDate);
+  Long create(long originPoint, long paymentPoint, LocalDate paymentDate);
 }

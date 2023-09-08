@@ -5,11 +5,11 @@ import com.babyblackdog.ddogdog.reviewRoomReservationMapping.domain.ReviewRoomRe
 
 public interface ReviewRoomReservationStore {
 
-    /**
-     * reviewRoomReservation 을 받아서 저장
-     *
-     * @param reviewRoomReservation
-     */
-    void registerReviewRoomReservation(ReviewRoomReservation reviewRoomReservation);
+  /**
+   * reviewRoomReservation 을 받아서 저장
+   *
+   * @param reviewRoomReservation
+   */
+  void registerReviewRoomReservation(ReviewRoomReservation reviewRoomReservation);
 
 }

@@ -15,27 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationFacade {
 
   private final ReservationService service;
-  private final PlaceReaderService placeService;
+  private final PlaceReaderService placeReaderService;
   private final UserService userService;
 
-  public ReservationFacade(
-      ReservationService service,
-      PlaceReaderService placeService,
-      UserService userService
-  ) {
+
+  public ReservationFacade(ReservationService service, PlaceReaderService placeReaderService,
+      UserService userService) {
     this.service = service;
-    this.placeService = placeService;
+    this.placeReaderService = placeReaderService;
     this.userService = userService;
   }
 
-    public ReservationFacade(ReservationService service, HotelService hotelService,
-            UserService userService, TimeProvider timeProvider) {
-        this.service = service;
-        this.hotelService = hotelService;
-        this.userService = userService;
-    }
+  public RoomOrderPageResult findRoomInfo(Long roomId, StayPeriod stayPeriod) {
+    validateStay(roomId, stayPeriod);
 
-    RoomSimpleResult roomSimpleResult = placeService.findRoomSimpleInfo(roomId);
+    RoomSimpleResult roomSimpleResult = placeReaderService.findRoomSimpleInfo(roomId);
     return new RoomOrderPageResult(
         roomSimpleResult.hotelName(),
         roomSimpleResult.roomType(),
@@ -47,38 +41,31 @@ public class ReservationFacade {
     );
   }
 
-        RoomSimpleResult roomSimpleResult = hotelService.findRoomInfo(placeId, roomId);
-        return new RoomOrderPageResult(
-                roomSimpleResult.hotelName(),
-                roomSimpleResult.roomName(),
-                roomSimpleResult.roomDescription(),
-                roomSimpleResult.point(),
-                stayPeriod.checkIn(),
-                stayPeriod.checkOut()
-        );
+  // 현재 트랜잭션하지 않음
+  public OrderedReservationResult order(Long userId, Long roomId, StayPeriod stayPeriod) {
+    // 유저가 존재하는지 검사
+    if (!userService.doesUserExist(userId)) {
+      throw new IllegalArgumentException("유저가 존재하지 않습니다.");
     }
 
     // room의 금액 가져오기
-    RoomSimpleResult roomInfo = placeService.findRoomSimpleInfo(roomId);
+    RoomSimpleResult roomInfo = placeReaderService.findRoomSimpleInfo(roomId);
 
-        // room의 금액 가져오기
-        RoomSimpleResult roomInfo = hotelService.findRoomInfo(placeId, roomId);
+    // 숙박 가능한 지 검사
+    validateStay(roomId, stayPeriod);
 
-        // 숙박 가능한 지 검사
-        validateStay(roomId, stayPeriod);
-
-        // 결제
-        if (userService.deductUserPoints(userId, new Point(roomInfo.point()))) {
-            throw new IllegalArgumentException("결제 실패");
-        }
-        Long reservationId = service.create(userId, roomId, roomInfo,
-                stayPeriod.checkIn(), stayPeriod.checkOut());
-        return new OrderedReservationResult(reservationId);
+    // 결제
+    if (userService.deductUserPoints(userId, new Point(roomInfo.point()))) {
+      throw new IllegalArgumentException("결제 실패");
     }
+    Long reservationId = service.create(userId, roomId, roomInfo,
+        stayPeriod.checkIn(), stayPeriod.checkOut());
+    return new OrderedReservationResult(reservationId);
+  }
 
-    private void validateStay(Long roomId, StayPeriod stayPeriod) {
-        if (!service.isRoomAvailableOnDate(roomId, stayPeriod.checkIn(), stayPeriod.checkOut())) {
-            throw new IllegalStateException("현재 기간을 예약할 수 없습니다.");
-        }
+  private void validateStay(Long roomId, StayPeriod stayPeriod) {
+    if (!service.isRoomAvailableOnDate(roomId, stayPeriod.checkIn(), stayPeriod.checkOut())) {
+      throw new IllegalStateException("현재 기간을 예약할 수 없습니다.");
     }
+  }
 }

@@ -1,11 +1,19 @@
 package com.babyblackdog.ddogdog.reviewRoomReservationMapping.domain;
 
-import com.babyblackdog.ddogdog.global.error.ReviewRoomReservationErrorCode;
-import com.babyblackdog.ddogdog.global.exception.ReviewRoomReservationException;
-import jakarta.persistence.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_RESERVATION_ID;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_REVIEW_ID;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_ROOM_ID;
 
+import com.babyblackdog.ddogdog.global.exception.ReviewRoomReservationException;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Objects;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
@@ -26,9 +34,15 @@ public class ReviewRoomReservation {
   private Long reviewId;
 
   public ReviewRoomReservation(Long roomId, Long reservationId, Long reviewId) {
-    if (Objects.isNull(roomId)) throw new ReviewRoomReservationException(ReviewRoomReservationErrorCode.INVALID_ROOM_ID);
-    if (Objects.isNull(reservationId)) throw new ReviewRoomReservationException(ReviewRoomReservationErrorCode.INVALID_RESERVATION_ID);
-    if (Objects.isNull(reviewId)) throw new ReviewRoomReservationException(ReviewRoomReservationErrorCode.INVALID_REVIEW_ID);
+    if (Objects.isNull(roomId)) {
+      throw new ReviewRoomReservationException(INVALID_ROOM_ID);
+    }
+    if (Objects.isNull(reservationId)) {
+      throw new ReviewRoomReservationException(INVALID_RESERVATION_ID);
+    }
+    if (Objects.isNull(reviewId)) {
+      throw new ReviewRoomReservationException(INVALID_REVIEW_ID);
+    }
 
     this.roomId = roomId;
     this.reservationId = reservationId;

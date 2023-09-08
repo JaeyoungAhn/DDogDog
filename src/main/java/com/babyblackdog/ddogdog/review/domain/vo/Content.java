@@ -1,14 +1,12 @@
 package com.babyblackdog.ddogdog.review.domain.vo;
 
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_CONTENT;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.EMPTY_REVIEW_CONTENT;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_REVIEW_LENGTH;
 
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
-
-import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.EMPTY_REVIEW_CONTENT;
-import static com.babyblackdog.ddogdog.global.error.ReviewErrorCode.INVALID_REVIEW_LENGTH;
 
 @Embeddable
 public class Content {

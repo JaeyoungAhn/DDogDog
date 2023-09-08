@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReviewStoreImpl implements ReviewStore {
 
-    private final ReviewRepository repository;
+  private final ReviewRepository repository;
 
-    public ReviewStoreImpl(ReviewRepository repository) {
-        this.repository = repository;
-    }
+  public ReviewStoreImpl(ReviewRepository repository) {
+    this.repository = repository;
+  }
 
-    @Override
-    public Review registerReview(Review review) {
-        return repository.save(review);
-    }
+  @Override
+  public Review registerReview(Review review) {
+    return repository.save(review);
+  }
 }

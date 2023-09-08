@@ -4,7 +4,7 @@ import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservatio
 
 public record OrderedReservationResponse(Long reservationId) {
 
-    public static OrderedReservationResponse of(OrderedReservationResult result) {
-        return new OrderedReservationResponse(result.reservationId());
-    }
+  public static OrderedReservationResponse of(OrderedReservationResult result) {
+    return new OrderedReservationResponse(result.reservationId());
+  }
 }

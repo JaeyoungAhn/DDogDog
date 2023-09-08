@@ -6,24 +6,24 @@ import jakarta.validation.constraints.Positive;
 @Embeddable
 public class Point {
 
-    @Positive
-    private long value;
+  @Positive
+  private long value;
 
-    public Point(long value) {
-        validate(value);
-        this.value = value;
-    }
+  public Point(long value) {
+    validate(value);
+    this.value = value;
+  }
 
-    protected Point() {
-    }
+  protected Point() {
+  }
 
-    private void validate(long value) {
-        if (value < 0) {
-            throw new IllegalArgumentException("포인트 값은 양수여야 합니다.");
-        }
+  private void validate(long value) {
+    if (value < 0) {
+      throw new IllegalArgumentException("포인트 값은 양수여야 합니다.");
     }
+  }
 
-    public long getValue() {
-        return value;
-    }
+  public long getValue() {
+    return value;
+  }
 }
