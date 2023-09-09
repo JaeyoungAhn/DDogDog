@@ -33,6 +33,7 @@ public class PlaceFacadeService {
 
   public void deleteHotel(Long hotelId) {
     hotelRepository.deleteById(hotelId);
+    roomRepository.deleteByHotelId(hotelId);
   }
 
   public RoomResult registerRoomOfHotel(AddRoomParam addRoomParam) {

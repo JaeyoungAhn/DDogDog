@@ -59,6 +59,13 @@ public class HotelRestController {
         .body(HotelResponse.of(hotelResult));
   }
 
+  /**
+   * 숙소를 제거한다. 숙소에 달린 객실도 모두 제거한다.
+   * DELETE /places/{hotelId}
+   *
+   * @param hotelId
+   * @return ResponseEntity<Void> : 204
+   */
   @DeleteMapping(path = "/{hotelId}")
   public ResponseEntity<Void> removeHotel(@PathVariable Long hotelId) {
     placeService.deleteHotel(hotelId);

@@ -3,6 +3,7 @@ package com.babyblackdog.ddogdog.place.hotel.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -31,6 +32,7 @@ import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
 import com.babyblackdog.ddogdog.place.room.model.Room;
 import com.babyblackdog.ddogdog.place.room.repository.RoomRepository;
+import com.babyblackdog.ddogdog.place.room.service.dto.RoomResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -57,6 +59,8 @@ class HotelRestControllerTest {
 
   @Autowired
   private HotelRepository hotelRepository;
+  @Autowired
+  private RoomRepository roomRepository;
   @Autowired
   private PlaceTestData placeTestData;
   @Autowired
@@ -104,6 +108,29 @@ class HotelRestControllerTest {
                 fieldWithPath("contact").type(STRING).description("숙소 문의번호"),
                 fieldWithPath("representative").type(STRING).description("숙소 대표자명"),
                 fieldWithPath("businessName").type(STRING).description("숙소 사업장명")
+            )
+        ));
+  }
+
+  @Test
+  @DisplayName("숙소 아이디로 숙소와 숙소 내 객실을 제거한다.")
+  void removeHotel_DeleteSuccess() throws Exception {
+    // Given
+    Hotel hotel = hotelRepository.save(placeTestData.getHotelEntity());
+    Room room = placeTestData.bindHotelToRooms(hotel).get(0);
+    roomRepository.save(room);
+
+    // When & Then
+    mockMvc.perform(delete("/places/{hotelId}", hotel.getId())
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-hotel",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("hotelId").description("호텔 아이디")
             )
         ));
   }

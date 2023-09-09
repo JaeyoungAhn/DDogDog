@@ -46,6 +46,8 @@ class PlaceFacadeServiceTest {
   void deleteHotel_DeleteSuccess() {
     // Given
     HotelResult hotelResult = placeService.registerHotel(placeTestData.getAddHotelParam());
+    AddRoomParam param = placeTestData.bindHotelIdToRoomParam(hotelResult.id());
+    placeService.registerRoomOfHotel(param);
 
     // When
     placeService.deleteHotel(hotelResult.id());
