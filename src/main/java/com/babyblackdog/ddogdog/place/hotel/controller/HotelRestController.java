@@ -1,5 +1,8 @@
 package com.babyblackdog.ddogdog.place.hotel.controller;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.babyblackdog.ddogdog.place.facade.PlaceFacadeService;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,9 +54,17 @@ public class HotelRestController {
         .buildAndExpand(hotelResult.id())
         .toUri();
     return ResponseEntity
-        .status(HttpStatus.CREATED)
+        .status(CREATED)
         .location(location)
         .body(HotelResponse.of(hotelResult));
+  }
+
+  @DeleteMapping(path = "/{hotelId}")
+  public ResponseEntity<Void> removeHotel(@PathVariable Long hotelId) {
+    placeService.deleteHotel(hotelId);
+    return ResponseEntity
+        .status(NO_CONTENT)
+        .build();
   }
 
   /**
@@ -65,7 +77,7 @@ public class HotelRestController {
   public ResponseEntity<HotelResponse> getHotel(@PathVariable Long hotelId) {
     HotelResult result = hotelService.findHotelById(hotelId);
     return ResponseEntity
-        .status(HttpStatus.OK)
+        .status(OK)
         .body(HotelResponse.of(result));
   }
 
@@ -81,7 +93,7 @@ public class HotelRestController {
       Pageable pageable) {
     Page<HotelResult> result = hotelService.findHotelsInProvince(new Province(province), pageable);
     return ResponseEntity
-        .status(HttpStatus.OK)
+        .status(OK)
         .body(HotelResponses.of(result));
   }
 

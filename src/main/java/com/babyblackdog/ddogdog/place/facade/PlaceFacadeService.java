@@ -31,6 +31,10 @@ public class PlaceFacadeService {
     return HotelResult.of(hotel);
   }
 
+  public void deleteHotel(Long hotelId) {
+    hotelRepository.deleteById(hotelId);
+  }
+
   public RoomResult registerRoomOfHotel(AddRoomParam addRoomParam) {
     Hotel hotel = this.findHotelId(addRoomParam.hotelId());
     Room room = AddRoomParam.to(hotel, addRoomParam);
