@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,6 +62,14 @@ public class RoomRestController {
         .status(CREATED)
         .location(location)
         .body(RoomResponse.of(roomResult));
+  }
+
+  @DeleteMapping(path = "/{hotelId}/{roomId}")
+  public ResponseEntity<Void> removeRoomOfHotel(@PathVariable Long hotelId, @PathVariable Long roomId) {
+    placeService.deleteRoom(roomId);
+    return ResponseEntity
+        .status(NO_CONTENT)
+        .build();
   }
 
   /**

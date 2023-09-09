@@ -42,6 +42,10 @@ public class PlaceFacadeService {
     return RoomResult.of(roomRepository.save(room));
   }
 
+  public void deleteRoom(Long roomId) {
+    roomRepository.deleteById(roomId);
+  }
+
   private Hotel findHotelId(Long hotelId) {
     return hotelRepository.findById(hotelId)
         .orElseThrow(() -> new HotelException(HOTEL_NOT_FOUND));

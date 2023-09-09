@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -81,7 +82,7 @@ class RoomRestControllerTest {
 
   @Test
   @DisplayName("존재하는 호텔에 객실을 추가한다.")
-  void addRoomOfHotel() throws Exception {
+  void addRoomOfHotel_CreateSuccess() throws Exception {
     // Given
     Long hotelId = savedHotel.getId();
     AddRoomRequest addRoomRequest = placeTestData.getAddRoomRequest();
@@ -123,6 +124,33 @@ class RoomRestControllerTest {
                 fieldWithPath("reservationAvailable").type(BOOLEAN).description("객실 예약 가능 여부")
             )
         ));
+  }
+
+  @Test
+  @DisplayName("존재하는 호텔에 객실을 제거한다.")
+  void removeRoomOfHotel_DeleteSuccess() throws Exception {
+    // Given
+    Hotel hotel = hotelRepository.save(placeTestData.getHotelEntity());
+    Room room = placeTestData.bindHotelToRooms(hotel).get(0);
+    Room savedRoom = roomRepository.save(room);
+
+    // When
+    mockMvc.perform(delete("/places/{hotelId}/{roomId}", hotel.getId(), savedRoom.getId())
+            .accept(APPLICATION_JSON_VALUE)
+            .contentType(APPLICATION_JSON_VALUE))
+        .andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(document("delete-room",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            pathParameters(
+                parameterWithName("hotelId").description("호텔 아이디"),
+                parameterWithName("roomId").description("객실 아이디")
+            )
+        ));
+
+    // Then
+
   }
 
   @Test

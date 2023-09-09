@@ -5,8 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.facade.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.facade.dto.AddRoomParam;
+import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
 import com.babyblackdog.ddogdog.place.hotel.repository.HotelRepository;
 import com.babyblackdog.ddogdog.place.hotel.service.dto.HotelResult;
+import com.babyblackdog.ddogdog.place.room.model.Room;
+import com.babyblackdog.ddogdog.place.room.repository.RoomRepository;
 import com.babyblackdog.ddogdog.place.room.service.dto.RoomResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,8 @@ class PlaceFacadeServiceTest {
 
   @Autowired
   private HotelRepository hotelRepository;
+  @Autowired
+  private RoomRepository roomRepository;
 
   @Autowired
   private PlaceTestData placeTestData;
@@ -71,6 +76,21 @@ class PlaceFacadeServiceTest {
     // Then
     assertThat(roomResult.roomNumber()).isEqualTo(param.roomNumber().getValue());
     assertThat(roomResult.point()).isEqualTo(param.point().getValue());
+  }
+
+  @Test
+  @DisplayName("객실 제거 요청으로 제거한다.")
+  void deleteRoom_DeleteSuccess() {
+    // Given
+    Hotel hotel = hotelRepository.save(placeTestData.getHotelEntity());
+    Room room = placeTestData.bindHotelToRooms(hotel).get(0);
+    Room savedRoom = roomRepository.save(room);
+
+    // When
+    placeService.deleteRoom(savedRoom.getId());
+
+    // Then
+    assertThat(roomRepository.existsById(room.getId())).isFalse();
   }
 
 }
