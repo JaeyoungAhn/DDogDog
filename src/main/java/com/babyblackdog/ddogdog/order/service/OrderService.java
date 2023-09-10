@@ -1,8 +1,8 @@
-package com.babyblackdog.ddogdog.payment.service;
+package com.babyblackdog.ddogdog.order.service;
 
 import java.time.LocalDate;
 
-public interface PaymentService {
+public interface OrderService {
 
   Long create(long originPoint, long paymentPoint, LocalDate paymentDate);
 }

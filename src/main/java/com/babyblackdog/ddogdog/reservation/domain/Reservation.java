@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.reservation.domain;
 
+import com.babyblackdog.ddogdog.order.domain.OrderStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,8 @@ public class Reservation {
 
   @Column(nullable = false)
   private LocalDate checkOut;
+
+  private OrderStatus orderStatus;
 
   protected Reservation() {
   }

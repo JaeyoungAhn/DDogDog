@@ -1,7 +1,7 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
 import com.babyblackdog.ddogdog.common.date.TimeProvider;
-import com.babyblackdog.ddogdog.payment.service.PaymentService;
+import com.babyblackdog.ddogdog.order.service.OrderService;
 import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.domain.Reservation;
 import com.babyblackdog.ddogdog.reservation.domain.ReservationRepository;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 public class ReservationServiceImpl implements ReservationService {
 
   private final ReservationRepository repository;
-  private final PaymentService paymentService;
+  private final OrderService orderService;
   private final TimeProvider timeProvider;
 
-  public ReservationServiceImpl(ReservationRepository repository, PaymentService paymentService,
+  public ReservationServiceImpl(ReservationRepository repository, OrderService orderService,
       TimeProvider timeProvider) {
     this.repository = repository;
-    this.paymentService = paymentService;
+    this.orderService = orderService;
     this.timeProvider = timeProvider;
   }
 
@@ -36,7 +36,7 @@ public class ReservationServiceImpl implements ReservationService {
   @Override
   public Long create(Long userId, Long roomId, RoomSimpleResult roomInfo,
       LocalDate checkIn, LocalDate checkOut) {
-    Long paymentId = paymentService.create(roomInfo.point(), roomInfo.point(),
+    Long paymentId = orderService.create(roomInfo.point(), roomInfo.point(),
         timeProvider.getCurrentDate());
     Reservation newReservation = new Reservation(paymentId, userId, roomId, checkIn, checkOut);
     return repository.save(newReservation).getId();
