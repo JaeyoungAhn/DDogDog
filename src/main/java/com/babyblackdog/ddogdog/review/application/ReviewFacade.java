@@ -17,11 +17,13 @@ public class ReviewFacade {
     this.reviewRoomReservationService = reviewRoomReservationService;
   }
 
-  public ReviewResult registerReview(Long roomId, Long reservationId, String content,
-      Double rating) {
+  public ReviewResult registerReview(Long roomId, Long reservationId, String content, Double rating) {
     ReviewResult savedReview = service.registerReview(roomId, reservationId, content, rating);
-    reviewRoomReservationService.registerReviewRoomReservation(roomId, reservationId,
-        savedReview.id());
+    reviewRoomReservationService.registerReviewRoomReservation(roomId, reservationId, savedReview.id());
     return savedReview;
+  }
+
+  public ReviewResult updateReview(Long reviewId, String content, Double rating) {
+    return service.updateReview(reviewId, content, rating);
   }
 }
