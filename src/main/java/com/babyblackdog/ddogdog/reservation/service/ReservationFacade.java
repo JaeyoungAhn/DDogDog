@@ -5,7 +5,6 @@ import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
 import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservationResult;
-import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;
 import com.babyblackdog.ddogdog.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
