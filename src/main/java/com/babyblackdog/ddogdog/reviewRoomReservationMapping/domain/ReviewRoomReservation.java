@@ -7,17 +7,21 @@ import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_ROOM_I
 import com.babyblackdog.ddogdog.global.exception.ReviewRoomReservationException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.util.Objects;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "review_room_reservation")
+@EnableJpaAuditing
+@Table(name = "review_room_reservation", indexes = {
+    @Index(name = "idx_room_reviewed_date", columnList = "room_id, reviewed_date")
+})
 public class ReviewRoomReservation {
 
   @Id
@@ -32,6 +36,9 @@ public class ReviewRoomReservation {
 
   @Column(name = "review_id")
   private Long reviewId;
+
+  @CreatedDate
+  private LocalDate reviewed_date;
 
   public ReviewRoomReservation(Long roomId, Long reservationId, Long reviewId) {
     if (Objects.isNull(roomId)) {
@@ -59,5 +66,9 @@ public class ReviewRoomReservation {
 
   public Long getId() {
     return id;
+  }
+
+  public void setReviewId(Long reviewId) {
+    this.reviewId = reviewId;
   }
 }
