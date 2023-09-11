@@ -2,13 +2,8 @@ package com.babyblackdog.ddogdog.review.domain;
 
 import com.babyblackdog.ddogdog.review.domain.vo.Content;
 import com.babyblackdog.ddogdog.review.domain.vo.Rating;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -30,6 +25,9 @@ public class Review {
 
   @CreatedDate
   private LocalDate createdDate;
+
+  @Column(name = "user_id")
+  private Long userId;
 
   public Review(Content content, Rating rating) {
     this.content = content;
@@ -55,4 +53,13 @@ public class Review {
     return createdDate;
   }
 
+  public Long getUserId() { return userId; }
+
+  public void setContent(Content content) {
+    this.content = content;
+  }
+
+  public void setRating(Rating rating) {
+    this.rating = rating;
+  }
 }

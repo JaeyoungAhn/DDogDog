@@ -57,4 +57,7 @@ public class ReviewRoomReservation {
   protected ReviewRoomReservation() {
   }
 
+  public Long getId() {
+    return id;
+  }
 }
