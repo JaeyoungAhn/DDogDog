@@ -3,11 +3,10 @@ package com.babyblackdog.ddogdog.order.service;
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
+import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
 import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
 import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.ReservationService;
-import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservationResult;
-import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
 import com.babyblackdog.ddogdog.user.service.UserService;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -56,17 +55,22 @@ public class OrderFacade {
         RoomSimpleResult roomInfo = placeReaderService.findRoomSimpleInfo(roomId);
 
         // 숙박 가능 여부
-        List<Long> selectedReservationIdList = lockTableReservationForUpdate(roomId, stayPeriod);
+        List<Long> selectedReservationIdList =
+                reservationService.lockTableReservationForUpdate(roomId, stayPeriod);
 
         // 결제
+        Long createdOrderId = service.create(userId, stayPeriod);
         if (userService.deductUserPoints(userId, new Point(roomInfo.point()))) {
             throw new IllegalArgumentException("결제 실패");
         }
-        Long reservationId = service.create(userId, roomId, roomInfo,
-                stayPeriod.checkIn(), stayPeriod.checkOut());
+
+        service.pay(createdOrderId);
 
         // 예약 상태 변경
+        for (Long reservationIdToReserve : selectedReservationIdList) {
+            reservationService.reserve(reservationIdToReserve);
+        }
 
-        return new OrderedReservationResult(reservationId);
+        return new OrderCreateResult(createdOrderId);
     }
 }

@@ -6,7 +6,7 @@ import com.babyblackdog.ddogdog.order.controller.dto.response.OrderCreateRespons
 import com.babyblackdog.ddogdog.order.controller.dto.response.RoomOrderPageResponse;
 import com.babyblackdog.ddogdog.order.service.OrderFacade;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
-import com.babyblackdog.ddogdog.reservation.controller.dto.request.ReservationOrderRequest;
+import com.babyblackdog.ddogdog.order.controller.dto.request.OrderCreateRequest;
 import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
@@ -48,7 +48,7 @@ public class OrderRestController {
 
     @PostMapping()
     public ResponseEntity<OrderCreateResponse> createOrder(
-            @RequestBody @Valid ReservationOrderRequest request) {
+            @RequestBody @Valid OrderCreateRequest request) {
         StayPeriod stayPeriod = new StayPeriod(request.checkIn(), request.checkOut(), timeProvider);
 
         OrderCreateResult result = facade.order(request.userId(), request.roomId(), stayPeriod);

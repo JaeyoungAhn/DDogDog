@@ -1,7 +1,9 @@
 package com.babyblackdog.ddogdog.order.domain;
 
+import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -10,29 +12,44 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDate;
+import org.apache.commons.lang3.Validate;
 
 @Entity
 public class Order {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private Long userId;
+    private Long userId;
 
-  @Embedded
-  @AttributeOverride(name = "value", column = @Column(name = "point_used"))
-  private Point pointUsed;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "point_used"))
+    private Point pointUsed;
 
-  @Enumerated(EnumType.STRING)
-  private OrderStatus orderStatus;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "checkIn", column = @Column(name = "check_in")),
+            @AttributeOverride(name = "checkOut", column = @Column(name = "check_out"))
+    })
+    private StayPeriod stayPeriod;
 
-  public Order(Long userId) {
-    this.userId = userId;
-    orderStatus = OrderStatus.PREPARED;
-  }
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
-  protected Order() {
-  }
+    public Order(Long userId, StayPeriod stayPeriod) {
+        Validate.notNull(userId, "userId는 Null일 수 없습니다.");
+        Validate.notNull(stayPeriod, "stayPeriod는 Null일 수 없습니다.");
+
+        orderStatus = OrderStatus.PREPARED;
+        this.userId = userId;
+        this.stayPeriod = stayPeriod;
+    }
+
+    protected Order() {
+    }
+
+    public Long getId() {
+        return id;
+    }
 }
