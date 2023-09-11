@@ -1,29 +1,23 @@
 package com.babyblackdog.ddogdog.reviewRoomReservationMapping.application;
 
-import com.babyblackdog.ddogdog.review.service.ReviewService;
-import com.babyblackdog.ddogdog.review.service.dto.ReviewResult;
-import com.babyblackdog.ddogdog.reviewRoomReservationMapping.service.ReviewRoomReservationService;
-import org.springframework.stereotype.Service;
+import com.babyblackdog.ddogdog.review.service.dto.ReviewResults;
+import org.springframework.data.domain.Pageable;
 
-@Service
-public class ReviewRoomReservationFacade {
+public interface ReviewRoomReservationFacade {
 
-  private final ReviewService service;
-  private final ReviewRoomReservationService reviewRoomReservationService;
+  /**
+   * hotelId, pageable 을 받아 해당하는 ReviewResults 반환 place 패키지에 의해 사용
+   *
+   * @param hotelId, pageable
+   * @return ReviewResults
+   */
+  ReviewResults findReviewsByHotelId(Long hotelId, Pageable pageable);
 
-  public ReviewRoomReservationFacade(ReviewService service,
-                                     ReviewRoomReservationService reviewRoomReservationService) {
-    this.service = service;
-    this.reviewRoomReservationService = reviewRoomReservationService;
-  }
-
-  public ReviewResult registerReview(Long roomId, Long reservationId, String content, Double rating) {
-    ReviewResult savedReview = service.registerReview(roomId, reservationId, content, rating);
-    reviewRoomReservationService.registerReviewRoomReservation(roomId, reservationId, savedReview.id());
-    return savedReview;
-  }
-
-  public ReviewResult updateReview(Long reviewId, String content, Double rating) {
-    return service.updateReview(reviewId, content, rating);
-  }
+  /**
+   * roomId, pageable 을 받아 해당하는 ReviewResults 반환 place 패키지에 의해 사용
+   *
+   * @param roomId, pageable
+   * @return ReviewResults
+   */
+  ReviewResults findReviewsByRoomId(Long roomId, Pageable pageable);
 }
