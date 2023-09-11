@@ -7,6 +7,7 @@ public record ReviewResponse(
     Long id,
     String content,
     Double rating,
+    Long userId,
     LocalDate createdDate
 ) {
 
@@ -15,6 +16,7 @@ public record ReviewResponse(
         result.id(),
         result.content(),
         result.rating(),
+        result.userId(),
         result.createdDate()
     );
   }
