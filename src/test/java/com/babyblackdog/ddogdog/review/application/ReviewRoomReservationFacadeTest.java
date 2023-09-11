@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Transactional
-class ReviewFacadeTest {
+class ReviewRoomReservationFacadeTest {
 
   @Autowired
   private ReviewFacade facade;
