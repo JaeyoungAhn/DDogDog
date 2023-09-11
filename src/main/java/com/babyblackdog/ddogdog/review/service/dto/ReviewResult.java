@@ -7,6 +7,7 @@ public record ReviewResult(
     Long id,
     String content,
     Double rating,
+    Long userId,
     LocalDate createdDate
 ) {
 
@@ -15,6 +16,7 @@ public record ReviewResult(
         entity.getId(),
         entity.getContent(),
         entity.getRating(),
+        entity.getUserId(),
         entity.getCreatedDate()
     );
   }
