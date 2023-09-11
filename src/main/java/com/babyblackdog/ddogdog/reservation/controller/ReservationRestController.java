@@ -4,7 +4,7 @@ import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.date.TimeProvider;
 import com.babyblackdog.ddogdog.reservation.controller.dto.request.ReservationOrderRequest;
 import com.babyblackdog.ddogdog.reservation.controller.dto.response.OrderedReservationResponse;
-import com.babyblackdog.ddogdog.reservation.controller.dto.response.RoomOrderPageResponse;
+import com.babyblackdog.ddogdog.order.controller.dto.RoomOrderPageResponse;
 import com.babyblackdog.ddogdog.reservation.service.ReservationFacade;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservationResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;
@@ -32,18 +32,6 @@ public class ReservationRestController {
   public ReservationRestController(ReservationFacade facade, TimeProvider timeProvider) {
     this.facade = facade;
     this.timeProvider = timeProvider;
-  }
-
-  @GetMapping()
-  public ResponseEntity<RoomOrderPageResponse> getRoomOrderPageInfo(@RequestParam Long roomId,
-      @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate checkIn,
-      @RequestParam @DateTimeFormat(iso = ISO.DATE) LocalDate checkOut) {
-    StayPeriod stayPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
-
-    RoomOrderPageResult result = facade.findRoomInfo(roomId, stayPeriod);
-
-    return ResponseEntity.status(HttpStatus.OK)
-        .body(RoomOrderPageResponse.of(result));
   }
 
   @PostMapping()

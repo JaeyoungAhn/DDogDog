@@ -26,20 +26,7 @@ public class ReservationFacade {
     this.userService = userService;
   }
 
-  public RoomOrderPageResult findRoomInfo(Long roomId, StayPeriod stayPeriod) {
-    validateStay(roomId, stayPeriod);
 
-    RoomSimpleResult roomSimpleResult = placeReaderService.findRoomSimpleInfo(roomId);
-    return new RoomOrderPageResult(
-        roomSimpleResult.hotelName(),
-        roomSimpleResult.roomType(),
-        roomSimpleResult.roomDescription(),
-        roomSimpleResult.roomNumber(),
-        roomSimpleResult.point(),
-        stayPeriod.checkIn(),
-        stayPeriod.checkOut()
-    );
-  }
 
   // 현재 트랜잭션하지 않음
   public OrderedReservationResult order(Long userId, Long roomId, StayPeriod stayPeriod) {

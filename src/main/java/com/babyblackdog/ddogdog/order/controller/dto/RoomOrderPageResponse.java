@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.reservation.controller.dto.response;
+package com.babyblackdog.ddogdog.order.controller.dto;
 
 import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;
 import java.time.LocalDate;
