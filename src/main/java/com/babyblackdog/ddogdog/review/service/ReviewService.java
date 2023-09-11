@@ -1,7 +1,7 @@
 package com.babyblackdog.ddogdog.review.service;
 
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResult;
-import com.babyblackdog.ddogdog.reviewRoomReservationMapping.domain.ReviewRoomReservation;
+import com.babyblackdog.ddogdog.review.service.dto.ReviewResults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,18 +24,18 @@ public interface ReviewService {
   ReviewResult updateReview(Long reviewId, String content, Double rating);
 
   /**
-   * userId, pageable을 통해 리뷰들 반환
+   * reviewId 들을 통해 Review 들을 반환
    *
-   * @param userId, pageable
-   * @return Page<ReviewResult>
+   * @param reviewIds
+   * @return ReviewResults
    */
-  Page<ReviewResult> findReviewsByUserId(Long userId, Pageable pageable);
+  ReviewResults findReviewsByReviewIds(Page<Long> reviewIds);
 
   /**
-   * Page<ReviewIds> 를 통해 리뷰들 반환
+   * userId, pageable 을 통해 Review 들을 반환
    *
-   * @param reviewRoomReservations
-   * @return Page<ReviewResult>
+   * @param userId, pageable
+   * @return ReviewResults
    */
-  Page<ReviewResult> findReviewsByReviewRoomReservation(Page<ReviewRoomReservation> reviewRoomReservations);
+  ReviewResults findReviewsByUserId(Long userId, Pageable pageable);
 }

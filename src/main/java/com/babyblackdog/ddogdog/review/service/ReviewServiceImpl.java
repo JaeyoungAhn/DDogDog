@@ -4,7 +4,7 @@ import com.babyblackdog.ddogdog.review.domain.Review;
 import com.babyblackdog.ddogdog.review.domain.vo.Content;
 import com.babyblackdog.ddogdog.review.domain.vo.Rating;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResult;
-import com.babyblackdog.ddogdog.reviewRoomReservationMapping.domain.ReviewRoomReservation;
+import com.babyblackdog.ddogdog.review.service.dto.ReviewResults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,8 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Transactional
   @Override
-  public ReviewResult registerReview(Long roomId, Long reservationId, String content, Double rating) {
+  public ReviewResult registerReview(Long roomId, Long reservationId, String content,
+      Double rating) {
     Review review = new Review(new Content(content), new Rating(rating));
     Review savedReview = store.registerReview(review);
     return ReviewResult.of(savedReview);
@@ -40,15 +41,14 @@ public class ReviewServiceImpl implements ReviewService {
   }
 
   @Override
-  public Page<ReviewResult> findReviewsByUserId(Long userId, Pageable pageable) {
-    Page<Review> retrievedReviews = reader.findReviewsByUserId(userId, pageable);
-    return retrievedReviews.map(ReviewResult::of);
+  public ReviewResults findReviewsByReviewIds(Page<Long> reviewIds) {
+    Page<Review> retrievedReviews = reader.findReviewsByReviewIds(reviewIds);
+    return ReviewResults.of(retrievedReviews);
   }
 
   @Override
-  public Page<ReviewResult> findReviewsByReviewRoomReservation(Page<ReviewRoomReservation> reviewRoomReservations) {
-    Page<Review> retrievedReviews = reader.findReviewsByRoomId(reviewRoomReservations.get());
-    return retrievedReviews.map(ReviewResult::of);
+  public ReviewResults findReviewsByUserId(Long userId, Pageable pageable) {
+    Page<Review> retrievedReviews = reader.findReviewsByUserId(userId, pageable);
+    return ReviewResults.of(retrievedReviews);
   }
-
 }
