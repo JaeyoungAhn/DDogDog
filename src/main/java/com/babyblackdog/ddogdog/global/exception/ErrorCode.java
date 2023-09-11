@@ -23,6 +23,7 @@ public enum ErrorCode {
   EMPTY_REVIEW_CONTENT(HttpStatus.BAD_REQUEST, "R400", "유효하지 않은 리뷰 내용입니다."),
   INVALID_REVIEW_LENGTH(HttpStatus.BAD_REQUEST, "R500", "리뷰 길이는 최소 10글자 이상이어야 합니다."),
   INVALID_RATING_RANGE(HttpStatus.BAD_REQUEST, "R600", "유효하지 않은 리뷰 별점입니다."),
+  REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST, "7600", "존재하지 않는 리뷰입니다."),
 
   // room
   ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "RM-100", "존재하지 않는 객실입니다."),
