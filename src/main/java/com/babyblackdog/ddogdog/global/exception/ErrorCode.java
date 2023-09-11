@@ -31,10 +31,11 @@ public enum ErrorCode {
   INVALID_OCCUPANCY_UPPER(HttpStatus.BAD_REQUEST, "RM-210", "최대 수용 인원은 10명까지 입니다."),
   INVALID_ROOM_NUMBER(HttpStatus.BAD_REQUEST, "RM-220", "방 번호는 반드시 주어져야 합니다."),
 
-  // reservation
+  // 3R(Review, Reservation, Room)
   INVALID_ROOM_ID(HttpStatus.BAD_REQUEST, "RRR100", "유효하지 않은 객실번호입니다."),
   INVALID_RESERVATION_ID(HttpStatus.BAD_REQUEST, "RRR200", "유효하지 않은 예약번호입니다."),
-  INVALID_REVIEW_ID(HttpStatus.BAD_REQUEST, "RRR300", "유효하지 않은 리뷰번호입니다.");
+  INVALID_REVIEW_ID(HttpStatus.BAD_REQUEST, "RRR300", "유효하지 않은 리뷰번호입니다."),
+  R3_NOT_FOUND(HttpStatus.BAD_REQUEST, "RRR400", "존재하지 않는 매핑테이블 키입니다.");
 
   private final HttpStatus httpStatus;
   private final String code;
