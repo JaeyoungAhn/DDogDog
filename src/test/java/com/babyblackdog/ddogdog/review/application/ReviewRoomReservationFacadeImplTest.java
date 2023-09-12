@@ -21,12 +21,13 @@ class ReviewRoomReservationFacadeImplTest {
   @DisplayName("[registerReview] 유효한 리뷰 정보로 생성할 수 있다.")
   void createReview_SuccessOnValid() {
     // Given & When
-    ReviewResult savedReviewResult = facade.registerReview(1L, 2L, "객실에 모기가 많았습니다.", 2.5);
+    ReviewResult savedReviewResult = facade.registerReview(1L, "객실에 모기가 많았습니다.", 2.5, 1L);
 
     // Then
     assertThat(savedReviewResult.id()).isEqualTo(1L);
     assertThat(savedReviewResult.content()).isEqualTo("객실에 모기가 많았습니다.");
     assertThat(savedReviewResult.rating()).isEqualTo(2.5, within(0.0001));
+    assertThat(savedReviewResult.userId()).isEqualTo(1L);
   }
 
 }

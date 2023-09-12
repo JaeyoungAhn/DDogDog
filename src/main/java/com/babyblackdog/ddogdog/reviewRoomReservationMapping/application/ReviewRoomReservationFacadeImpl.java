@@ -24,11 +24,16 @@ public class ReviewRoomReservationFacadeImpl implements ReviewRoomReservationFac
     this.roomService = roomService;
   }
 
+//  @Override
+//  public ReviewResults findReviewsByHotelId(Long hotelId, Pageable pageable) {
+//    List<Long> roomIds = roomService.findRoomIdsByHotelId(hotelId);
+//    Page<Long> reviewIds = service.findReviewIdsByRoomIds(roomIds, pageable);
+//    return reviewService.findReviewsByReviewIds(reviewIds);
+//  }
+
   @Override
   public ReviewResults findReviewsByHotelId(Long hotelId, Pageable pageable) {
-    List<Long> roomIds = roomService.findRoomIdsByHotelId(hotelId);
-    Page<Long> reviewIds = service.findReviewIdsByRoomIds(roomIds, pageable);
-    return reviewService.findReviewsByReviewIds(reviewIds);
+    return null;
   }
 
   @Override

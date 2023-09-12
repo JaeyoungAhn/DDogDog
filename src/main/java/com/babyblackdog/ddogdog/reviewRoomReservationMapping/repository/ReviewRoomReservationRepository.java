@@ -14,7 +14,7 @@ public interface ReviewRoomReservationRepository extends
 
   Page<Long> findReviewIdsByRoomId(Long roomId, Pageable pageable);
 
-  Page<Long> findReviewIdsByRoomIds(List<Long> roomIds, Pageable pageable);
+  Page<Long> findReviewIdsByRoomIdIn(List<Long> roomIds, Pageable pageable);
 
   Optional<ReviewRoomReservation> findReviewIdByRoomIdAndReservationId(Long roomId,
       Long reservationId);

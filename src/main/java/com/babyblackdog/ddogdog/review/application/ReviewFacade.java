@@ -11,20 +11,14 @@ import org.springframework.stereotype.Service;
 public class ReviewFacade {
 
   private final ReviewService service;
-  private final ReviewRoomReservationService reviewRoomReservationService;
 
-  public ReviewFacade(ReviewService service,
-      ReviewRoomReservationService reviewRoomReservationService) {
+  public ReviewFacade(ReviewService service) {
     this.service = service;
-    this.reviewRoomReservationService = reviewRoomReservationService;
   }
 
-  public ReviewResult registerReview(Long roomId, Long reservationId, String content,
-      Double rating) {
-    ReviewResult savedReview = service.registerReview(roomId, reservationId, content, rating);
-    reviewRoomReservationService.updateReviewRoomReservation(roomId, reservationId,
-        savedReview.id());
-    return savedReview;
+  public ReviewResult registerReview(Long roomId, String content,
+      Double rating, Long userId) {
+    return service.registerReview(roomId, content, rating, userId);
   }
 
   public ReviewResult updateReview(Long reviewId, String content, Double rating) {

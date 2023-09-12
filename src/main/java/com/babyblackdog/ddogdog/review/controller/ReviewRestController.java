@@ -29,10 +29,10 @@ public class ReviewRestController {
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponse> createReview(@RequestParam Long roomId,
-      @RequestParam Long reservationId,
       @RequestParam String content,
-      @RequestParam Double rating) {
-    ReviewResult addedReviewResult = facade.registerReview(roomId, reservationId, content, rating);
+      @RequestParam Double rating,
+      @RequestParam Long userId) {
+    ReviewResult addedReviewResult = facade.registerReview(roomId, content, rating, userId);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .body(ReviewResponse.of(addedReviewResult));

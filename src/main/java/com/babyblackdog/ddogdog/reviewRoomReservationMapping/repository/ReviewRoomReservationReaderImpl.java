@@ -22,6 +22,6 @@ public class ReviewRoomReservationReaderImpl implements ReviewRoomReservationRea
 
   @Override
   public Page<Long> findReviewIdsByRoomIds(List<Long> roomIds, Pageable pageable) {
-    return repository.findReviewIdsByRoomIds(roomIds, pageable);
+    return repository.findReviewIdsByRoomIdIn(roomIds, pageable);
   }
 }

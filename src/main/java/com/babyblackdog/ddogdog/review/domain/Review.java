@@ -35,9 +35,10 @@ public class Review {
   @Column(name = "user_id")
   private Long userId;
 
-  public Review(Content content, Rating rating) {
+  public Review(Content content, Rating rating, Long userId) {
     this.content = content;
     this.rating = rating;
+    this.userId = userId;
   }
 
   protected Review() {

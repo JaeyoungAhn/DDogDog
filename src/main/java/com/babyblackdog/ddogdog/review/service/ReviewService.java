@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 public interface ReviewService {
 
   /**
-   * reservation_id, content, rating 을 받아 리뷰 생성
+   * roomId, content, rating, userId 을 받아 리뷰 생성
    *
-   * @param reservationId, content, rating
+   * @param roomId, content, rating, userId
    * @return ReviewResult
    */
-  ReviewResult registerReview(Long roomId, Long reservationId, String content, Double rating);
+  ReviewResult registerReview(Long roomId, String content, Double rating, Long userId);
 
   /**
    * reviewId, content, rating 을 받아 리뷰 수정

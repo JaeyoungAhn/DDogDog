@@ -28,7 +28,7 @@ public class ReviewReaderImpl implements ReviewReader {
 
   @Override
   public Page<Review> findReviewsByReviewIds(Page<Long> reviewIds) {
-    List<Review> retrievedReviews = repository.findReviewsByReviewIds(reviewIds.getContent());
+    List<Review> retrievedReviews = repository.findReviewsByIdIn(reviewIds.getContent());
     Pageable pageable = reviewIds.getPageable();
     return new PageImpl<>(retrievedReviews, pageable, retrievedReviews.size());
   }
