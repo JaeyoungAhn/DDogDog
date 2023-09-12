@@ -1,20 +1,20 @@
 package com.babyblackdog.ddogdog.place;
 
 import com.babyblackdog.ddogdog.common.point.Point;
-import com.babyblackdog.ddogdog.place.facade.dto.AddRoomParam;
-import com.babyblackdog.ddogdog.place.hotel.controller.dto.AddHotelRequest;
-import com.babyblackdog.ddogdog.place.hotel.model.Hotel;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.BusinessName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.HotelName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.HumanName;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.PhoneNumber;
-import com.babyblackdog.ddogdog.place.hotel.model.vo.Province;
-import com.babyblackdog.ddogdog.place.facade.dto.AddHotelParam;
-import com.babyblackdog.ddogdog.place.room.controller.dto.AddRoomRequest;
-import com.babyblackdog.ddogdog.place.room.model.Room;
-import com.babyblackdog.ddogdog.place.room.model.vo.Occupancy;
-import com.babyblackdog.ddogdog.place.room.model.vo.RoomNumber;
-import com.babyblackdog.ddogdog.place.room.model.vo.RoomType;
+import com.babyblackdog.ddogdog.place.controller.dto.AddHotelRequest;
+import com.babyblackdog.ddogdog.place.controller.dto.AddRoomRequest;
+import com.babyblackdog.ddogdog.place.model.Hotel;
+import com.babyblackdog.ddogdog.place.model.Room;
+import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
+import com.babyblackdog.ddogdog.place.model.vo.HotelName;
+import com.babyblackdog.ddogdog.place.model.vo.HumanName;
+import com.babyblackdog.ddogdog.place.model.vo.Occupancy;
+import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
+import com.babyblackdog.ddogdog.place.model.vo.Province;
+import com.babyblackdog.ddogdog.place.model.vo.RoomNumber;
+import com.babyblackdog.ddogdog.place.model.vo.RoomType;
+import com.babyblackdog.ddogdog.place.service.dto.AddHotelParam;
+import com.babyblackdog.ddogdog.place.service.dto.AddRoomParam;
 import java.util.List;
 import org.springframework.stereotype.Component;
 

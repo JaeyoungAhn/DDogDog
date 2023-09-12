@@ -2,8 +2,8 @@ package com.babyblackdog.ddogdog.reservation.service;
 
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
-import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
-import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
+import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
+import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservationResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;
 import com.babyblackdog.ddogdog.user.service.UserService;
@@ -15,21 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationFacade {
 
   private final ReservationService service;
-  private final PlaceReaderService placeReaderService;
+  private final PlaceAccessService placeAccessService;
   private final UserService userService;
 
 
-  public ReservationFacade(ReservationService service, PlaceReaderService placeReaderService,
+  public ReservationFacade(ReservationService service, PlaceAccessService placeAccessService,
       UserService userService) {
     this.service = service;
-    this.placeReaderService = placeReaderService;
+    this.placeAccessService = placeAccessService;
     this.userService = userService;
   }
 
   public RoomOrderPageResult findRoomInfo(Long roomId, StayPeriod stayPeriod) {
     validateStay(roomId, stayPeriod);
 
-    RoomSimpleResult roomSimpleResult = placeReaderService.findRoomSimpleInfo(roomId);
+    RoomSimpleResult roomSimpleResult = placeAccessService.findRoomSimpleInfo(roomId);
     return new RoomOrderPageResult(
         roomSimpleResult.hotelName(),
         roomSimpleResult.roomType(),
@@ -49,7 +49,7 @@ public class ReservationFacade {
     }
 
     // room의 금액 가져오기
-    RoomSimpleResult roomInfo = placeReaderService.findRoomSimpleInfo(roomId);
+    RoomSimpleResult roomInfo = placeAccessService.findRoomSimpleInfo(roomId);
 
     // 숙박 가능한 지 검사
     validateStay(roomId, stayPeriod);

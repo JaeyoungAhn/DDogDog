@@ -21,4 +21,4 @@ spring:
         hibernate:
           type:
             descriptor:
-              sql: trace
+              sql: debug

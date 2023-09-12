@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
-import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
+import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.reader.ReservationReaderService;
 import java.time.LocalDate;
 
