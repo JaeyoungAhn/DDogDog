@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.order.service;
 
+import com.babyblackdog.ddogdog.common.StayCostEstimator;
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
@@ -20,25 +21,28 @@ public class OrderFacade {
     private final PlaceReaderService placeReaderService;
     private final ReservationService reservationService;
     private final UserService userService;
+    private final StayCostEstimator stayCostEstimator;
 
     public OrderFacade(OrderService service, PlaceReaderService placeReaderService,
-            ReservationService reservationService, UserService userService) {
+            ReservationService reservationService, UserService userService,
+            StayCostEstimator stayCostEstimator) {
         this.service = service;
         this.placeReaderService = placeReaderService;
         this.reservationService = reservationService;
         this.userService = userService;
+        this.stayCostEstimator = stayCostEstimator;
     }
 
     public RoomOrderPageResult findRoomSummary(Long roomId, StayPeriod stayPeriod) {
         RoomSimpleResult roomSimpleResult = placeReaderService.findRoomSimpleInfo(roomId);
 
-        long stayDays = ChronoUnit.DAYS.between(stayPeriod.checkOut(), stayPeriod.checkIn());
         return new RoomOrderPageResult(
                 roomSimpleResult.hotelName(),
                 roomSimpleResult.roomType(),
                 roomSimpleResult.roomDescription(),
                 roomSimpleResult.roomNumber(),
-                roomSimpleResult.point() * stayDays,
+                stayCostEstimator.calculateTotalCost(stayPeriod,
+                        new Point(roomSimpleResult.point())),
                 stayPeriod.checkIn(),
                 stayPeriod.checkOut()
         );
@@ -54,23 +58,25 @@ public class OrderFacade {
         // room의 정보 가져오기
         RoomSimpleResult roomInfo = placeReaderService.findRoomSimpleInfo(roomId);
 
-        // 숙박 가능 여부
-        List<Long> selectedReservationIdList =
-                reservationService.lockTableReservationForUpdate(roomId, stayPeriod);
-
         // 결제
-        Long createdOrderId = service.create(userId, stayPeriod);
-        if (userService.deductUserPoints(userId, new Point(roomInfo.point()))) {
+        Point pointToPay = stayCostEstimator.calculateTotalCost(stayPeriod,
+                new Point(roomInfo.point()));
+        if (userService.deductUserPoints(userId, pointToPay)) {
             throw new IllegalArgumentException("결제 실패");
         }
 
-        service.pay(createdOrderId);
+        Long createdOrderId = service.create(userId, stayPeriod, pointToPay);
 
-        // 예약 상태 변경
-        for (Long reservationIdToReserve : selectedReservationIdList) {
-            reservationService.reserve(reservationIdToReserve);
+        // 숙박 가능 여부
+        List<Long> reservedRoomDate =
+                reservationService.reserve(roomId, stayPeriod, createdOrderId);
+        // 예약 확인
+        if (reservedRoomDate.size() != ChronoUnit.DAYS.between(stayPeriod.checkOut(),
+                stayPeriod.checkIn())) {
+            throw new IllegalStateException("예약할 수 없는 날짜가 포함되어 있습니다.");
         }
 
+        service.complete(createdOrderId);
         return new OrderCreateResult(createdOrderId);
     }
 }

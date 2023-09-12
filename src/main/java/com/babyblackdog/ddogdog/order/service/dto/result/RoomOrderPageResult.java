@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.order.service.dto.result;
 
+import com.babyblackdog.ddogdog.common.point.Point;
 import java.time.LocalDate;
 
 public record RoomOrderPageResult(
@@ -7,7 +8,7 @@ public record RoomOrderPageResult(
     String roomName,
     String roomDescription,
     String roomNumber,
-    long stayCost,
+    Point stayCost,
     LocalDate checkIn,
     LocalDate checkOut) {
 

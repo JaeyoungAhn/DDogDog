@@ -15,7 +15,7 @@ public record RoomOrderPageResponse(
     return new RoomOrderPageResponse(
         result.placeName(),
         result.roomName(),
-        result.stayCost(),
+        result.stayCost().getValue(),
         result.checkIn(),
         result.checkOut()
     );
