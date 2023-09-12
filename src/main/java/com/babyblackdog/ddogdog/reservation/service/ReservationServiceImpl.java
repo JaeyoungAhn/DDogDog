@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
+import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.date.TimeProvider;
 import com.babyblackdog.ddogdog.order.service.OrderService;
 import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
@@ -34,11 +35,13 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public Long create(Long userId, Long roomId, RoomSimpleResult roomInfo,
-      LocalDate checkIn, LocalDate checkOut) {
-    Long paymentId = orderService.create(roomInfo.point(), roomInfo.point(),
-        timeProvider.getCurrentDate());
-    Reservation newReservation = new Reservation(paymentId, userId, roomId, checkIn, checkOut);
-    return repository.save(newReservation).getId();
+  public Long create(Long userId, Long roomId, RoomSimpleResult roomInfo, LocalDate checkIn,
+          LocalDate checkOut) {
+    return null;
+  }
+
+  @Override
+  public List<Long> reserve(Long roomId, StayPeriod stayPeriod, Long createdOrderId) {
+    return null;
   }
 }

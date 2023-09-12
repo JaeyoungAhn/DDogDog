@@ -22,8 +22,8 @@ class StayPeriodTest {
     StayPeriod actual = new StayPeriod(checkIn, checkOut, timeProvider);
 
     // Then
-    assertThat(actual.checkIn()).isEqualTo(FIXED_DATE);
-    assertThat(actual.checkOut()).isEqualTo(FIXED_DATE.plusDays(1));
+    assertThat(actual.getCheckIn()).isEqualTo(FIXED_DATE);
+    assertThat(actual.getCheckOut()).isEqualTo(FIXED_DATE.plusDays(1));
   }
 
 
@@ -38,8 +38,8 @@ class StayPeriodTest {
     StayPeriod actual = new StayPeriod(checkIn, checkOut, timeProvider);
 
     // Then
-    assertThat(actual.checkIn()).isEqualTo(FIXED_DATE);
-    assertThat(actual.checkOut()).isEqualTo(checkOut);
+    assertThat(actual.getCheckIn()).isEqualTo(FIXED_DATE);
+    assertThat(actual.getCheckOut()).isEqualTo(checkOut);
   }
 
   @Test
@@ -55,8 +55,8 @@ class StayPeriodTest {
     StayPeriod actual = new StayPeriod(checkIn, checkOut, timeProvider);
 
     // Then
-    assertThat(actual.checkIn()).isEqualTo(checkIn);
-    assertThat(actual.checkOut()).isEqualTo(expectedCheckOut);
+    assertThat(actual.getCheckIn()).isEqualTo(checkIn);
+    assertThat(actual.getCheckOut()).isEqualTo(expectedCheckOut);
   }
 
   @Test
@@ -70,7 +70,7 @@ class StayPeriodTest {
     StayPeriod actual = new StayPeriod(checkIn, checkOut, timeProvider);
 
     // Then
-    assertThat(actual.checkIn()).isEqualTo(checkIn);
-    assertThat(actual.checkOut()).isEqualTo(checkOut);
+    assertThat(actual.getCheckIn()).isEqualTo(checkIn);
+    assertThat(actual.getCheckOut()).isEqualTo(checkOut);
   }
 }

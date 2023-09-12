@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class StayCostEstimator {
 
     public Point calculateTotalCost(StayPeriod stayPeriod, Point dailyCost) {
-        long stayDays = ChronoUnit.DAYS.between(stayPeriod.checkOut(), stayPeriod.checkIn());
+        long stayDays = ChronoUnit.DAYS.between(stayPeriod.getCheckOut(), stayPeriod.getCheckIn());
         return new Point(stayDays * dailyCost.getValue());
     }
 }

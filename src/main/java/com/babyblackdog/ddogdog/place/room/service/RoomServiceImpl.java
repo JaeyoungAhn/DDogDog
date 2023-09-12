@@ -38,8 +38,8 @@ class RoomServiceImpl implements RoomService {
         .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND));
     boolean reservationAvailable = mappingService.isReservationAvailableForRoom(
         roomId,
-        stayPeriod.checkIn(),
-        stayPeriod.checkOut());
+        stayPeriod.getCheckIn(),
+        stayPeriod.getCheckOut());
     return RoomResult.of(room, reservationAvailable);
   }
 
@@ -50,8 +50,8 @@ class RoomServiceImpl implements RoomService {
     return rooms.map(room -> {
       boolean reservationAvailable = mappingService.isReservationAvailableForRoom(
           room.getId(),
-          stayPeriod.checkIn(),
-          stayPeriod.checkOut());
+          stayPeriod.getCheckIn(),
+          stayPeriod.getCheckOut());
       return RoomResult.of(room, reservationAvailable);
     });
   }

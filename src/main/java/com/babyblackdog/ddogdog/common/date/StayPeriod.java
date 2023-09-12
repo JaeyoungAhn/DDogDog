@@ -2,25 +2,36 @@ package com.babyblackdog.ddogdog.common.date;
 
 import java.time.LocalDate;
 
-public record StayPeriod(LocalDate checkIn, LocalDate checkOut, TimeProvider timeProvider) {
+public class StayPeriod {
 
-  public StayPeriod {
-    checkIn = adjustIfInvalid(checkIn, timeProvider);
-    checkOut = adjustIfInvalid(checkOut, timeProvider);
-    checkOut = ensureCheckOutIsAfterCheckIn(checkIn, checkOut);
-  }
+    private final LocalDate checkIn;
+    private final LocalDate checkOut;
 
-  private LocalDate adjustIfInvalid(LocalDate date, TimeProvider timeProvider) {
-    if (date == null || timeProvider.getCurrentDate().isAfter(date)) {
-      return timeProvider.getCurrentDate();
+    public StayPeriod(LocalDate checkIn, LocalDate checkOut, TimeProvider timeProvider) {
+        this.checkIn = adjustIfInvalid(checkIn, timeProvider);
+        LocalDate validCheckOut = adjustIfInvalid(checkOut, timeProvider);
+        this.checkOut = ensureCheckOutIsAfterCheckIn(this.checkIn, validCheckOut);
     }
-    return date;
-  }
 
-  private LocalDate ensureCheckOutIsAfterCheckIn(LocalDate checkIn, LocalDate checkOut) {
-    if (!checkOut.isAfter(checkIn)) {
-      return checkIn.plusDays(1);
+    public LocalDate getCheckIn() {
+        return checkIn;
     }
-    return checkOut;
-  }
+
+    public LocalDate getCheckOut() {
+        return checkOut;
+    }
+
+    private LocalDate adjustIfInvalid(LocalDate date, TimeProvider timeProvider) {
+        if (date == null || timeProvider.getCurrentDate().isAfter(date)) {
+            return timeProvider.getCurrentDate();
+        }
+        return date;
+    }
+
+    private LocalDate ensureCheckOutIsAfterCheckIn(LocalDate checkIn, LocalDate checkOut) {
+        if (!checkOut.isAfter(checkIn)) {
+            return checkIn.plusDays(1);
+        }
+        return checkOut;
+    }
 }

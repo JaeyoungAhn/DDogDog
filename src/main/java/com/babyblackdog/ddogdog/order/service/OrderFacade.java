@@ -43,8 +43,8 @@ public class OrderFacade {
                 roomSimpleResult.roomNumber(),
                 stayCostEstimator.calculateTotalCost(stayPeriod,
                         new Point(roomSimpleResult.point())),
-                stayPeriod.checkIn(),
-                stayPeriod.checkOut()
+                stayPeriod.getCheckIn(),
+                stayPeriod.getCheckOut()
         );
     }
 
@@ -71,8 +71,8 @@ public class OrderFacade {
         List<Long> reservedRoomDate =
                 reservationService.reserve(roomId, stayPeriod, createdOrderId);
         // 예약 확인
-        if (reservedRoomDate.size() != ChronoUnit.DAYS.between(stayPeriod.checkOut(),
-                stayPeriod.checkIn())) {
+        if (reservedRoomDate.size() != ChronoUnit.DAYS.between(stayPeriod.getCheckOut(),
+                stayPeriod.getCheckIn())) {
             throw new IllegalStateException("예약할 수 없는 날짜가 포함되어 있습니다.");
         }
 
