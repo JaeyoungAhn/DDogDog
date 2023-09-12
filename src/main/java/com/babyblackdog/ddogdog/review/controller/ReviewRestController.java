@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.review.controller;
 
+import com.babyblackdog.ddogdog.review.controller.dto.ReviewRequest;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponse;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponses;
 import com.babyblackdog.ddogdog.review.service.ReviewService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@RequestMapping(path = "/reviews")
 public class ReviewRestController {
   private final ReviewService service;
 
@@ -22,11 +24,13 @@ public class ReviewRestController {
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<ReviewResponse> createReview(@RequestParam Long roomId,
-                                                     @RequestParam String content,
-                                                     @RequestParam Double rating,
-                                                     @RequestParam Long userId) {
-    ReviewResult addedReviewResult = service.registerReview(roomId, content, rating, userId);
+  public ResponseEntity<ReviewResponse> createReview(@RequestBody ReviewRequest reviewRequest) {
+    ReviewResult addedReviewResult = service.registerReview(
+            reviewRequest.roomId(),
+            reviewRequest.content(),
+            reviewRequest.rating(),
+            reviewRequest.userId());
+
     return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(ReviewResponse.of(addedReviewResult));
