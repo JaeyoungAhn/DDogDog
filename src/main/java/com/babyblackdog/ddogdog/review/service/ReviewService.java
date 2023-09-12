@@ -2,8 +2,9 @@ package com.babyblackdog.ddogdog.review.service;
 
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResult;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResults;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface ReviewService {
 
@@ -24,12 +25,12 @@ public interface ReviewService {
   ReviewResult updateReview(Long reviewId, String content, Double rating);
 
   /**
-   * reviewId 들을 통해 Review 들을 반환
+   * roomIds, pageable 들을 통해 ReviewResults 를 반환
    *
-   * @param reviewIds
+   * @param roomIds, pageable
    * @return ReviewResults
    */
-  ReviewResults findReviewsByReviewIds(Page<Long> reviewIds);
+  ReviewResults findReviewsByReviewIds(List<Long> roomIds, Pageable pageable);
 
   /**
    * userId, pageable 을 통해 Review 들을 반환

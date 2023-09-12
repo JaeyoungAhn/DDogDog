@@ -1,15 +1,15 @@
 package com.babyblackdog.ddogdog.review.repository;
 
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.REVIEW_NOT_FOUND;
-
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import com.babyblackdog.ddogdog.review.domain.Review;
 import com.babyblackdog.ddogdog.review.service.ReviewReader;
-import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.REVIEW_NOT_FOUND;
 
 @Component
 public class ReviewReaderImpl implements ReviewReader {
@@ -27,10 +27,8 @@ public class ReviewReaderImpl implements ReviewReader {
   }
 
   @Override
-  public Page<Review> findReviewsByReviewIds(Page<Long> reviewIds) {
-    List<Review> retrievedReviews = repository.findReviewsByIdIn(reviewIds.getContent());
-    Pageable pageable = reviewIds.getPageable();
-    return new PageImpl<>(retrievedReviews, pageable, retrievedReviews.size());
+  public Page<Review> findReviewsByReviewIds(List<Long> reviewIds, Pageable pageable) {
+    return repository.findReviewsByIdIn(reviewIds, pageable);
   }
 
   @Override

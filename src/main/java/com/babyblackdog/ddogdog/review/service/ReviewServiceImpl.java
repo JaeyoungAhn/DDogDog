@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -40,8 +42,8 @@ public class ReviewServiceImpl implements ReviewService {
   }
 
   @Override
-  public ReviewResults findReviewsByReviewIds(Page<Long> reviewIds) {
-    Page<Review> retrievedReviews = reader.findReviewsByReviewIds(reviewIds);
+  public ReviewResults findReviewsByReviewIds(List<Long> reviewIds, Pageable pageable) {
+    Page<Review> retrievedReviews = reader.findReviewsByReviewIds(reviewIds, pageable);
     return ReviewResults.of(retrievedReviews);
   }
 
