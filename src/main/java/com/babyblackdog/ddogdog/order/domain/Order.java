@@ -25,7 +25,7 @@ public class Order {
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "point_used"))
-    private Point pointUsed;
+    private Point usedPoint;
 
     @Embedded
     @AttributeOverrides({
@@ -37,13 +37,15 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    public Order(Long userId, StayPeriod stayPeriod) {
+    public Order(Long userId, StayPeriod stayPeriod, Point usedPoint) {
         Validate.notNull(userId, "userId는 Null일 수 없습니다.");
         Validate.notNull(stayPeriod, "stayPeriod는 Null일 수 없습니다.");
+        Validate.notNull(usedPoint, "pointUsed는 Null일 수 없습니다.");
 
         orderStatus = OrderStatus.PREPARED;
         this.userId = userId;
         this.stayPeriod = stayPeriod;
+        this.usedPoint = usedPoint;
     }
 
     protected Order() {
@@ -51,5 +53,9 @@ public class Order {
 
     public Long getId() {
         return id;
+    }
+
+    public void complete() {
+        orderStatus = OrderStatus.COMPLETED;
     }
 }
