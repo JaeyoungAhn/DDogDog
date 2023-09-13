@@ -55,7 +55,23 @@ public class Order {
         return id;
     }
 
+    public Point getUsedPoint() {
+        return usedPoint;
+    }
+
+    public StayPeriod getStayPeriod() {
+        return stayPeriod;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
     public void complete() {
         orderStatus = OrderStatus.COMPLETED;
+    }
+
+    public boolean isOrderAuthorValid(long userId) {
+        return this.userId == userId;
     }
 }
