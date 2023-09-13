@@ -68,8 +68,8 @@ class ReviewRestControllerTest {
                                 fieldWithPath("id").type(NUMBER).description("리뷰 아이디"),
                                 fieldWithPath("roomId").type(NUMBER).description("객실 아이디"),
                                 fieldWithPath("content").type(STRING).description("리뷰 내용"),
+                                fieldWithPath("email").type(STRING).description("이메일"),
                                 fieldWithPath("rating").type(NUMBER).description("리뷰 별점"),
-                                fieldWithPath("userId").type(NUMBER).description("유저 아이디"),
                                 fieldWithPath("createdDate").type(STRING).description("생성 시간")
                         )
                 ));
