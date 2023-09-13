@@ -67,15 +67,8 @@ public class OrderFacade {
 
         Long createdOrderId = service.create(userId, stayPeriod, pointToPay);
 
-        // 숙박 가능 여부
         List<Long> reservedRoomDate =
                 reservationService.reserve(roomId, stayPeriod, createdOrderId);
-        // 예약 확인
-        if (reservedRoomDate.size() != ChronoUnit.DAYS.between(stayPeriod.getCheckOut(),
-                stayPeriod.getCheckIn())) {
-            throw new IllegalStateException("예약할 수 없는 날짜가 포함되어 있습니다.");
-        }
-
         service.complete(createdOrderId);
         return new OrderCreateResult(createdOrderId);
     }
