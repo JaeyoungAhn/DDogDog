@@ -46,11 +46,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderCancelResult cancel(Long orderId, long userId) {
         Order foundOrder = repository.findById(orderId).orElseThrow(IllegalArgumentException::new);
-        if (!foundOrder.canCanceled(userId)) {
-            throw new IllegalStateException("주문을 취소할 수 없습니다.");
-        }
 
-        foundOrder.cancel();
+        foundOrder.cancel(userId);
+
         return new OrderCancelResult(
                 foundOrder.getUsedPoint(),
                 foundOrder.getStayPeriod()

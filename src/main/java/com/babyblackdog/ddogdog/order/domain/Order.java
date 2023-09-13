@@ -68,14 +68,24 @@ public class Order {
     }
 
     public void complete() {
-        orderStatus = OrderStatus.COMPLETED;
+        if (this.orderStatus != OrderStatus.PREPARED) {
+            throw new IllegalStateException("주문을 완료할 수 없습니다.");
+        }
+        this.orderStatus = OrderStatus.COMPLETED;
     }
 
     public boolean isOrderAuthorValid(long userId) {
         return this.userId == userId;
     }
 
-    public boolean canCanceled(long userId) {
+    public void cancel(long userId) {
+        if (!canCanceled(userId)) {
+            throw new IllegalStateException("주문을 취소할 수 없습니다.");
+        }
+        this.orderStatus = OrderStatus.CANCELED;
+    }
+
+    private boolean canCanceled(long userId) {
         if (!isOrderAuthorValid(userId)) {
             return false;
         }
@@ -83,9 +93,5 @@ public class Order {
             return false;
         }
         return true;
-    }
-
-    public void cancel() {
-        this.orderStatus = OrderStatus.CANCELED;
     }
 }
