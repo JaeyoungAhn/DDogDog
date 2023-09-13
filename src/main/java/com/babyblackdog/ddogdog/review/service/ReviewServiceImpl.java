@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.review.service;
 
 import com.babyblackdog.ddogdog.review.domain.Review;
 import com.babyblackdog.ddogdog.review.domain.vo.Content;
+import com.babyblackdog.ddogdog.review.domain.vo.Email;
 import com.babyblackdog.ddogdog.review.domain.vo.Rating;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResult;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResults;
@@ -26,8 +27,8 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Transactional
   @Override
-  public ReviewResult registerReview(Long roomId, String content, Double rating, Long userId) {
-    Review review = new Review(roomId, new Content(content), new Rating(rating), userId);
+  public ReviewResult registerReview(Long roomId, String content, Double rating, String email) {
+    Review review = new Review(roomId, new Content(content), new Rating(rating), new Email(email));
     Review savedReview = store.registerReview(review);
     return ReviewResult.of(savedReview);
   }
@@ -42,14 +43,14 @@ public class ReviewServiceImpl implements ReviewService {
   }
 
   @Override
-  public ReviewResults findReviewsByReviewIds(List<Long> reviewIds, Pageable pageable) {
-    Page<Review> retrievedReviews = reader.findReviewsByReviewIds(reviewIds, pageable);
+  public ReviewResults findReviewsByRoomIds(List<Long> roomIds, Pageable pageable) {
+    Page<Review> retrievedReviews = reader.findReviewsByRoomIds(roomIds, pageable);
     return ReviewResults.of(retrievedReviews);
   }
 
   @Override
-  public ReviewResults findReviewsByUserId(Long userId, Pageable pageable) {
-    Page<Review> retrievedReviews = reader.findReviewsByUserId(userId, pageable);
+  public ReviewResults findReviewsByEmail(String email, Pageable pageable) {
+    Page<Review> retrievedReviews = reader.findReviewsByEmail(new Email(email), pageable);
     return ReviewResults.of(retrievedReviews);
   }
 }

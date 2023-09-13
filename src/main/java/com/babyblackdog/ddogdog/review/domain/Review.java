@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.review.domain;
 
 import com.babyblackdog.ddogdog.review.domain.vo.Content;
+import com.babyblackdog.ddogdog.review.domain.vo.Email;
 import com.babyblackdog.ddogdog.review.domain.vo.Rating;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,6 +22,9 @@ public class Review {
   private Long roomId;
 
   @Embedded
+  private Email email;
+
+  @Embedded
   private Content content;
 
   @Embedded
@@ -29,14 +33,12 @@ public class Review {
   @CreatedDate
   private LocalDate createdDate;
 
-  @Column(name = "user_id")
-  private Long userId;
 
-  public Review(Long roomId, Content content, Rating rating, Long userId) {
+  public Review(Long roomId, Content content, Rating rating, Email email) {
     this.roomId = roomId;
     this.content = content;
     this.rating = rating;
-    this.userId = userId;
+    this.email = email;
   }
 
   protected Review() {
@@ -66,11 +68,12 @@ public class Review {
     return createdDate;
   }
 
-  public Long getUserId() {
-    return userId;
-  }
-
   public Long getRoomId() {
     return roomId;
   }
+
+  public String getEmail() {
+    return email.getValue();
+  }
+
 }

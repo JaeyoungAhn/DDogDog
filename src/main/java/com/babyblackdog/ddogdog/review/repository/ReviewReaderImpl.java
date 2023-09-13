@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.review.repository;
 
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import com.babyblackdog.ddogdog.review.domain.Review;
+import com.babyblackdog.ddogdog.review.domain.vo.Email;
 import com.babyblackdog.ddogdog.review.service.ReviewReader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,16 +24,16 @@ public class ReviewReaderImpl implements ReviewReader {
   @Override
   public Review findReviewById(Long reviewId) {
     return repository.findById(reviewId)
-        .orElseThrow(() -> new ReviewException(REVIEW_NOT_FOUND));
+            .orElseThrow(() -> new ReviewException(REVIEW_NOT_FOUND));
   }
 
   @Override
-  public Page<Review> findReviewsByReviewIds(List<Long> reviewIds, Pageable pageable) {
-    return repository.findReviewsByIdIn(reviewIds, pageable);
+  public Page<Review> findReviewsByEmail(Email email, Pageable pageable) {
+    return repository.findReviewsByEmail(email, pageable);
   }
 
   @Override
-  public Page<Review> findReviewsByUserId(Long userId, Pageable pageable) {
-    return repository.findReviewsByUserId(userId, pageable);
+  public Page<Review> findReviewsByRoomIds(List<Long> roomIds, Pageable pageable) {
+    return repository.findReviewsByIdIn(roomIds, pageable);
   }
 }

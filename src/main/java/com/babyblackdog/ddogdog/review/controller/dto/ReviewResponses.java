@@ -20,9 +20,9 @@ public record ReviewResponses(List<ReviewResponse> reviewResponses) {
     return new ReviewResponse(
             reviewResult.id(),
             reviewResult.roomId(),
+            reviewResult.email(),
             reviewResult.content(),
             reviewResult.rating(),
-            reviewResult.userId(),
             reviewResult.createdDate()
     );
   }

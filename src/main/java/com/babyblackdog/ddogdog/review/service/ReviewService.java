@@ -14,7 +14,7 @@ public interface ReviewService {
    * @param roomId, content, rating, userId
    * @return ReviewResult
    */
-  ReviewResult registerReview(Long roomId, String content, Double rating, Long userId);
+  ReviewResult registerReview(Long roomId, String content, Double rating, String email);
 
   /**
    * reviewId, content, rating 을 받아 리뷰 수정
@@ -30,13 +30,13 @@ public interface ReviewService {
    * @param roomIds, pageable
    * @return ReviewResults
    */
-  ReviewResults findReviewsByReviewIds(List<Long> roomIds, Pageable pageable);
+  ReviewResults findReviewsByRoomIds(List<Long> roomIds, Pageable pageable);
 
   /**
-   * userId, pageable 을 통해 Review 들을 반환
+   * email, pageable 을 통해 Review 들을 반환
    *
-   * @param userId, pageable
+   * @param email, pageable
    * @return ReviewResults
    */
-  ReviewResults findReviewsByUserId(Long userId, Pageable pageable);
+  ReviewResults findReviewsByEmail(String email, Pageable pageable);
 }

@@ -7,9 +7,9 @@ import java.time.LocalDate;
 public record ReviewResponse(
         Long id,
         Long roomId,
+        String email,
         String content,
         Double rating,
-        Long userId,
         LocalDate createdDate
 ) {
 
@@ -17,9 +17,9 @@ public record ReviewResponse(
     return new ReviewResponse(
             result.id(),
             result.roomId(),
+            result.email(),
             result.content(),
             result.rating(),
-            result.userId(),
             result.createdDate()
     );
   }

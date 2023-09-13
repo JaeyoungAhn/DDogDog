@@ -12,8 +12,7 @@ public record ReviewResults(Page<ReviewResult> reviewResults) {
   public static ReviewResults of(Page<Review> retrievedReviews) {
     List<ReviewResult> mappedResults = retrievedReviews.getContent()
             .stream()
-            .map(review -> new ReviewResult(review.getId(), review.getRoomId(), review.getContent(), review.getRating(),
-                    review.getUserId(), review.getCreatedDate()))
+            .map(review -> new ReviewResult(review.getId(), review.getRoomId(), review.getEmail(), review.getContent(), review.getRating(), review.getCreatedDate()))
         .collect(Collectors.toList());
 
     Page<ReviewResult> reviewResultPage = new PageImpl<>(
