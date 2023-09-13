@@ -2,13 +2,16 @@ package com.babyblackdog.ddogdog.user.model;
 
 import static io.micrometer.common.util.StringUtils.isNotEmpty;
 
+import com.babyblackdog.ddogdog.common.point.Point;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.StringJoiner;
 import org.springframework.util.Assert;
@@ -25,33 +28,29 @@ public class User {
   @Column(name = "username")
   private String username;
 
-  @Column(name = "provider")
-  private String provider;
-
-  @Column(name = "provider_id")
-  private String providerId;
-
   @Column(name = "email")
   private String email;
 
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "group_id", referencedColumnName = "id")
-  private Group group;
+  @Enumerated(value = EnumType.STRING)
+  private Role role;
 
-  protected User() {
-  }
+  @Embedded
+  @AttributeOverride(name = "value", column = @Column(name = "remain_point"))
+  private Point point;
 
-  public User(String username, String provider, String providerId, String email, Group group) {
+  public User(String username, String email, Role role, Point point) {
     Assert.isTrue(isNotEmpty(username), "username must be provided.");
-    Assert.isTrue(isNotEmpty(provider), "provider must be provided.");
-    Assert.isTrue(isNotEmpty(providerId), "providerId must be provided.");
-    Assert.isTrue(group != null, "group must be provided.");
+    Assert.isTrue(isNotEmpty(email), "email must be provided.");
+    Assert.notNull(role, "role must be provided");
+    Assert.notNull(point, "point must be provided");
 
     this.username = username;
-    this.provider = provider;
-    this.providerId = providerId;
     this.email = email;
-    this.group = group;
+    this.role = role;
+    this.point = point;
+  }
+
+  protected User() {
   }
 
   public Long getId() {
@@ -62,20 +61,16 @@ public class User {
     return username;
   }
 
-  public String getProvider() {
-    return provider;
-  }
-
-  public String getProviderId() {
-    return providerId;
-  }
-
   public String getEmail() {
     return email;
   }
 
-  public Group getGroup() {
-    return group;
+  public String getRole() {
+    return role.name();
+  }
+
+  public long getPoint() {
+    return point.getValue();
   }
 
   @Override
@@ -83,10 +78,13 @@ public class User {
     return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
         .add("id=" + id)
         .add("username='" + username + "'")
-        .add("provider='" + provider + "'")
-        .add("providerId='" + providerId + "'")
         .add("email='" + email + "'")
-        .add("group=" + group)
+        .add("role=" + getRole())
+        .add("point=" + getPoint())
         .toString();
+  }
+
+  public void addPoint(long charge) {
+    this.point = new Point(getPoint() + charge);
   }
 }

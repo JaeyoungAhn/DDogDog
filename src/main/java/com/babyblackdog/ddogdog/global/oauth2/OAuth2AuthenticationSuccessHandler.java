@@ -14,7 +14,6 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -40,9 +39,8 @@ public class OAuth2AuthenticationSuccessHandler extends
     if (authentication instanceof OAuth2AuthenticationToken) {
       OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
       OAuth2User principal = oauth2Token.getPrincipal();
-      String registrationId = oauth2Token.getAuthorizedClientRegistrationId();
 
-      User user = processUserOAuth2UserJoin(principal, registrationId);
+      User user = processUserOAuth2UserJoin(principal);
 
       String loginSuccessJson = generateLoginSuccessJson(user);
       response.setContentType(APPLICATION_JSON_VALUE);
@@ -54,8 +52,8 @@ public class OAuth2AuthenticationSuccessHandler extends
     }
   }
 
-  private User processUserOAuth2UserJoin(OAuth2User oAuth2User, String registrationId) {
-    return userService.join(oAuth2User, registrationId);
+  private User processUserOAuth2UserJoin(OAuth2User oAuth2User) {
+    return userService.join(oAuth2User);
   }
 
   private String generateLoginSuccessJson(User user) {
@@ -65,21 +63,16 @@ public class OAuth2AuthenticationSuccessHandler extends
         {
           "token": "%s",
           "username": "%s",
-          "provider": "%s",
-          "group": "%s",
           "email": "%s",
+          "role": "%s",
+          "point": "%d"
         }
-        """.formatted(token, user.getUsername(), user.getProvider(),
-        user.getGroup().getName(), user.getEmail());
+        """.formatted(token, user.getUsername(), user.getEmail(), user.getRole(), user.getPoint());
   }
 
   private String generateToken(User user) {
-    String[] roles = user.getGroup().getAuthorities()
-        .stream()
-        .map(SimpleGrantedAuthority::getAuthority)
-        .toArray(String[]::new);
     return jwtProvider.sign(
-        Claims.from(user.getUsername(), roles));
+        Claims.from(user.getUsername(), user.getRole()));
   }
 
 }

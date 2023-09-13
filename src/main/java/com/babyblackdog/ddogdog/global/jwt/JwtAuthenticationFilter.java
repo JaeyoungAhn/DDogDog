@@ -1,9 +1,8 @@
 package com.babyblackdog.ddogdog.global.jwt;
 
 import static io.micrometer.common.util.StringUtils.isNotEmpty;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -13,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +56,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authentication);
           }
         } catch (Exception e) {
-          log.warn("JwtAuthenticationProvider processing failed: {}", e); //
+          log.warn("JwtAuthenticationProvider processing failed: {}", e);
           throw e;
         }
       }
@@ -86,13 +85,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
   }
 
   private List<GrantedAuthority> getAuthorities(Claims claims) {
-    String[] roles = claims.getRoles();
-    boolean condition = (roles == null || roles.length == 0);
-    return condition
-        ? emptyList()
-        : Arrays.stream(roles)
-            .map(SimpleGrantedAuthority::new)
-            .collect(toList());
+    return StringUtils.isBlank(claims.getRole())
+        ? Collections.emptyList()
+        : List.of(new SimpleGrantedAuthority(claims.getRole()));
   }
 
 }

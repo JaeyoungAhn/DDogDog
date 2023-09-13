@@ -1,39 +1,34 @@
 package com.babyblackdog.ddogdog.user.controller;
 
-import com.babyblackdog.ddogdog.global.jwt.JwtAuthentication;
-import com.babyblackdog.ddogdog.user.UserResult;
+import static org.springframework.http.HttpStatus.OK;
+
 import com.babyblackdog.ddogdog.user.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/users")
 public class UserRestController {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  private final UserService userService;
 
-  private final UserService service;
-
-  public UserRestController(UserService service) {
-    this.service = service;
+  public UserRestController(UserService userService) {
+    this.userService = userService;
   }
 
-  @GetMapping(path = "/users/me")
-  public String me(
-      @AuthenticationPrincipal JwtAuthentication authentication) {
-    UserResult userResult = service.findUserFromAuthentication(authentication);
-    return SecurityContextHolder.getContext().getAuthentication().getName();
+  @PatchMapping("/{email}")
+  public ResponseEntity<String> addPoint(
+      @PathVariable String email,
+      @RequestBody long charge
+  ) {
+    userService.chargePoint(email, charge);
+    String message = "%d point charged to %s".formatted(email, charge);
+    return ResponseEntity
+        .status(OK)
+        .body(message);
   }
-
-  @GetMapping(path = "/users/info")
-  public Authentication info() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    LoggerFactory.getLogger(getClass()).info("authentication : {}", authentication);
-    return authentication;
-  }
-
 }

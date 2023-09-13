@@ -2,7 +2,6 @@ package com.babyblackdog.ddogdog.global.jwt;
 
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.StringJoiner;
 import org.springframework.util.Assert;
@@ -10,7 +9,7 @@ import org.springframework.util.Assert;
 public class Claims {
 
   private String username;
-  private String[] roles;
+  private String role;
   private Date issuedAt;
   private Date expiresAt;
 
@@ -19,15 +18,15 @@ public class Claims {
 
   Claims(DecodedJWT decodedJWT) {
     this.username = getUsernameFromClaim(decodedJWT);
-    this.roles = getRolesFromClaim(decodedJWT);
+    this.role = getRoleFromClaim(decodedJWT);
     this.issuedAt = decodedJWT.getIssuedAt();
     this.expiresAt = decodedJWT.getExpiresAt();
   }
 
-  public static Claims from(String username, String[] roles) {
+  public static Claims from(String username, String role) {
     Claims claims = new Claims();
     claims.username = username;
-    claims.roles = roles;
+    claims.role = role;
     return claims;
   }
 
@@ -37,41 +36,25 @@ public class Claims {
     return username.asString();
   }
 
-  private String[] getRolesFromClaim(DecodedJWT decodedJWT) {
-    Claim roles = decodedJWT.getClaim("roles");
-    Assert.notNull(roles, "roles is not in claim");
-    return roles.asArray(String.class);
+  private String getRoleFromClaim(DecodedJWT decodedJWT) {
+    Claim role = decodedJWT.getClaim("role");
+    Assert.notNull(this.role, "roles is not in claim");
+    return role.asString();
   }
 
   String getUsername() {
     return username;
   }
 
-  String[] getRoles() {
-    return roles;
-  }
-
-  long getIssuedAt() {
-    return issuedAt != null ? issuedAt.getTime() : -1;
-  }
-
-  long getExpiresAt() {
-    return expiresAt != null ? expiresAt.getTime() : -1;
-  }
-
-  void eraseIssuedAt() {
-    issuedAt = null;
-  }
-
-  void eraseExpiresAt() {
-    expiresAt = null;
+  String getRole() {
+    return role;
   }
 
   @Override
   public String toString() {
     return new StringJoiner(", ", Claims.class.getSimpleName() + "[", "]")
         .add("username='" + username + "'")
-        .add("roles=" + Arrays.toString(roles))
+        .add("role='" + role + "'")
         .add("issuedAt=" + issuedAt)
         .add("expiresAt=" + expiresAt)
         .toString();

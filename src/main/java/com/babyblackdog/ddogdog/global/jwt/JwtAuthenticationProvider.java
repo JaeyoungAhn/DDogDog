@@ -11,7 +11,6 @@ public final class JwtAuthenticationProvider {
 
   private final String header;
   private final String issuer;
-  private final String clientSecret;
   private final int expirySeconds;
   private final Algorithm algorithm;
   private final JWTVerifier jwtVerifier;
@@ -24,7 +23,6 @@ public final class JwtAuthenticationProvider {
   ) {
     this.header = header;
     this.issuer = issuer;
-    this.clientSecret = clientSecret;
     this.expirySeconds = expirySeconds;
     this.algorithm = Algorithm.HMAC512(clientSecret);
     this.jwtVerifier = com.auth0.jwt.JWT.require(algorithm)
@@ -41,7 +39,7 @@ public final class JwtAuthenticationProvider {
       builder.withExpiresAt(new Date(now.getTime() + expirySeconds * 1_000L));
     }
     builder.withClaim("username", claims.getUsername());
-    builder.withArrayClaim("roles", claims.getRoles());
+    builder.withClaim("role", claims.getRole());
     return builder.sign(algorithm);
   }
 
