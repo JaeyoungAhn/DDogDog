@@ -46,12 +46,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
           log.debug("JwtAuthenticationProvider parse result: {}", claims);
 
           String username = claims.getUsername();
+          String email = claims.getEmail();
           List<GrantedAuthority> authorities = getAuthorities(claims);
 
           if (isNotEmpty(username) && !authorities.isEmpty()) {
             JwtAuthenticationToken authentication =
                 new JwtAuthenticationToken(
-                    new JwtAuthentication(token, username), null, authorities);
+                    new JwtAuthentication(token, username, email), null, authorities);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
           }

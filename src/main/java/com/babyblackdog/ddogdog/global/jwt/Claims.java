@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 public class Claims {
 
   private String username;
+  private String email;
   private String role;
   private Date issuedAt;
   private Date expiresAt;
@@ -18,14 +19,16 @@ public class Claims {
 
   Claims(DecodedJWT decodedJWT) {
     this.username = getUsernameFromClaim(decodedJWT);
+    this.email = getEmailFromClaim(decodedJWT);
     this.role = getRoleFromClaim(decodedJWT);
     this.issuedAt = decodedJWT.getIssuedAt();
     this.expiresAt = decodedJWT.getExpiresAt();
   }
 
-  public static Claims from(String username, String role) {
+  public static Claims from(String username, String email, String role) {
     Claims claims = new Claims();
     claims.username = username;
+    claims.email = email;
     claims.role = role;
     return claims;
   }
@@ -34,6 +37,12 @@ public class Claims {
     Claim username = decodedJWT.getClaim("username");
     Assert.notNull(username, "username is not in claim");
     return username.asString();
+  }
+
+  private String getEmailFromClaim(DecodedJWT decodedJWT) {
+    Claim email = decodedJWT.getClaim("email");
+    Assert.notNull(email, "email is not in claim");
+    return email.asString();
   }
 
   private String getRoleFromClaim(DecodedJWT decodedJWT) {
@@ -46,6 +55,10 @@ public class Claims {
     return username;
   }
 
+  public String getEmail() {
+    return email;
+  }
+
   String getRole() {
     return role;
   }
@@ -54,6 +67,7 @@ public class Claims {
   public String toString() {
     return new StringJoiner(", ", Claims.class.getSimpleName() + "[", "]")
         .add("username='" + username + "'")
+        .add("email='" + email + "'")
         .add("role='" + role + "'")
         .add("issuedAt=" + issuedAt)
         .add("expiresAt=" + expiresAt)
