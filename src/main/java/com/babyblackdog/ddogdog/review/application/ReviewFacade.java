@@ -25,6 +25,7 @@ public class ReviewFacade {
 
   public ReviewResult registerReview(Long roomId, String content, Double rating, Long userId) {
     String email = userAccessService.findEmail(userId);
+    placeAccessService.addRating(roomId, rating);
     return service.registerReview(roomId, content, rating, email);
   }
 
