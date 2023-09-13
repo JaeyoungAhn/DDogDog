@@ -7,14 +7,11 @@ public class StayPeriod {
 
     private final LocalDate checkIn;
     private final LocalDate checkOut;
-    private final long period;
-
 
     public StayPeriod(LocalDate checkIn, LocalDate checkOut, TimeProvider timeProvider) {
         this.checkIn = adjustIfInvalid(checkIn, timeProvider);
         LocalDate validCheckOut = adjustIfInvalid(checkOut, timeProvider);
         this.checkOut = ensureCheckOutIsAfterCheckIn(this.checkIn, validCheckOut);
-        this.period = ChronoUnit.DAYS.between(this.checkIn, this.getCheckOut());
     }
 
     public LocalDate getCheckIn() {
@@ -26,7 +23,7 @@ public class StayPeriod {
     }
 
     public long getPeriod() {
-        return period;
+        return ChronoUnit.DAYS.between(this.checkIn, this.getCheckOut());
     }
 
     private LocalDate adjustIfInvalid(LocalDate date, TimeProvider timeProvider) {

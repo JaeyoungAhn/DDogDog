@@ -14,7 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.apache.commons.lang3.Validate;
 
-@Entity
+@Entity(name = "orders")
 public class Order {
 
     @Id
