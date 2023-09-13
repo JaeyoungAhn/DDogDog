@@ -35,10 +35,9 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Transactional
   @Override
-  public ReviewResult updateReview(Long reviewId, String content, Double rating) {
+  public ReviewResult updateReview(Long reviewId, String content) {
     Review retrievedReview = reader.findReviewById(reviewId);
     retrievedReview.setContent(new Content(content));
-    retrievedReview.setRating(new Rating(rating));
     return ReviewResult.of(retrievedReview);
   }
 

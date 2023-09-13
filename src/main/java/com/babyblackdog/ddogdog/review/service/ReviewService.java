@@ -17,12 +17,12 @@ public interface ReviewService {
   ReviewResult registerReview(Long roomId, String content, Double rating, String email);
 
   /**
-   * reviewId, content, rating 을 받아 리뷰 수정
+   * reviewId, content 을 받아 리뷰 수정
    *
-   * @param reviewId, content, rating
+   * @param reviewId, content
    * @return ReviewResult
    */
-  ReviewResult updateReview(Long reviewId, String content, Double rating);
+  ReviewResult updateReview(Long reviewId, String content);
 
   /**
    * roomIds, pageable 들을 통해 ReviewResults 를 반환

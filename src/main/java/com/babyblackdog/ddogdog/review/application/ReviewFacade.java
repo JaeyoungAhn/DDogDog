@@ -17,9 +17,9 @@ public class ReviewFacade {
   private final UserAccessService userAccessService;
   private final PlaceAccessService placeAccessService;
 
-  public ReviewFacade(PlaceAccessService placeAccessService, ReviewService service, UserAccessService userAccessService) {
-    this.placeAccessService = placeAccessService;
+  public ReviewFacade(ReviewService service, PlaceAccessService placeAccessService, UserAccessService userAccessService) {
     this.service = service;
+    this.placeAccessService = placeAccessService;
     this.userAccessService = userAccessService;
   }
 
@@ -29,8 +29,8 @@ public class ReviewFacade {
     return service.registerReview(roomId, content, rating, email);
   }
 
-  public ReviewResult updateReview(Long reviewId, String content, Double rating) {
-    return service.updateReview(reviewId, content, rating);
+  public ReviewResult updateReview(Long reviewId, String content) {
+    return service.updateReview(reviewId, content);
   }
 
   public ReviewResults findReviewsByUserId(Long userId, Pageable pageable) {

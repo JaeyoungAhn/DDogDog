@@ -5,7 +5,6 @@ import com.babyblackdog.ddogdog.review.application.ReviewFacade;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewRequest;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponse;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponses;
-import com.babyblackdog.ddogdog.review.service.ReviewService;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResult;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResults;
 import org.springframework.data.domain.Pageable;
@@ -20,11 +19,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(path = "/reviews")
 public class ReviewRestController {
-  private final ReviewService service;
   private final ReviewFacade facade;
 
-  public ReviewRestController(ReviewService service, ReviewFacade facade) {
-    this.service = service;
+  public ReviewRestController(ReviewFacade facade) {
     this.facade = facade;
   }
 
@@ -43,9 +40,8 @@ public class ReviewRestController {
 
   @PatchMapping(value = "/{reviewId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponse> modifyReview(@PathVariable Long reviewId,
-                                                     @RequestParam String content,
-                                                     @RequestParam Double rating) {
-    ReviewResult updatedReviewResult = facade.updateReview(reviewId, content, rating);
+                                                     @RequestParam String content) {
+    ReviewResult updatedReviewResult = facade.updateReview(reviewId, content);
     return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .body(ReviewResponse.of(updatedReviewResult));
