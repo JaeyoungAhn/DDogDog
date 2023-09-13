@@ -18,6 +18,7 @@ import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import com.babyblackdog.ddogdog.place.service.dto.RoomResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,7 @@ public class PlaceServiceImpl implements
 
   @Override
   public HotelResult registerHotel(AddHotelParam param) {
+
     Hotel hotel = hotelRepository.save(AddHotelParam.to(param));
     return HotelResult.of(hotel);
   }

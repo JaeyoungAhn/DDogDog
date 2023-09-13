@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,6 +94,7 @@ public class PlaceRestController {
       @PathVariable Long hotelId
   ) {
     HotelResult result = placeService.findHotel(hotelId);
+    System.out.println(SecurityContextHolder.getContext().getAuthentication());
     return ResponseEntity
         .status(OK)
         .body(HotelResponse.of(result));

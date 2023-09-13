@@ -38,7 +38,7 @@ public class Claims {
 
   private String getRoleFromClaim(DecodedJWT decodedJWT) {
     Claim role = decodedJWT.getClaim("role");
-    Assert.notNull(this.role, "roles is not in claim");
+    Assert.notNull(role, "roles is not in claim");
     return role.asString();
   }
 

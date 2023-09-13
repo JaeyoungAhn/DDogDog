@@ -4,25 +4,20 @@ import java.util.StringJoiner;
 import org.springframework.http.HttpStatus;
 
 public class ErrorResponse {
-
-  private final ErrorCode errorCode;
+  private final String message;
 
   protected ErrorResponse(ErrorCode errorCode) {
-    this.errorCode = errorCode;
+    this.message = "[%s] - %s".formatted(errorCode.getCode(), errorCode.getMessage());
   }
 
   protected static ErrorResponse of(ErrorCode errorCode) {
     return new ErrorResponse(errorCode);
   }
 
-  protected HttpStatus getStatusCode() {
-    return errorCode.getHttpStatus();
-  }
-
   @Override
   public String toString() {
     return new StringJoiner(", ", ErrorResponse.class.getSimpleName() + "[", "]")
-        .add("errorCode=" + errorCode)
+        .add("message='" + message + "'")
         .toString();
   }
 }

@@ -56,6 +56,10 @@ public enum ErrorCode {
     return httpStatus;
   }
 
+  public String getCode() {
+    return code;
+  }
+
   public String getMessage() {
     return message;
   }
