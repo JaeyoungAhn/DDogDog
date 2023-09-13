@@ -86,4 +86,14 @@ class ReviewTest {
     assertThat(exception).isInstanceOf(ReviewException.class);
   }
 
+  @Test
+  @DisplayName("이메일 형식에 어긋난 리뷰는 생성할 수 없다.")
+  void createReviewEntity_FailOnInvalidEmail() {
+    // Given & When
+    Exception exception = catchException(() -> new Review(1L, new Content("객실에 모기가 많았습니다."), new Rating(null), new Email("te@st@dd@og.dog")));
+
+    // Then
+    assertThat(exception).isInstanceOf(ReviewException.class);
+  }
+
 }
