@@ -9,7 +9,6 @@ import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
 import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.ReservationService;
 import com.babyblackdog.ddogdog.user.service.UserService;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

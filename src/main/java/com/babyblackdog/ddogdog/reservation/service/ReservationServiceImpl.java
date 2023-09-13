@@ -1,10 +1,10 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
+import com.babyblackdog.ddogdog.common.date.TimeProvider;
 import com.babyblackdog.ddogdog.reservation.domain.Reservation;
 import com.babyblackdog.ddogdog.reservation.domain.ReservationRepository;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,18 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository repository;
+    private final TimeProvider timeProvider;
 
-    public ReservationServiceImpl(ReservationRepository repository) {
+    public ReservationServiceImpl(ReservationRepository repository, TimeProvider timeProvider) {
         this.repository = repository;
+        this.timeProvider = timeProvider;
     }
 
     @Override
     public boolean isRoomAvailableOnDate(Long roomId, LocalDate checkIn, LocalDate checkOut) {
+        StayPeriod reservationPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
         List<Reservation> reservationList =
-                repository.findReservationsByDateRange(roomId, checkIn, checkOut);
+                repository.findReservationsByDateRange(roomId,
+                        reservationPeriod.getCheckIn(), reservationPeriod.getCheckOut());
 
-        if (ChronoUnit.DAYS.between(checkOut, checkIn)
-                != reservationList.size()) {
+        if (reservationPeriod.getPeriod() != reservationList.size()) {
             return false;
         }
 
@@ -49,8 +52,7 @@ public class ReservationServiceImpl implements ReservationService {
                 repository.findReservationsByDateRange(roomId, stayPeriod.getCheckIn(),
                         stayPeriod.getCheckOut());
 
-        if (ChronoUnit.DAYS.between(stayPeriod.getCheckIn(), stayPeriod.getCheckOut())
-                != reservationList.size()) {
+        if (stayPeriod.getPeriod() != reservationList.size()) {
             throw new IllegalStateException("예약할 수 없는 날짜가 포함되어 있습니다.");
         }
 
