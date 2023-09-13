@@ -41,13 +41,13 @@ public class ReviewRestController {
             .body(ReviewResponse.of(addedReviewResult));
   }
 
-  @PutMapping(value = "/{reviewId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+  @PatchMapping(value = "/{reviewId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponse> modifyReview(@PathVariable Long reviewId,
                                                      @RequestParam String content,
                                                      @RequestParam Double rating) {
-    ReviewResult updatedReviewResult = service.updateReview(reviewId, content, rating);
+    ReviewResult updatedReviewResult = facade.updateReview(reviewId, content, rating);
     return ResponseEntity
-            .status(HttpStatus.CREATED)
+            .status(HttpStatus.NO_CONTENT)
             .body(ReviewResponse.of(updatedReviewResult));
   }
 

@@ -28,6 +28,10 @@ public class ReviewFacade {
     return service.registerReview(roomId, content, rating, email);
   }
 
+  public ReviewResult updateReview(Long reviewId, String content, Double rating) {
+    return service.updateReview(reviewId, content, rating);
+  }
+
   public ReviewResults findReviewsByUserId(Long userId, Pageable pageable) {
     String email = userAccessService.findEmail(userId);
     return service.findReviewsByEmail(email, pageable);
