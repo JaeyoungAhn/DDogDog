@@ -3,11 +3,13 @@ package com.babyblackdog.ddogdog.order.controller;
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.date.TimeProvider;
 import com.babyblackdog.ddogdog.order.controller.dto.request.OrderCreateRequest;
+import com.babyblackdog.ddogdog.order.controller.dto.response.OrderCancelResponse;
 import com.babyblackdog.ddogdog.order.controller.dto.response.OrderCreateResponse;
 import com.babyblackdog.ddogdog.order.controller.dto.response.OrderInformationResponse;
 import com.babyblackdog.ddogdog.order.controller.dto.response.RoomOrderPageResponse;
 import com.babyblackdog.ddogdog.order.service.OrderFacade;
 import com.babyblackdog.ddogdog.order.service.OrderService;
+import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderInformationResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
@@ -68,5 +70,13 @@ public class OrderRestController {
         OrderInformationResult result = service.find(orderId, userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(OrderInformationResponse.of(result));
+    }
+
+    @PostMapping("/{orderId}/cancel")
+    public ResponseEntity<OrderCancelResponse> cancelOrder(@PathVariable Long orderId,
+            @RequestParam long userId) {
+        OrderCancelResult result = facade.cancelOrder(orderId, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(OrderCancelResponse.of(result));
     }
 }

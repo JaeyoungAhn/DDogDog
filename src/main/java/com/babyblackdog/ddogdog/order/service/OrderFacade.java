@@ -3,6 +3,7 @@ package com.babyblackdog.ddogdog.order.service;
 import com.babyblackdog.ddogdog.common.StayCostEstimator;
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
 import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
@@ -70,5 +71,15 @@ public class OrderFacade {
                 reservationService.reserve(roomId, stayPeriod, createdOrderId);
         service.complete(createdOrderId);
         return new OrderCreateResult(createdOrderId);
+    }
+
+    @Transactional
+    public OrderCancelResult cancelOrder(Long orderId, long userId) {
+        OrderCancelResult orderCancelResult = service.cancel(orderId, userId);
+
+        // 유저에게 주문 포인트 반환(미구현)
+//        userService.creditPoint(userId, orderCancelResult.usedPoint());
+
+        return orderCancelResult;
     }
 }

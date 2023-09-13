@@ -74,4 +74,18 @@ public class Order {
     public boolean isOrderAuthorValid(long userId) {
         return this.userId == userId;
     }
+
+    public boolean canCanceled(long userId) {
+        if (!isOrderAuthorValid(userId)) {
+            return false;
+        }
+        if (this.orderStatus != OrderStatus.COMPLETED) {
+            return false;
+        }
+        return true;
+    }
+
+    public void cancel() {
+        this.orderStatus = OrderStatus.CANCELED;
+    }
 }

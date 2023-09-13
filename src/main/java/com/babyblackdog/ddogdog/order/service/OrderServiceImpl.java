@@ -4,6 +4,7 @@ import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.order.domain.Order;
 import com.babyblackdog.ddogdog.order.domain.OrderRepository;
+import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderInformationResult;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,20 @@ public class OrderServiceImpl implements OrderService {
                 foundOrder.getUsedPoint(),
                 foundOrder.getStayPeriod(),
                 foundOrder.getOrderStatus().toString()
+        );
+    }
+
+    @Override
+    public OrderCancelResult cancel(Long orderId, long userId) {
+        Order foundOrder = repository.findById(orderId).orElseThrow(IllegalArgumentException::new);
+        if (!foundOrder.canCanceled(userId)) {
+            throw new IllegalStateException("주문을 취소할 수 없습니다.");
+        }
+
+        foundOrder.cancel();
+        return new OrderCancelResult(
+                foundOrder.getUsedPoint(),
+                foundOrder.getStayPeriod()
         );
     }
 }
