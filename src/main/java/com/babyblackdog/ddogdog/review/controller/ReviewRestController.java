@@ -1,5 +1,7 @@
 package com.babyblackdog.ddogdog.review.controller;
 
+import com.babyblackdog.ddogdog.global.exception.ReviewException;
+import com.babyblackdog.ddogdog.review.application.ReviewFacade;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewRequest;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponse;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponses;
@@ -12,20 +14,23 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_REVIEW_PARAMETER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(path = "/reviews")
 public class ReviewRestController {
   private final ReviewService service;
+  private final ReviewFacade facade;
 
-  public ReviewRestController(ReviewService service) {
+  public ReviewRestController(ReviewService service, ReviewFacade facade) {
     this.service = service;
+    this.facade = facade;
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponse> createReview(@RequestBody ReviewRequest reviewRequest) {
-    ReviewResult addedReviewResult = service.registerReview(
+    ReviewResult addedReviewResult = facade.registerReview(
             reviewRequest.roomId(),
             reviewRequest.content(),
             reviewRequest.rating(),
@@ -38,20 +43,32 @@ public class ReviewRestController {
 
   @PutMapping(value = "/{reviewId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponse> modifyReview(@PathVariable Long reviewId,
-      @RequestParam String content,
-      @RequestParam Double rating) {
+                                                     @RequestParam String content,
+                                                     @RequestParam Double rating) {
     ReviewResult updatedReviewResult = service.updateReview(reviewId, content, rating);
     return ResponseEntity
-        .status(HttpStatus.CREATED)
-        .body(ReviewResponse.of(updatedReviewResult));
+            .status(HttpStatus.CREATED)
+            .body(ReviewResponse.of(updatedReviewResult));
   }
 
-  @GetMapping(value = "/{userId}", produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<ReviewResponses> getReviewsByUserId(@PathVariable Long userId,
+  @GetMapping(produces = APPLICATION_JSON_VALUE)
+  public ResponseEntity<ReviewResponses> getReviewsByUserId(@RequestParam(required = false) Long userId,
+                                                            @RequestParam(required = false) Long hotelId,
                                                             Pageable pageable) {
-    ReviewResults retrievedReviewsResult = service.findReviewsByUserId(userId, pageable);
-    return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(ReviewResponses.of(retrievedReviewsResult));
+    if (userId != null && hotelId == null) {
+      ReviewResults retrievedReviewsResult = facade.findReviewsByUserId(userId, pageable);
+      return ResponseEntity
+              .status(HttpStatus.OK)
+              .body(ReviewResponses.of(retrievedReviewsResult));
+    }
+
+    if (hotelId != null && userId == null) {
+      ReviewResults retrievedReviewsResult = facade.findReviewsByHotelId(hotelId, pageable);
+      return ResponseEntity
+              .status(HttpStatus.OK)
+              .body(ReviewResponses.of(retrievedReviewsResult));
+    }
+
+    throw new ReviewException(INVALID_REVIEW_PARAMETER);
   }
 }
