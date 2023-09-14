@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class OrderFacade {
 
     private final OrderService service;
@@ -33,6 +34,7 @@ public class OrderFacade {
         this.stayCostEstimator = stayCostEstimator;
     }
 
+    @Transactional(readOnly = true)
     public RoomOrderPageResult findRoomSummary(Long roomId, StayPeriod stayPeriod) {
         RoomSimpleResult roomSimpleResult = placeReaderService.findRoomSimpleInfo(roomId);
 
@@ -48,7 +50,6 @@ public class OrderFacade {
         );
     }
 
-    @Transactional
     public OrderCreateResult order(Long userId, Long roomId, StayPeriod stayPeriod) {
         // 유저 존재 검사
         if (!userService.doesUserExist(userId)) {
@@ -73,11 +74,10 @@ public class OrderFacade {
         return new OrderCreateResult(createdOrderId);
     }
 
-    @Transactional
     public OrderCancelResult cancelOrder(Long orderId, long userId) {
         OrderCancelResult orderCancelResult = service.cancel(orderId, userId);
 
-        // 유저에게 주문 포인트 반환(미구현)
+        // todo: 유저에게 주문 포인트 반환(미구현)
 //        userService.creditPoint(userId, orderCancelResult.usedPoint());
 
         return orderCancelResult;
