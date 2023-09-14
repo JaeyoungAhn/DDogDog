@@ -7,6 +7,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.date.TimeProvider;
+import com.babyblackdog.ddogdog.global.aop.FilterAdmin;
 import com.babyblackdog.ddogdog.place.controller.dto.AddHotelRequest;
 import com.babyblackdog.ddogdog.place.controller.dto.AddRoomRequest;
 import com.babyblackdog.ddogdog.place.controller.dto.HotelResponse;
@@ -51,6 +52,7 @@ public class PlaceRestController {
    * @param request
    * @return ResponseEntity<HotelResponse>
    */
+  @FilterAdmin
   @PostMapping(consumes = APPLICATION_JSON_VALUE)
   public ResponseEntity<HotelResponse> addHotel(
       @Validated @RequestBody AddHotelRequest request
@@ -72,6 +74,7 @@ public class PlaceRestController {
    * @param hotelId
    * @return ResponseEntity<Void> : 204
    */
+  @FilterAdmin
   @DeleteMapping(path = "/{hotelId}")
   public ResponseEntity<Void> removeHotel(
       @PathVariable Long hotelId
@@ -122,6 +125,7 @@ public class PlaceRestController {
    * @param request
    * @return
    */
+  @FilterAdmin
   @PostMapping(path = "/{hotelId}", consumes = APPLICATION_JSON_VALUE)
   public ResponseEntity<RoomResponse> createRoomOfHotel(
       @PathVariable Long hotelId,
@@ -145,6 +149,7 @@ public class PlaceRestController {
    * @param roomId
    * @return ResponseEntity<Void>
    */
+  @FilterAdmin
   @DeleteMapping(path = "/{hotelId}/{roomId}")
   public ResponseEntity<Void> removeRoomOfHotel(@PathVariable Long hotelId,
       @PathVariable Long roomId) {

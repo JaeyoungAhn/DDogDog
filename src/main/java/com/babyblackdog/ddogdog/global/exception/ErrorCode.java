@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.global.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.StringJoiner;
@@ -41,7 +42,8 @@ public enum ErrorCode {
 
   // user
   USER_NOT_FOUND(BAD_REQUEST, "US-100", "존재하지 않는 유저입니다."),
-  INVALID_ROLE(BAD_REQUEST, "US-110", "유효하지 않은 권한입니다.");
+  INVALID_ROLE(BAD_REQUEST, "US-110", "유효하지 않은 권한입니다."),
+  FORBIDDEN_ROLE(FORBIDDEN, "US-120", "접근 권한이 부족합니다.");
 
   private final HttpStatus httpStatus;
   private final String code;
