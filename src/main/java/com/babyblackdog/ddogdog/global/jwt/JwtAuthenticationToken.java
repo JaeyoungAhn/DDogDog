@@ -9,9 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
   private final Object principal;
-  private String credentials;
+  private Object credentials;
 
-  JwtAuthenticationToken(Object principal, String credentials,
+  JwtAuthenticationToken(JwtAuthenticationPrincipal principal, Object credentials,
       Collection<? extends GrantedAuthority> authorities) {
     super(authorities);
     super.setAuthenticated(true);
@@ -26,7 +26,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
   }
 
   @Override
-  public String getCredentials() {
+  public Object getCredentials() {
     return credentials;
   }
 

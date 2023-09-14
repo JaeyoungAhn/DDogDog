@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -30,8 +31,6 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-  private final Logger log = LoggerFactory.getLogger(getClass());
 
   private final ApplicationContext applicationContext;
   private final JwtConfig jwtConfig;
@@ -62,8 +61,6 @@ public class SecurityConfig {
                 applicationContext.getBean(OAuth2AuthorizedClientRepository.class))
             .successHandler(oAuth2AuthenticationSuccessHandler(
                 jwtAuthenticationProvider(), applicationContext.getBean(UserService.class))))
-        .exceptionHandling(handler -> handler
-            .accessDeniedHandler(accessDeniedHandler()))
         .addFilterBefore(
             jwtAuthenticationFilter(jwtAuthenticationProvider()),
             AnonymousAuthenticationFilter.class)
@@ -77,20 +74,6 @@ public class SecurityConfig {
         .requestMatchers(
             antMatcher("/assets/**")
         );
-  }
-
-  @Bean
-  public AccessDeniedHandler accessDeniedHandler() {
-    return (request, response, accessDeniedException) -> {
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      Object principal = authentication != null ? authentication.getPrincipal() : null;
-      log.warn("{} is denied", principal, accessDeniedException);
-      response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-      response.setContentType("text/plain;charset=UTF-8");
-      response.getWriter().write("## ACCESS DENIED ##");
-      response.getWriter().flush();
-      response.getWriter().close();
-    };
   }
 
   @Bean

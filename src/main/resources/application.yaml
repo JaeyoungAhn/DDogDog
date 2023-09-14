@@ -47,5 +47,5 @@ spring:
 jwt:
   header: Authorization
   issuer: baby-blackdog
-  expirySeconds: 3600
+  expirySeconds: 2592000
   client-secret: YmFieS1ibGFjay1kb2ctZGRvZy1kb2c=

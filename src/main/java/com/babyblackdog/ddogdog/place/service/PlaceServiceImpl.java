@@ -6,6 +6,7 @@ import static com.babyblackdog.ddogdog.global.exception.ErrorCode.ROOM_NOT_FOUND
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
+import com.babyblackdog.ddogdog.global.jwt.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.mapping.MappingService;
 import com.babyblackdog.ddogdog.place.model.Hotel;
 import com.babyblackdog.ddogdog.place.model.Room;

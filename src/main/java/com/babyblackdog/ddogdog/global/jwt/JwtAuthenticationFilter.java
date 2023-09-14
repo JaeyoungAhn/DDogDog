@@ -52,7 +52,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
           if (isNotEmpty(username) && !authorities.isEmpty()) {
             JwtAuthenticationToken authentication =
                 new JwtAuthenticationToken(
-                    new JwtAuthentication(token, username, email), null, authorities);
+                    new JwtAuthenticationPrincipal(token, username, email), null, authorities);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
           }

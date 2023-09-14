@@ -40,7 +40,8 @@ public enum ErrorCode {
   INVALID_REVIEW_ID(BAD_REQUEST, "RRR300", "유효하지 않은 리뷰번호입니다."),
 
   // user
-  USER_NOT_FOUND(BAD_REQUEST, "US-100", "존재하지 않는 유저입니다.");
+  USER_NOT_FOUND(BAD_REQUEST, "US-100", "존재하지 않는 유저입니다."),
+  INVALID_ROLE(BAD_REQUEST, "US-110", "유효하지 않은 권한입니다.");
 
   private final HttpStatus httpStatus;
   private final String code;

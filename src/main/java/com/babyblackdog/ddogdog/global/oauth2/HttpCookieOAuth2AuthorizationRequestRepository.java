@@ -14,7 +14,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements
     AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
   private static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "OAUTH2_AUTHORIZATION_REQUEST";
-  private static final int OAUTH2_AUTHORIZATION_REQUEST_COOKIE_EXPIRE_SECONDS = 3600;
+  private static final int OAUTH2_AUTHORIZATION_REQUEST_COOKIE_EXPIRE_SECONDS = 2592000;
 
   private final String cookieName;
   private final int cookieExpireSeconds;
