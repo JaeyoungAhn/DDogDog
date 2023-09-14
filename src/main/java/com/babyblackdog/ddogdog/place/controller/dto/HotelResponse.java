@@ -9,7 +9,8 @@ public record HotelResponse(
     Long adminId,
     String contact,
     String representative,
-    String businessName
+    String businessName,
+    double ratingScore
 ) {
 
   public static HotelResponse of(HotelResult result) {
@@ -20,7 +21,8 @@ public record HotelResponse(
         result.adminId(),
         result.contact(),
         result.representative(),
-        result.businessName()
+        result.businessName(),
+        result.ratingScore()
     );
   }
 

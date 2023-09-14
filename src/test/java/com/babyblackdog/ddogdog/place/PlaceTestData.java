@@ -4,6 +4,7 @@ import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.place.controller.dto.AddHotelRequest;
 import com.babyblackdog.ddogdog.place.controller.dto.AddRoomRequest;
 import com.babyblackdog.ddogdog.place.model.Hotel;
+import com.babyblackdog.ddogdog.place.model.Rating;
 import com.babyblackdog.ddogdog.place.model.Room;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
@@ -29,6 +30,8 @@ public class PlaceTestData {
   private final AddRoomRequest addRoomRequest;
   private AddRoomParam addRoomParam;
 
+  private Rating ratingEntity;
+
   public PlaceTestData() {
     this.hotelEntity = instanceofHotel();
     this.addHotelRequest = instanceofHotelRequest();
@@ -36,6 +39,8 @@ public class PlaceTestData {
 
     this.roomEntities = instanceofRooms();
     this.addRoomRequest = instanceofRoomRequest();
+
+    this.ratingEntity = instanceofRating();
   }
 
   private Hotel instanceofHotel() {
@@ -104,6 +109,10 @@ public class PlaceTestData {
     );
   }
 
+  private Rating instanceofRating() {
+    return new Rating(0, 0);
+  }
+
   public AddRoomParam bindHotelIdToRoomParam(Long hotelId) {
     return AddRoomRequest.to(hotelId, addRoomRequest);
   }
@@ -146,5 +155,9 @@ public class PlaceTestData {
 
   public AddRoomParam getAddRoomParam() {
     return addRoomParam;
+  }
+
+  public Rating getRatingEntity() {
+    return ratingEntity;
   }
 }

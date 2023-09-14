@@ -9,7 +9,8 @@ public record HotelResult(
     Long adminId,
     String contact,
     String representative,
-    String businessName
+    String businessName,
+    double ratingScore
 ) {
 
   public static HotelResult of(Hotel entity) {
@@ -20,7 +21,8 @@ public record HotelResult(
         entity.getAdminId(),
         entity.getContact(),
         entity.getRepresentative(),
-        entity.getBusinessName()
+        entity.getBusinessName(),
+        entity.getRatingScore()
     );
   }
 

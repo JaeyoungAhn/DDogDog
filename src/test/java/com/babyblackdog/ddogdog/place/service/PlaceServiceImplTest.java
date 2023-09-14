@@ -3,6 +3,7 @@ package com.babyblackdog.ddogdog.place.service;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.HOTEL_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchException;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -15,9 +16,11 @@ import com.babyblackdog.ddogdog.global.exception.RoomException;
 import com.babyblackdog.ddogdog.mapping.MappingService;
 import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.model.Hotel;
+import com.babyblackdog.ddogdog.place.model.Rating;
 import com.babyblackdog.ddogdog.place.model.Room;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
 import com.babyblackdog.ddogdog.place.repository.HotelRepository;
+import com.babyblackdog.ddogdog.place.repository.RatingRepository;
 import com.babyblackdog.ddogdog.place.repository.RoomRepository;
 import com.babyblackdog.ddogdog.place.service.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.service.dto.AddRoomParam;
@@ -26,6 +29,7 @@ import com.babyblackdog.ddogdog.place.service.dto.RoomResult;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,26 +54,36 @@ class PlaceServiceImplTest {
   @Autowired
   private RoomRepository roomRepository;
   @Autowired
+  private RatingRepository ratingRepository;
+  @Autowired
   private PlaceTestData placeTestData;
 
   private Hotel hotel;
+  private Rating rating;
   private List<Room> rooms;
 
   @BeforeEach
   void setUp() {
-    this.hotel = hotelRepository.save(placeTestData.getHotelEntity());
-    this.rooms = roomRepository.saveAll(placeTestData.bindHotelToRooms(hotel));
+    hotel = placeTestData.getHotelEntity();
+    rating = placeTestData.getRatingEntity();
+    hotel.setRating(rating);
+  }
+
+  @AfterEach
+  void tearDown() {
+    hotelRepository.deleteAll();
+    roomRepository.deleteAll();
   }
 
   @Test
   @DisplayName("유효한 지역 이름으로 숙소를 조회하면 성공한다.")
   void findHotelsInProvince_ReadSuccess() {
     // Given
-    Hotel savedHotel = hotelRepository.save(hotel);
+    HotelResult hotelResult = placeService.registerHotel(placeTestData.getAddHotelParam());
 
     // When
     Page<HotelResult> result = placeService.findHotelsInProvince(
-        savedHotel.getAddress(),
+        new Province(hotelResult.address()),
         PageRequest.of(0, 2));
 
     // Then
@@ -93,7 +107,7 @@ class PlaceServiceImplTest {
     // Then
     assertThat(result)
         .isNotNull()
-        .isNotEmpty();
+        .isEmpty();
   }
 
   @Test
@@ -113,7 +127,7 @@ class PlaceServiceImplTest {
   @DisplayName("유효하지 않은 숙소 아이디를 이용해 숙소를 조회하면 실패한다.")
   void findPlaceById_ReadException() {
     // Given
-    Long invalidId = 1L;
+    Long invalidId = 1_000L;
 
     // When & Then
     assertThatThrownBy(() -> placeService.findHotel(invalidId))
@@ -183,9 +197,11 @@ class PlaceServiceImplTest {
   }
 
   @Test
-  @DisplayName("[findRoomById] 존재하는 객실을 객실 아이디로 조회할 수 있다.")
+  @DisplayName("존재하는 객실을 객실 아이디로 조회할 수 있다.")
   void findRoomById_Success() {
     // Given
+    Hotel savedHotel = hotelRepository.save(hotel);
+    rooms = placeTestData.bindHotelToRooms(savedHotel);
     Room savedRoom = roomRepository.save(rooms.get(0));
 
     // When
@@ -196,7 +212,7 @@ class PlaceServiceImplTest {
   }
 
   @Test
-  @DisplayName("[findRoomById] 존재하지 않는 객실을 객실 아이디로 조회할 수 없다.")
+  @DisplayName("존재하지 않는 객실을 객실 아이디로 조회할 수 없다.")
   void findRoomById_Exception() {
     // Given
     Long invalidId = 1L;
@@ -208,11 +224,14 @@ class PlaceServiceImplTest {
   }
 
   @Test
-  @DisplayName("[findRoomByIdForDuration] 객실을 특정 기간에 맞게 조회한다.")
+  @DisplayName("객실을 특정 기간에 맞게 조회한다.")
   void findRoomIdForDuration_Success() {
     // Given
     boolean expect = true;
-    Room savedRoom = roomRepository.save(rooms.get(0));
+    Room savedRoom = roomRepository.save(
+        placeTestData.bindHotelToRooms(
+            hotelRepository.save(hotel))
+            .get(0));
     given(mappingService.isReservationAvailableForRoom(anyLong(), any(LocalDate.class),
         any(LocalDate.class)))
         .willReturn(expect);
@@ -228,14 +247,16 @@ class PlaceServiceImplTest {
   }
 
   @Test
-  @DisplayName("[findAllRoomsOfHotelForDuration] 호텔 아이디를 이용해 호텔의 모든 객실을 조회한다.")
+  @DisplayName("호텔 아이디를 이용해 호텔의 모든 객실을 조회한다.")
   void findAllRoomsOfHotelForDuration_Success() {
     // Given
+    Hotel savedHotel = hotelRepository.save(hotel);
+    rooms = placeTestData.bindHotelToRooms(savedHotel);
     roomRepository.saveAll(rooms);
 
     // When
     Page<RoomResult> roomResults = placeService.findAllRoomsOfHotelForDuration(
-        hotel.getId(),
+        savedHotel.getId(),
         new StayPeriod(LocalDate.now(), LocalDate.now(), new TodayDateProvider()),
         PageRequest.of(0, 2));
 

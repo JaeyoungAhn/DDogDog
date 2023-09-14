@@ -8,6 +8,7 @@ import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
 import com.babyblackdog.ddogdog.mapping.MappingService;
 import com.babyblackdog.ddogdog.place.model.Hotel;
+import com.babyblackdog.ddogdog.place.model.Rating;
 import com.babyblackdog.ddogdog.place.model.Room;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
 import com.babyblackdog.ddogdog.place.repository.HotelRepository;
@@ -38,19 +39,23 @@ public class PlaceServiceImpl implements
   }
 
   @Override
+  @Transactional
   public HotelResult registerHotel(AddHotelParam param) {
-
-    Hotel hotel = hotelRepository.save(AddHotelParam.to(param));
-    return HotelResult.of(hotel);
+    Hotel hotel = AddHotelParam.to(param);
+    hotel.setRating(new Rating(0, 0));
+    Hotel savedHotel = hotelRepository.save(hotel);
+    return HotelResult.of(savedHotel);
   }
 
   @Override
+  @Transactional
   public void deleteHotel(Long hotelId) {
     hotelRepository.deleteById(hotelId);
     roomRepository.deleteByHotelId(hotelId);
   }
 
   @Override
+  @Transactional
   public RoomResult registerRoomOfHotel(AddRoomParam addRoomParam) {
     Hotel hotel = hotelRepository.findById(addRoomParam.hotelId())
         .orElseThrow(() -> new RoomException(HOTEL_NOT_FOUND));
@@ -59,13 +64,14 @@ public class PlaceServiceImpl implements
   }
 
   @Override
+  @Transactional
   public void deleteRoom(Long roomId) {
     roomRepository.deleteById(roomId);
   }
 
   @Override
   public Page<HotelResult> findHotelsInProvince(Province province, Pageable pageable) {
-    Page<Hotel> hotels = hotelRepository.findContainsAddress("서울", pageable);
+    Page<Hotel> hotels = hotelRepository.findContainsAddress(province.getValue(), pageable);
     return hotels.map(HotelResult::of);
   }
 

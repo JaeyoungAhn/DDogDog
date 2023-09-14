@@ -17,6 +17,7 @@ public class JwtSimpleAuthentication {
   private final Role role;
 
   private static class SingletonHolder {
+
     private static final JwtSimpleAuthentication INSTANCE = new JwtSimpleAuthentication();
   }
 
