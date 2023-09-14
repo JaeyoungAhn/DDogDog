@@ -15,15 +15,15 @@ public class WishlistFacade {
         this.service = service;
     }
 
-    public WishlistResult registerWishlist(Long userId, Long hotelId) {
-        return service.registerWishlist(userId, hotelId);
+    public WishlistResult registerWishlist(String email, Long hotelId) {
+        return service.registerWishlist(email, hotelId);
     }
 
     public void deleteWishlist(Long wishlistId) {
         service.deleteWishlist(wishlistId);
     }
 
-    public WishlistResults findWishlistsByUserId(Long userId, Pageable pageable) {
-        return service.findWishlistsByUserId(userId, pageable);
+    public WishlistResults findWishlistsByEmail(String email, Pageable pageable) {
+        return service.findWishlistsByEmail(email, pageable);
     }
 }

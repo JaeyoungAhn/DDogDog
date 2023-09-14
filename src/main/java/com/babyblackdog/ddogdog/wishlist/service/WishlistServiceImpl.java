@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.wishlist.service;
 
+import com.babyblackdog.ddogdog.wishlist.model.Email;
 import com.babyblackdog.ddogdog.wishlist.model.Wishlist;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResults;
@@ -21,25 +22,23 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Transactional
     @Override
-    public WishlistResult registerWishlist(Long userId, Long placeId) {
-        Wishlist savedWishlist = store.registerWishlist(new Wishlist(userId, placeId));
+    public WishlistResult registerWishlist(String email, Long placeId) {
+        // todo: JWT 내 Email과 요청하는 이메일이 일치하는지 확인
+        Wishlist savedWishlist = store.registerWishlist(new Wishlist(new Email(email), placeId));
         return WishlistResult.of(savedWishlist);
     }
 
     @Transactional
     @Override
     public void deleteWishlist(Long wishlistId) {
+        // todo: JWT 내 Email과 wishlistId를 가진 Email이 동일한지 확인
         store.deleteWishlist(wishlistId);
     }
 
     @Override
-    public WishlistResults findWishlistsByUserId(Long userId, Pageable pageable) {
-        Page<Wishlist> retrievedWishlists = reader.findWishlistsByUserId(userId, pageable);
+    public WishlistResults findWishlistsByEmail(String email, Pageable pageable) {
+        // todo: JWT 내 Email과 요청하는 이메일이 일치하는지 확인
+        Page<Wishlist> retrievedWishlists = reader.findWishlistsByEmail(email, pageable);
         return WishlistResults.of(retrievedWishlists);
-    }
-
-    @Override
-    public boolean isInWishlist(Long userId, Long placeId) {
-        return reader.isInWishlist(userId, placeId);
     }
 }

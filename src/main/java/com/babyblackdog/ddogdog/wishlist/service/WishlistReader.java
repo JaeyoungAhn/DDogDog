@@ -8,5 +8,5 @@ public interface WishlistReader {
 
     Boolean isInWishlist(Long userId, Long placeId);
 
-    Page<Wishlist> findWishlistsByUserId(Long userId, Pageable pageable);
+    Page<Wishlist> findWishlistsByEmail(String email, Pageable pageable);
 }

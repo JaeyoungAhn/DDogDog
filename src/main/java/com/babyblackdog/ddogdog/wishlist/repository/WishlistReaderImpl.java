@@ -14,9 +14,8 @@ public class WishlistReaderImpl implements WishlistReader {
         this.repository = repository;
     }
 
-    @Override
-    public Page<Wishlist> findWishlistsByUserId(Long userId, Pageable pageable) {
-        return repository.findWishlistsByUserId(userId, pageable);
+    public Page<Wishlist> findWishlistsByEmail(String email, Pageable pageable) {
+        return repository.findWishlistsByEmail(email, pageable);
     }
 
     @Override

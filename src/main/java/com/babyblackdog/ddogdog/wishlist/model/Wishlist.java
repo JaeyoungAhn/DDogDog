@@ -10,14 +10,14 @@ public class Wishlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @Embedded
+    private Email email;
 
     @Column(name = "place_id")
     private Long placeId;
 
-    public Wishlist(Long userId, Long placeId) {
-        this.userId = userId;
+    public Wishlist(Email email, Long placeId) {
+        this.email = email;
         this.placeId = placeId;
     }
 
@@ -28,8 +28,8 @@ public class Wishlist {
         return id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getEmail() {
+        return email.getValue();
     }
 
     public Long getPlaceId() {

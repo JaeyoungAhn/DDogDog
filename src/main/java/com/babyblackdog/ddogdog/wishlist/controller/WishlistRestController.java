@@ -1,7 +1,6 @@
 package com.babyblackdog.ddogdog.wishlist.controller;
 
 import com.babyblackdog.ddogdog.wishlist.application.WishlistFacade;
-import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistRequest;
 import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistResponse;
 import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistResponses;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
@@ -23,10 +22,10 @@ public class WishlistRestController {
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<WishlistResponse> createWishlist(@RequestBody WishlistRequest wishlistRequest) {
-        WishlistResult addedWishlistResult = facade.registerWishlist(
-                wishlistRequest.userId(),
-                wishlistRequest.placeId());
+    public ResponseEntity<WishlistResponse> createWishlist(@RequestBody Long placeId) {
+        // todo: JWT 이메일 넣어주는 로직 구현
+        String email = "test@ddog.dog";
+        WishlistResult addedWishlistResult = facade.registerWishlist(email, placeId);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -39,11 +38,14 @@ public class WishlistRestController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/{userId}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<WishlistResponses> getWishlistsByUserId(@PathVariable Long userId, Pageable pageable) {
-            WishlistResults retrievedReviewsResult = facade.findWishlistsByUserId(userId, pageable);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(WishlistResponses.of(retrievedReviewsResult));
+    @GetMapping(value = "/me}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<WishlistResponses> getWishlists(Pageable pageable) {
+        // todo: JWT 이메일 넣어주는 로직 구현
+        String email = "test@ddog.dog";
+
+        WishlistResults retrievedReviewsResult = facade.findWishlistsByEmail(email, pageable);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(WishlistResponses.of(retrievedReviewsResult));
     }
 }
