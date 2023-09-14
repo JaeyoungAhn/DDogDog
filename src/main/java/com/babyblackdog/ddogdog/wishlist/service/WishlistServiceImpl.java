@@ -1,5 +1,8 @@
 package com.babyblackdog.ddogdog.wishlist.service;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_WISHLIST_PERMISSION;
+
+import com.babyblackdog.ddogdog.global.exception.WishlistException;
 import com.babyblackdog.ddogdog.wishlist.model.Email;
 import com.babyblackdog.ddogdog.wishlist.model.Wishlist;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
@@ -23,7 +26,6 @@ public class WishlistServiceImpl implements WishlistService {
     @Transactional
     @Override
     public WishlistResult registerWishlist(String email, Long placeId) {
-        // todo: JWT 내 Email과 요청하는 이메일이 일치하는지 확인
         Wishlist savedWishlist = store.registerWishlist(new Wishlist(new Email(email), placeId));
         return WishlistResult.of(savedWishlist);
     }
@@ -31,13 +33,19 @@ public class WishlistServiceImpl implements WishlistService {
     @Transactional
     @Override
     public void deleteWishlist(Long wishlistId) {
-        // todo: JWT 내 Email과 wishlistId를 가진 Email이 동일한지 확인
+        JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
+        String email = jwt.getEmail();
+
+        Wishlist wishlist = reader.findWishlistById(wishlistId);
+        if (!email.equals(wishlist.getEmail())) {
+            throw new WishlistException(INVALID_WISHLIST_PERMISSION);
+        }
+
         store.deleteWishlist(wishlistId);
     }
 
     @Override
     public WishlistResults findWishlistsByEmail(String email, Pageable pageable) {
-        // todo: JWT 내 Email과 요청하는 이메일이 일치하는지 확인
         Page<Wishlist> retrievedWishlists = reader.findWishlistsByEmail(email, pageable);
         return WishlistResults.of(retrievedWishlists);
     }

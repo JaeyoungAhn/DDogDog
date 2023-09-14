@@ -1,11 +1,11 @@
 package com.babyblackdog.ddogdog.global.exception;
 
-import org.springframework.http.HttpStatus;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import java.util.StringJoiner;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
 
@@ -42,9 +42,10 @@ public enum ErrorCode {
 
     // wishlist
     WISHLIST_EMAIL_NOT_FOUND(NOT_FOUND, "W-100", "존재하지 않는 이메일입니다."),
+    WISHLIST_NOT_FOUND(NOT_FOUND, "W-110", "존재하지 않는 찜입니다."),
     INVALID_WISHLIST_EMAIL(BAD_REQUEST, "W-200", "유효하지 않은 이메일입니다"),
-    EMPTY_WISHLIST_EMAIL(BAD_REQUEST, "W-210", "비어있는 이메일입니다");
-
+    EMPTY_WISHLIST_EMAIL(BAD_REQUEST, "W-210", "비어있는 이메일입니다"),
+    INVALID_WISHLIST_PERMISSION(FORBIDDEN, "W-300", "찜에 대한 권한이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
