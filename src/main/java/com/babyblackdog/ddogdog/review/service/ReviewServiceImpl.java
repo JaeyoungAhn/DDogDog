@@ -1,17 +1,19 @@
 package com.babyblackdog.ddogdog.review.service;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_REVIEW_PERMISSION;
+
+import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import com.babyblackdog.ddogdog.review.domain.Review;
 import com.babyblackdog.ddogdog.review.domain.vo.Content;
 import com.babyblackdog.ddogdog.review.domain.vo.Email;
 import com.babyblackdog.ddogdog.review.domain.vo.Rating;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResult;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResults;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional(readOnly = true)
 @Service
@@ -37,6 +39,14 @@ public class ReviewServiceImpl implements ReviewService {
   @Override
   public ReviewResult updateReview(Long reviewId, String content) {
     Review retrievedReview = reader.findReviewById(reviewId);
+
+    JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
+    String email = jwt.getEmail();
+
+    if (!email.equals(retrievedReview.getEmail())) {
+      throw new ReviewException(INVALID_REVIEW_PERMISSION);
+    }
+
     retrievedReview.setContent(new Content(content));
     return ReviewResult.of(retrievedReview);
   }

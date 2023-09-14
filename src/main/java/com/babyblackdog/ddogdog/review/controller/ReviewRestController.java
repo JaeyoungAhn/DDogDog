@@ -1,9 +1,7 @@
 package com.babyblackdog.ddogdog.review.controller;
 
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_REVIEW_PERMISSION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import com.babyblackdog.ddogdog.review.application.ReviewFacade;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewRequest;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponse;
@@ -62,12 +60,6 @@ public class ReviewRestController {
   @GetMapping(value = "/{hotelId}", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponses> getReviewsByHotelId(@PathVariable Long hotelId,
       Pageable pageable) {
-
-    JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-
-    if (Role.ADMIN != jwt.getRole()) {
-      throw new ReviewException(INVALID_REVIEW_PERMISSION);
-    }
 
     ReviewResults retrievedReviewsResult = facade.findReviewsByHotelId(hotelId, pageable);
     return ResponseEntity
