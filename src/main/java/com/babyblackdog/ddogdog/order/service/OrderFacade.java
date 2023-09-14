@@ -10,11 +10,11 @@ import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
 import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.ReservationService;
 import com.babyblackdog.ddogdog.user.service.UserService;
-import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class OrderFacade {
 
     private final OrderService service;
@@ -33,6 +33,7 @@ public class OrderFacade {
         this.stayCostEstimator = stayCostEstimator;
     }
 
+    @Transactional(readOnly = true)
     public RoomOrderPageResult findRoomSummary(Long roomId, StayPeriod stayPeriod) {
         RoomSimpleResult roomSimpleResult = placeReaderService.findRoomSimpleInfo(roomId);
 
@@ -48,37 +49,29 @@ public class OrderFacade {
         );
     }
 
-    @Transactional
     public OrderCreateResult order(Long userId, Long roomId, StayPeriod stayPeriod) {
-        // 유저 존재 검사
         if (!userService.doesUserExist(userId)) {
             throw new IllegalArgumentException("유저가 존재하지 않습니다.");
         }
 
-        // room의 정보 가져오기
         RoomSimpleResult roomInfo = placeReaderService.findRoomSimpleInfo(roomId);
 
-        // 결제
         Point pointToPay = stayCostEstimator.calculateTotalCost(stayPeriod,
                 new Point(roomInfo.point()));
-        if (userService.deductUserPoints(userId, pointToPay)) {
-            throw new IllegalArgumentException("결제 실패");
-        }
+        userService.debitPoint(userId, pointToPay);
 
         Long createdOrderId = service.create(userId, stayPeriod, pointToPay);
 
-        List<Long> reservedRoomDate =
-                reservationService.reserve(roomId, stayPeriod, createdOrderId);
+        reservationService.reserve(roomId, stayPeriod, createdOrderId);
         service.complete(createdOrderId);
+
         return new OrderCreateResult(createdOrderId);
     }
 
-    @Transactional
     public OrderCancelResult cancelOrder(Long orderId, long userId) {
         OrderCancelResult orderCancelResult = service.cancel(orderId, userId);
 
-        // 유저에게 주문 포인트 반환(미구현)
-//        userService.creditPoint(userId, orderCancelResult.usedPoint());
+        userService.creditPoint(userId, orderCancelResult.point());
 
         return orderCancelResult;
     }

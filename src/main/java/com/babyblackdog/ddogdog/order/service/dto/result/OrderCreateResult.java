@@ -1,5 +1,5 @@
 package com.babyblackdog.ddogdog.order.service.dto.result;
 
-public record OrderCreateResult(Long OrderId) {
+public record OrderCreateResult(Long orderId) {
 
 }

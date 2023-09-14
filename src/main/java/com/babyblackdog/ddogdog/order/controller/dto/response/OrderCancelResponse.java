@@ -8,7 +8,7 @@ public record OrderCancelResponse(Point canceledPoint, LocalDate checkIn, LocalD
 
     public static OrderCancelResponse of(OrderCancelResult result) {
         return new OrderCancelResponse(
-                result.usedPoint(),
+                result.point(),
                 result.stayPeriod().getCheckIn(),
                 result.stayPeriod().getCheckOut()
         );

@@ -14,7 +14,7 @@ public record RoomOrderPageResponse(
   public static RoomOrderPageResponse of(RoomOrderPageResult result) {
     return new RoomOrderPageResponse(
         result.placeName(),
-        result.roomName(),
+        result.roomType(),
         result.stayCost().getValue(),
         result.checkIn(),
         result.checkOut()

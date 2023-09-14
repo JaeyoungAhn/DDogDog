@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public record RoomOrderPageResult(
     String placeName,
-    String roomName,
+    String roomType,
     String roomDescription,
     String roomNumber,
     Point stayCost,

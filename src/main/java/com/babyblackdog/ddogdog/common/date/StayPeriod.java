@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.common.date;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public class StayPeriod {
 
@@ -38,5 +39,23 @@ public class StayPeriod {
             return checkIn.plusDays(1);
         }
         return checkOut;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        StayPeriod that = (StayPeriod) o;
+        return Objects.equals(getCheckIn(), that.getCheckIn()) && Objects.equals(
+                getCheckOut(), that.getCheckOut());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCheckIn(), getCheckOut());
     }
 }
