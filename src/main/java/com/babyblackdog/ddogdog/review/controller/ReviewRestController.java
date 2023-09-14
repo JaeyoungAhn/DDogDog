@@ -19,6 +19,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(path = "/reviews")
 public class ReviewRestController {
+
   private final ReviewFacade facade;
 
   public ReviewRestController(ReviewFacade facade) {
@@ -27,44 +28,52 @@ public class ReviewRestController {
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponse> createReview(@RequestBody ReviewRequest reviewRequest) {
+
+    // todo: JWT 내 이메일 가져오기
+    String email = "test@ddog.dog";
+
     ReviewResult addedReviewResult = facade.registerReview(
-            reviewRequest.roomId(),
-            reviewRequest.content(),
-            reviewRequest.rating(),
-            reviewRequest.userId());
+        reviewRequest.roomId(),
+        reviewRequest.content(),
+        reviewRequest.rating(),
+        email);
 
     return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(ReviewResponse.of(addedReviewResult));
+        .status(HttpStatus.CREATED)
+        .body(ReviewResponse.of(addedReviewResult));
   }
 
   @PatchMapping(value = "/{reviewId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponse> modifyReview(@PathVariable Long reviewId,
-                                                     @RequestParam String content) {
+      @RequestParam String content) {
     ReviewResult updatedReviewResult = facade.updateReview(reviewId, content);
     return ResponseEntity
-            .status(HttpStatus.NO_CONTENT)
-            .body(ReviewResponse.of(updatedReviewResult));
+        .status(HttpStatus.NO_CONTENT)
+        .body(ReviewResponse.of(updatedReviewResult));
+  }
+
+  @GetMapping(value = "/{hotelId}", produces = APPLICATION_JSON_VALUE)
+  public ResponseEntity<ReviewResponses> getReviewsByHotelId(@PathVariable Long hotelId,
+      Pageable pageable) {
+
+    // Todo: JWT내 권한이 ADMIN 인지 확인
+
+    ReviewResults retrievedReviewsResult = facade.findReviewsByHotelId(hotelId, pageable);
+    return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(ReviewResponses.of(retrievedReviewsResult));
+
   }
 
   @GetMapping(produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<ReviewResponses> getReviewsByUserId(@RequestParam(required = false) Long userId,
-                                                            @RequestParam(required = false) Long hotelId,
-                                                            Pageable pageable) {
-    if (userId != null && hotelId == null) {
-      ReviewResults retrievedReviewsResult = facade.findReviewsByUserId(userId, pageable);
-      return ResponseEntity
-              .status(HttpStatus.OK)
-              .body(ReviewResponses.of(retrievedReviewsResult));
-    }
+  public ResponseEntity<ReviewResponses> getReviewsForMe(Pageable pageable) {
 
-    if (hotelId != null && userId == null) {
-      ReviewResults retrievedReviewsResult = facade.findReviewsByHotelId(hotelId, pageable);
-      return ResponseEntity
-              .status(HttpStatus.OK)
-              .body(ReviewResponses.of(retrievedReviewsResult));
-    }
+    // todo: JWT 내에서 이메일 가져오기
+    String email = "test@ddog.dog";
 
-    throw new ReviewException(INVALID_REVIEW_PARAMETER);
+    ReviewResults retrievedReviewsResult = facade.findReviewsByEmail(email, pageable);
+    return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(ReviewResponses.of(retrievedReviewsResult));
   }
 }

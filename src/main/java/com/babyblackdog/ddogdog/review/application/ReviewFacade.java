@@ -14,17 +14,14 @@ import java.util.List;
 public class ReviewFacade {
 
   private final ReviewService service;
-  private final UserAccessService userAccessService;
   private final PlaceAccessService placeAccessService;
 
-  public ReviewFacade(ReviewService service, PlaceAccessService placeAccessService, UserAccessService userAccessService) {
+  public ReviewFacade(ReviewService service, PlaceAccessService placeAccessService) {
     this.service = service;
     this.placeAccessService = placeAccessService;
-    this.userAccessService = userAccessService;
   }
 
-  public ReviewResult registerReview(Long roomId, String content, Double rating, Long userId) {
-    String email = userAccessService.findEmail(userId);
+  public ReviewResult registerReview(Long roomId, String content, Double rating, String email) {
     placeAccessService.addRating(roomId, rating);
     return service.registerReview(roomId, content, rating, email);
   }
@@ -33,8 +30,7 @@ public class ReviewFacade {
     return service.updateReview(reviewId, content);
   }
 
-  public ReviewResults findReviewsByUserId(Long userId, Pageable pageable) {
-    String email = userAccessService.findEmail(userId);
+  public ReviewResults findReviewsByEmail(String email, Pageable pageable) {
     return service.findReviewsByEmail(email, pageable);
   }
 
