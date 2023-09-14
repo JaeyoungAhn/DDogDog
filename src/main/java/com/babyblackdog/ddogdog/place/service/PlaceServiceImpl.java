@@ -6,7 +6,6 @@ import static com.babyblackdog.ddogdog.global.exception.ErrorCode.ROOM_NOT_FOUND
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
-import com.babyblackdog.ddogdog.global.jwt.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.mapping.MappingService;
 import com.babyblackdog.ddogdog.place.model.Hotel;
 import com.babyblackdog.ddogdog.place.model.Room;
@@ -19,7 +18,6 @@ import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import com.babyblackdog.ddogdog.place.service.dto.RoomResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

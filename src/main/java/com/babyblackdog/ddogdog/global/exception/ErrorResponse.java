@@ -1,9 +1,9 @@
 package com.babyblackdog.ddogdog.global.exception;
 
 import java.util.StringJoiner;
-import org.springframework.http.HttpStatus;
 
 public class ErrorResponse {
+
   private final String message;
 
   protected ErrorResponse(ErrorCode errorCode) {
