@@ -76,7 +76,7 @@ public class ReviewRestController {
 
   }
 
-  @GetMapping(produces = APPLICATION_JSON_VALUE)
+  @GetMapping(value = "/me", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewResponses> getReviewsForMe(Pageable pageable) {
 
     JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
@@ -87,4 +87,4 @@ public class ReviewRestController {
         .status(HttpStatus.OK)
         .body(ReviewResponses.of(retrievedReviewsResult));
   }
-}용
+}
