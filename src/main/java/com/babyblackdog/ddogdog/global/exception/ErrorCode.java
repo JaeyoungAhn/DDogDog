@@ -1,8 +1,7 @@
 package com.babyblackdog.ddogdog.global.exception;
 
-import org.springframework.http.HttpStatus;
-
 import java.util.StringJoiner;
+import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
 
@@ -22,6 +21,7 @@ public enum ErrorCode {
   INVALID_RATING(HttpStatus.BAD_REQUEST, "R-200", "유효하지 않은 별점입니다."),
   INVALID_DECIMAL_POINT(HttpStatus.BAD_REQUEST, "R-210", "유효하지 않은 소숫점 자리입니다."),
   INVALID_REVIEW(HttpStatus.BAD_REQUEST, "R-220", "유효하지 않은 리뷰입니다."),
+  INVALID_REVIEW_PERMISSION(HttpStatus.FORBIDDEN, "R-300", "리뷰 접근 권한이 없습니다."),
 
   INVALID_REVIEW_LENGTH(HttpStatus.BAD_REQUEST, "R-230", "리뷰 길이는 최소 10글자 이상이어야 합니다."),
   INVALID_RATING_RANGE(HttpStatus.BAD_REQUEST, "R-240", "유효하지 않은 리뷰 별점입니다."),
