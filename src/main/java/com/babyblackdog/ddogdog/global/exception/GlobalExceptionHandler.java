@@ -43,6 +43,16 @@ public class GlobalExceptionHandler {
         .body(errorResponse);
   }
 
+  @ExceptionHandler(UserException.class)
+  public ResponseEntity<ErrorResponse> userExceptionHandler(UserException exception) {
+    ErrorCode errorCode = exception.getErrorCode();
+    ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+    logger.info("UserException: {}", errorResponse);
+    return ResponseEntity
+        .status(errorCode.getHttpStatus())
+        .body(errorResponse);
+  }
+
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> internalServerErrorExceptionHandler(Exception exception) {
     ErrorCode errorCode = INTERNAL_SERVER_ERROR;
