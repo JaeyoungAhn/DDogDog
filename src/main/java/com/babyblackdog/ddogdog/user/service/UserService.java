@@ -20,47 +20,49 @@ import org.springframework.util.Assert;
 @Transactional(readOnly = true)
 public class UserService {
 
-  private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-  @Transactional(readOnly = true)
-  public Optional<User> findByEmail(String email) {
-    return userRepository.findByEmail(email);
-  }
+    @Transactional(readOnly = true)
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
-  @Transactional
-  public User join(OAuth2User oAuth2User) {
-    Assert.isTrue(oAuth2User != null, "oauth2User must be provided");
+    @Transactional
+    public User join(OAuth2User oAuth2User) {
+        Assert.isTrue(oAuth2User != null, "oauth2User must be provided");
 
-    Map<String, Object> attributes = oAuth2User.getAttributes();
-    Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
-    Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
 
-    Assert.isTrue(properties != null, "OAuth2User properties is empty");
-    Assert.isTrue(account != null, "OAuth2User account is empty");
+        Assert.isTrue(properties != null, "OAuth2User properties is empty");
+        Assert.isTrue(account != null, "OAuth2User account is empty");
 
-    String nickname = (String) properties.get("nickname");
-    String email = (String) account.get("email");
-    return this.findByEmail(email)
-        .map(user -> {
-          log.warn("Already exists user: {}", user);
-          return user;
-        })
-        .orElseGet(() -> userRepository.save(
-            new User(nickname, email, Role.USER, new Point(0))));
-  }
+        String nickname = (String) properties.get("nickname");
+        String email = (String) account.get("email");
+        return this.findByEmail(email)
+                .map(user -> {
+                    log.warn("Already exists user: {}", user);
+                    return user;
+                })
+                .orElseGet(() -> userRepository.save(
+                        new User(nickname, email, Role.USER, new Point(0))));
+    }
 
-  @Transactional
-  public void chargePoint(String email, long charge) {
-    userRepository.findByEmail(email)
-        .orElseThrow(() -> new UserException(USER_NOT_FOUND))
-        .addPoint(charge);
-  }
+    @Transactional
+    public void chargePoint(String email, long charge) {
+        userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException(USER_NOT_FOUND))
+                .addPoint(charge);
+    }
+
     void creditPoint(long userId, Point point);
+
     void debitPoint(Long userId, Point point);
 }

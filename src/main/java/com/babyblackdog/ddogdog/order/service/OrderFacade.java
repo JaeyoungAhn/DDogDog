@@ -3,7 +3,6 @@ package com.babyblackdog.ddogdog.order.service;
 import com.babyblackdog.ddogdog.common.StayCostEstimator;
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
-import com.babyblackdog.ddogdog.global.jwt.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;

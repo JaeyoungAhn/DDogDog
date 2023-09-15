@@ -2,8 +2,6 @@ package com.babyblackdog.ddogdog.reservation.service;
 
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.date.TimeProvider;
-import com.babyblackdog.ddogdog.payment.service.PaymentService;
-import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.domain.Reservation;
 import com.babyblackdog.ddogdog.reservation.domain.ReservationRepository;
 import java.time.LocalDate;

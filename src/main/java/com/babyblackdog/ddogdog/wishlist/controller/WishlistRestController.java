@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/reviews")
 public class WishlistRestController {
+
     private final WishlistFacade facade;
 
     public WishlistRestController(WishlistFacade facade) {

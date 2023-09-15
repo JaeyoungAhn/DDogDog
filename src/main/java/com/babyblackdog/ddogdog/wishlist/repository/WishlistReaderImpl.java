@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WishlistReaderImpl implements WishlistReader {
+
     private final WishlistRepository repository;
 
     public WishlistReaderImpl(WishlistRepository repository) {
@@ -21,13 +22,13 @@ public class WishlistReaderImpl implements WishlistReader {
         return repository.findWishlistsByEmail(email, pageable);
     }
 
-  @Override
-  public Wishlist findWishlistById(Long wishlistId) {
-    return repository.findById(wishlistId)
-        .orElseThrow(() -> new WishlistException(WISHLIST_NOT_FOUND));
-  }
+    @Override
+    public Wishlist findWishlistById(Long wishlistId) {
+        return repository.findById(wishlistId)
+                .orElseThrow(() -> new WishlistException(WISHLIST_NOT_FOUND));
+    }
 
-  @Override
+    @Override
     public Boolean isInWishlist(Long userId, Long placeId) {
         return repository.existsByUserIdAndPlaceId(userId, placeId);
     }

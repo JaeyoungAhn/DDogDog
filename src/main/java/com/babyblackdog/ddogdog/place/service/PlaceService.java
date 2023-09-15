@@ -11,23 +11,23 @@ import org.springframework.data.domain.Pageable;
 
 public interface PlaceService {
 
-  HotelResult registerHotel(AddHotelParam param);
+    HotelResult registerHotel(AddHotelParam param);
 
-  void deleteHotel(Long hotelId);
+    void deleteHotel(Long hotelId);
 
-  RoomResult registerRoomOfHotel(AddRoomParam param);
+    RoomResult registerRoomOfHotel(AddRoomParam param);
 
-  void deleteRoom(Long roomId);
+    void deleteRoom(Long roomId);
 
-  Page<HotelResult> findHotelsInProvince(Province province, Pageable pageable);
+    Page<HotelResult> findHotelsInProvince(Province province, Pageable pageable);
 
-  HotelResult findHotel(Long id);
+    HotelResult findHotel(Long id);
 
-  RoomResult findRoom(Long roomId);
+    RoomResult findRoom(Long roomId);
 
-  RoomResult findRoomForDuration(Long roomId, StayPeriod stayPeriod);
+    RoomResult findRoomForDuration(Long roomId, StayPeriod stayPeriod);
 
-  Page<RoomResult> findAllRoomsOfHotelForDuration(Long hotelId, StayPeriod stayPeriod,
-      Pageable pageable);
+    Page<RoomResult> findAllRoomsOfHotelForDuration(Long hotelId, StayPeriod stayPeriod,
+            Pageable pageable);
 
 }

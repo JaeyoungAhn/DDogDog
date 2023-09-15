@@ -1,11 +1,10 @@
 package com.babyblackdog.ddogdog.wishlist.service.dto;
 
 import com.babyblackdog.ddogdog.wishlist.model.Wishlist;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 public record WishlistResults(Page<WishlistResult> wishlistResults) {
 

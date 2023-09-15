@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlaceAccessServiceImpl implements PlaceAccessService {
 
-  private final PlaceService placeService;
+    private final PlaceService placeService;
 
-  public PlaceAccessServiceImpl(PlaceService placeService) {
-    this.placeService = placeService;
-  }
+    public PlaceAccessServiceImpl(PlaceService placeService) {
+        this.placeService = placeService;
+    }
 
-  @Override
-  public RoomSimpleResult findRoomSimpleInfo(Long roomId) {
-    RoomResult roomResult = placeService.findRoom(roomId);
-    return RoomSimpleResult.of(roomResult);
-  }
+    @Override
+    public RoomSimpleResult findRoomSimpleInfo(Long roomId) {
+        RoomResult roomResult = placeService.findRoom(roomId);
+        return RoomSimpleResult.of(roomResult);
+    }
 }

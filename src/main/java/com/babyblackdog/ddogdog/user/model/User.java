@@ -18,62 +18,62 @@ import org.springframework.util.Assert;
 @Table(name = "users")
 public class User {
 
-  @Id
-  @Column(name = "email", nullable = false)
-  private String email;
+    @Id
+    @Column(name = "email", nullable = false)
+    private String email;
 
-  @Column(name = "username")
-  private String username;
+    @Column(name = "username")
+    private String username;
 
-  @Enumerated(value = EnumType.STRING)
-  private Role role;
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 
-  @Embedded
-  @AttributeOverride(name = "value", column = @Column(name = "remain_point"))
-  private Point point;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "remain_point"))
+    private Point point;
 
-  public User(String email, String username, Role role, Point point) {
-    Assert.isTrue(isNotEmpty(username), "username must be provided.");
-    Assert.isTrue(isNotEmpty(email), "email must be provided.");
-    Assert.notNull(role, "role must be provided");
-    Assert.notNull(point, "point must be provided");
+    public User(String email, String username, Role role, Point point) {
+        Assert.isTrue(isNotEmpty(username), "username must be provided.");
+        Assert.isTrue(isNotEmpty(email), "email must be provided.");
+        Assert.notNull(role, "role must be provided");
+        Assert.notNull(point, "point must be provided");
 
-    this.email = email;
-    this.username = username;
-    this.role = role;
-    this.point = point;
-  }
+        this.email = email;
+        this.username = username;
+        this.role = role;
+        this.point = point;
+    }
 
-  protected User() {
-  }
+    protected User() {
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public String getUsername() {
-    return username;
-  }
+    public String getUsername() {
+        return username;
+    }
 
-  public String getRole() {
-    return role.name();
-  }
+    public String getRole() {
+        return role.name();
+    }
 
-  public long getPoint() {
-    return point.getValue();
-  }
+    public long getPoint() {
+        return point.getValue();
+    }
 
-  @Override
-  public String toString() {
-    return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
-        .add("username='" + username + "'")
-        .add("email='" + email + "'")
-        .add("role=" + getRole())
-        .add("point=" + getPoint())
-        .toString();
-  }
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
+                .add("username='" + username + "'")
+                .add("email='" + email + "'")
+                .add("role=" + getRole())
+                .add("point=" + getPoint())
+                .toString();
+    }
 
-  public void addPoint(long charge) {
-    this.point = new Point(getPoint() + charge);
-  }
+    public void addPoint(long charge) {
+        this.point = new Point(getPoint() + charge);
+    }
 }

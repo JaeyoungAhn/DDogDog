@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @Service
 public class WishlistServiceImpl implements WishlistService {
+
     private final WishlistReader reader;
     private final WishlistStore store;
 

@@ -18,40 +18,40 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class UserServiceTest {
 
-  @Autowired
-  private UserService userService;
+    @Autowired
+    private UserService userService;
 
-  @Autowired
-  private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-  private User savedUser;
+    private User savedUser;
 
-  @BeforeEach
-  void setUp() {
-    savedUser = userRepository.save(
-        new User(
-            "다나카",
-            "danaka@naver.com",
-            Role.USER,
-            new Point(0)
-        )
-    );
-  }
+    @BeforeEach
+    void setUp() {
+        savedUser = userRepository.save(
+                new User(
+                        "다나카",
+                        "danaka@naver.com",
+                        Role.USER,
+                        new Point(0)
+                )
+        );
+    }
 
-  @Test
-  @DisplayName("유저에게 포인트를 추가한다.")
-  void chargePoint_Success() {
-    // Given
-    String email = savedUser.getEmail();
-    long charge = 2_000L;
+    @Test
+    @DisplayName("유저에게 포인트를 추가한다.")
+    void chargePoint_Success() {
+        // Given
+        String email = savedUser.getEmail();
+        long charge = 2_000L;
 
-    // When
-    userService.chargePoint(email, charge);
+        // When
+        userService.chargePoint(email, charge);
 
-    // Then
-    Optional<User> user = userService.findByEmail(email);
+        // Then
+        Optional<User> user = userService.findByEmail(email);
 
-    assertThat(user.isPresent()).isTrue();
-    assertThat(user.get().getPoint()).isEqualTo(charge);
-  }
+        assertThat(user.isPresent()).isTrue();
+        assertThat(user.get().getPoint()).isEqualTo(charge);
+    }
 }

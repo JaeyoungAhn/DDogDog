@@ -2,7 +2,6 @@ package com.babyblackdog.ddogdog.wishlist.controller.dto;
 
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResults;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

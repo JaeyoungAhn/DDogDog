@@ -22,102 +22,102 @@ import jakarta.persistence.Table;
 @Table(name = "rooms")
 public class Room {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "hotel_id")
-  private Hotel hotel;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
 
-  @Enumerated(value = EnumType.STRING)
-  private RoomType roomType;
+    @Enumerated(value = EnumType.STRING)
+    private RoomType roomType;
 
-  @Column(name = "description", nullable = false)
-  private String description;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-  @Embedded
-  private Occupancy occupancy;
+    @Embedded
+    private Occupancy occupancy;
 
-  @Column(name = "has_bed", nullable = false)
-  private boolean hasBed;
+    @Column(name = "has_bed", nullable = false)
+    private boolean hasBed;
 
-  @Column(name = "has_amenities", nullable = false)
-  private boolean hasAmenities;
+    @Column(name = "has_amenities", nullable = false)
+    private boolean hasAmenities;
 
-  @Column(name = "smoking_available", nullable = false)
-  private boolean smokingAvailable;
+    @Column(name = "smoking_available", nullable = false)
+    private boolean smokingAvailable;
 
-  @Embedded
-  private RoomNumber roomNumber;
+    @Embedded
+    private RoomNumber roomNumber;
 
-  @Embedded
-  @AttributeOverride(name = "value", column = @Column(name = "point"))
-  private Point point;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "point"))
+    private Point point;
 
-  public Room(Hotel hotel, RoomType roomType, String description, Occupancy occupancy,
-      boolean hasBed, boolean hasAmenities, boolean smokingAvailable, RoomNumber roomNumber,
-      Point point
-  ) {
-    this.hotel = hotel;
-    this.roomType = roomType;
-    this.description = description;
-    this.occupancy = occupancy;
-    this.hasBed = hasBed;
-    this.hasAmenities = hasAmenities;
-    this.smokingAvailable = smokingAvailable;
-    this.roomNumber = roomNumber;
-    this.point = point;
-  }
+    public Room(Hotel hotel, RoomType roomType, String description, Occupancy occupancy,
+            boolean hasBed, boolean hasAmenities, boolean smokingAvailable, RoomNumber roomNumber,
+            Point point
+    ) {
+        this.hotel = hotel;
+        this.roomType = roomType;
+        this.description = description;
+        this.occupancy = occupancy;
+        this.hasBed = hasBed;
+        this.hasAmenities = hasAmenities;
+        this.smokingAvailable = smokingAvailable;
+        this.roomNumber = roomNumber;
+        this.point = point;
+    }
 
-  protected Room() {
-  }
+    protected Room() {
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public Hotel getHotel() {
-    return hotel;
-  }
+    public Hotel getHotel() {
+        return hotel;
+    }
 
-  public String getHotelName() {
-    return hotel.getName();
-  }
+    public String getHotelName() {
+        return hotel.getName();
+    }
 
-  public RoomType getRoomType() {
-    return roomType;
-  }
+    public RoomType getRoomType() {
+        return roomType;
+    }
 
-  public String getRoomTypeName() {
-    return roomType.getTypeName();
-  }
+    public String getRoomTypeName() {
+        return roomType.getTypeName();
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public int getMaxOccupancy() {
-    return occupancy.getMaxOccupancy();
-  }
+    public int getMaxOccupancy() {
+        return occupancy.getMaxOccupancy();
+    }
 
-  public boolean isHasBed() {
-    return hasBed;
-  }
+    public boolean isHasBed() {
+        return hasBed;
+    }
 
-  public boolean isHasAmenities() {
-    return hasAmenities;
-  }
+    public boolean isHasAmenities() {
+        return hasAmenities;
+    }
 
-  public boolean isSmokingAvailable() {
-    return smokingAvailable;
-  }
+    public boolean isSmokingAvailable() {
+        return smokingAvailable;
+    }
 
-  public String getRoomNumber() {
-    return roomNumber.getValue();
-  }
+    public String getRoomNumber() {
+        return roomNumber.getValue();
+    }
 
-  public long getPoint() {
-    return point.getValue();
-  }
+    public long getPoint() {
+        return point.getValue();
+    }
 }

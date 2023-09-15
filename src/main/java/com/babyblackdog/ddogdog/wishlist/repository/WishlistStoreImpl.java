@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WishlistStoreImpl implements WishlistStore {
+
     private final WishlistRepository repository;
 
     public WishlistStoreImpl(WishlistRepository repository) {

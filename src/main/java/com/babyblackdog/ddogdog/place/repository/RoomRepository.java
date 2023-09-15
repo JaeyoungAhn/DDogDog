@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-  Page<Room> findRoomsByHotelId(Long hotelId, Pageable pageable);
+    Page<Room> findRoomsByHotelId(Long hotelId, Pageable pageable);
 
-  void deleteByHotelId(Long hotelId);
+    void deleteByHotelId(Long hotelId);
 }

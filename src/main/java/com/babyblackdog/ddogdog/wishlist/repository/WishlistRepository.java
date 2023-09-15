@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
+
     Page<Wishlist> findWishlistsByEmail(String userId, Pageable pageable);
 
     Boolean existsByUserIdAndPlaceId(Long userId, Long placeId);
