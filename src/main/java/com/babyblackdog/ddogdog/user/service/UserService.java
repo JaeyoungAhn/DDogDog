@@ -61,4 +61,6 @@ public class UserService {
         .orElseThrow(() -> new UserException(USER_NOT_FOUND))
         .addPoint(charge);
   }
+    void creditPoint(long userId, Point point);
+    void debitPoint(Long userId, Point point);
 }

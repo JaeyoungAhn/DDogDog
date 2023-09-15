@@ -1,12 +1,12 @@
-package com.babyblackdog.ddogdog.reservation.controller.dto.response;
+package com.babyblackdog.ddogdog.order.controller.dto.response;
 
-import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;
+import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
 import java.time.LocalDate;
 
 public record RoomOrderPageResponse(
     String placeName,
     String roomName,
-    long roomPoint,
+    long stayCost,
     LocalDate checkIn,
     LocalDate checkOut
 ) {
@@ -14,8 +14,8 @@ public record RoomOrderPageResponse(
   public static RoomOrderPageResponse of(RoomOrderPageResult result) {
     return new RoomOrderPageResponse(
         result.placeName(),
-        result.roomName(),
-        result.roomPoint(),
+        result.roomType(),
+        result.stayCost().getValue(),
         result.checkIn(),
         result.checkOut()
     );

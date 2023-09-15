@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.common.point;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Positive;
+import java.util.Objects;
 
 @Embeddable
 public class Point {
@@ -25,5 +26,22 @@ public class Point {
 
   public long getValue() {
     return value;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Point point = (Point) o;
+    return getValue() == point.getValue();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getValue());
   }
 }

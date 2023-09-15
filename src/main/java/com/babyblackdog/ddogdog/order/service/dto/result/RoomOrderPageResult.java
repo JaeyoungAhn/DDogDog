@@ -1,13 +1,14 @@
-package com.babyblackdog.ddogdog.reservation.service.dto.result;
+package com.babyblackdog.ddogdog.order.service.dto.result;
 
+import com.babyblackdog.ddogdog.common.point.Point;
 import java.time.LocalDate;
 
 public record RoomOrderPageResult(
     String placeName,
-    String roomName,
+    String roomType,
     String roomDescription,
     String roomNumber,
-    long roomPoint,
+    Point stayCost,
     LocalDate checkIn,
     LocalDate checkOut) {
 
