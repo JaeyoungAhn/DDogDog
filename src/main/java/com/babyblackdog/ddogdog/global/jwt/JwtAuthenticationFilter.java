@@ -24,71 +24,71 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
-  private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
-  private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
-  public JwtAuthenticationFilter(JwtAuthenticationProvider jwtAuthenticationProvider) {
-    this.jwtAuthenticationProvider = jwtAuthenticationProvider;
-  }
+    public JwtAuthenticationFilter(JwtAuthenticationProvider jwtAuthenticationProvider) {
+        this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+    }
 
-  @Override
-  public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-      throws IOException, ServletException {
-    HttpServletRequest request = (HttpServletRequest) req;
-    HttpServletResponse response = (HttpServletResponse) res;
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
 
-    if (SecurityContextHolder.getContext().getAuthentication() == null) {
-      String token = getToken(request);
-      if (token != null) {
-        try {
-          Claims claims = verify(token);
-          log.debug("JwtAuthenticationProvider parse result: {}", claims);
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            String token = getToken(request);
+            if (token != null) {
+                try {
+                    Claims claims = verify(token);
+                    log.debug("JwtAuthenticationProvider parse result: {}", claims);
 
-          String username = claims.getUsername();
-          String email = claims.getEmail();
-          List<GrantedAuthority> authorities = getAuthorities(claims);
+                    String username = claims.getUsername();
+                    String email = claims.getEmail();
+                    List<GrantedAuthority> authorities = getAuthorities(claims);
 
-          if (isNotEmpty(username) && !authorities.isEmpty()) {
-            JwtAuthenticationToken authentication =
-                new JwtAuthenticationToken(
-                    new JwtAuthenticationPrincipal(token, username, email), null, authorities);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-          }
-        } catch (Exception e) {
-          log.warn("JwtAuthenticationProvider processing failed: {}", e);
-          throw e;
+                    if (isNotEmpty(username) && !authorities.isEmpty()) {
+                        JwtAuthenticationToken authentication =
+                                new JwtAuthenticationToken(
+                                        new JwtAuthenticationPrincipal(token, username, email), null, authorities);
+                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                } catch (Exception e) {
+                    log.warn("JwtAuthenticationProvider processing failed: {}", e);
+                    throw e;
+                }
+            }
+        } else {
+            log.debug(
+                    "SecurityContextHolder not populated with security token, as it already contained: '{}'",
+                    SecurityContextHolder.getContext().getAuthentication());
         }
-      }
-    } else {
-      log.debug(
-          "SecurityContextHolder not populated with security token, as it already contained: '{}'",
-          SecurityContextHolder.getContext().getAuthentication());
+
+        chain.doFilter(request, response);
     }
 
-    chain.doFilter(request, response);
-  }
+    private String getToken(HttpServletRequest request) {
+        String token = request.getHeader(jwtAuthenticationProvider.getHeader());
 
-  private String getToken(HttpServletRequest request) {
-    String token = request.getHeader(jwtAuthenticationProvider.getHeader());
+        if (isNotEmpty(token)) {
+            log.debug("JwtAuthenticationProvider authorization api detected: {}", token);
 
-    if (isNotEmpty(token)) {
-      log.debug("JwtAuthenticationProvider authorization api detected: {}", token);
-
-      return URLDecoder.decode(token.substring(7), StandardCharsets.UTF_8);
+            return URLDecoder.decode(token.substring(7), StandardCharsets.UTF_8);
+        }
+        return null;
     }
-    return null;
-  }
 
-  private Claims verify(String token) {
-    return jwtAuthenticationProvider.verify(token);
-  }
+    private Claims verify(String token) {
+        return jwtAuthenticationProvider.verify(token);
+    }
 
-  private List<GrantedAuthority> getAuthorities(Claims claims) {
-    return StringUtils.isBlank(claims.getRole())
-        ? Collections.emptyList()
-        : List.of(new SimpleGrantedAuthority(claims.getRole()));
-  }
+    private List<GrantedAuthority> getAuthorities(Claims claims) {
+        return StringUtils.isBlank(claims.getRole())
+                ? Collections.emptyList()
+                : List.of(new SimpleGrantedAuthority(claims.getRole()));
+    }
 
 }

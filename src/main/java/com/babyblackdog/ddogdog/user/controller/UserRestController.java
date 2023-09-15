@@ -14,21 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserRestController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  public UserRestController(UserService userService) {
-    this.userService = userService;
-  }
+    public UserRestController(UserService userService) {
+        this.userService = userService;
+    }
 
-  @PatchMapping("/{email}")
-  public ResponseEntity<String> addPoint(
-      @PathVariable String email,
-      @RequestBody long charge
-  ) {
-    userService.chargePoint(email, charge);
-    String message = "%d point charged to %s".formatted(email, charge);
-    return ResponseEntity
-        .status(OK)
-        .body(message);
-  }
+    @PatchMapping("/{email}")
+    public ResponseEntity<String> addPoint(
+            @PathVariable String email,
+            @RequestBody long charge
+    ) {
+        userService.chargePoint(email, charge);
+        String message = "%d point charged to %s".formatted(email, charge);
+        return ResponseEntity
+                .status(OK)
+                .body(message);
+    }
 }

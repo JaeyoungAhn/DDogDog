@@ -13,30 +13,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class UserAccessorServiceImpl implements
-    UserAccessorService {
+        UserAccessorService {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  public UserAccessorServiceImpl(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+    public UserAccessorServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-  @Override
-  public UserResult findUserByEmail(String email) {
-    User user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new UserException(USER_NOT_FOUND));
-    return UserResult.of(user);
-  }
+    @Override
+    public UserResult findUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException(USER_NOT_FOUND));
+        return UserResult.of(user);
+    }
 
-  @Override
-  public boolean doesUserExist(Long userId) {
-    return false;
-  }
+    @Override
+    public boolean doesUserExist(Long userId) {
+        return false;
+    }
 
-  @Override
-  public boolean deductUserPoints(Long userId, Point point) {
-    return false;
-  }
+    @Override
+    public boolean deductUserPoints(Long userId, Point point) {
+        return false;
+    }
 
 //  @Override
 //  public boolean doesUserExist(String email) {

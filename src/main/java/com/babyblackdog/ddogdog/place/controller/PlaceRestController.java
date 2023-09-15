@@ -38,14 +38,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping(path = "/places", produces = APPLICATION_JSON_VALUE)
 public class PlaceRestController {
 
-  private final PlaceService placeService;
-  private final TimeProvider timeProvider;
+    private final PlaceService placeService;
+    private final TimeProvider timeProvider;
 
-  public PlaceRestController(PlaceService placeService, TimeProvider timeProvider) {
-    this.placeService = placeService;
-    this.timeProvider = timeProvider;
-  }
-
+    public PlaceRestController(PlaceService placeService, TimeProvider timeProvider) {
+        this.placeService = placeService;
+        this.timeProvider = timeProvider;
+    }
+  
   /**
    * POST /places [숙소 정보 등록]
    *
@@ -85,38 +85,38 @@ public class PlaceRestController {
         .build();
   }
 
-  /**
-   * GET /places/{hotelId} [숙소 아이디로 해당 숙소 조회]
-   *
-   * @param hotelId
-   * @return ResponseEntity<HotelResponse>
-   */
-  @GetMapping("/{hotelId}")
-  public ResponseEntity<HotelResponse> getHotel(
-      @PathVariable Long hotelId
-  ) {
-    HotelResult result = placeService.findHotel(hotelId);
-    return ResponseEntity
-        .status(OK)
-        .body(HotelResponse.of(result));
-  }
+    /**
+     * GET /places/{hotelId} [숙소 아이디로 해당 숙소 조회]
+     *
+     * @param hotelId
+     * @return ResponseEntity<HotelResponse>
+     */
+    @GetMapping("/{hotelId}")
+    public ResponseEntity<HotelResponse> getHotel(
+            @PathVariable Long hotelId
+    ) {
+        HotelResult result = placeService.findHotel(hotelId);
+        return ResponseEntity
+                .status(OK)
+                .body(HotelResponse.of(result));
+    }
 
-  /**
-   * GET /places?province=강원&page=0&size=5 [지역 내 있는 모든 숙소 정보를 조회]
-   *
-   * @param province
-   * @param pageable
-   * @return ResponseEntity<HotelResponses>
-   */
-  @GetMapping
-  public ResponseEntity<HotelResponses> getHotelsInProvince(
-      @RequestParam String province, Pageable pageable
-  ) {
-    Page<HotelResult> result = placeService.findHotelsInProvince(new Province(province), pageable);
-    return ResponseEntity
-        .status(OK)
-        .body(HotelResponses.of(result));
-  }
+    /**
+     * GET /places?province=강원&page=0&size=5 [지역 내 있는 모든 숙소 정보를 조회]
+     *
+     * @param province
+     * @param pageable
+     * @return ResponseEntity<HotelResponses>
+     */
+    @GetMapping
+    public ResponseEntity<HotelResponses> getHotelsInProvince(
+            @RequestParam String province, Pageable pageable
+    ) {
+        Page<HotelResult> result = placeService.findHotelsInProvince(new Province(province), pageable);
+        return ResponseEntity
+                .status(OK)
+                .body(HotelResponses.of(result));
+    }
 
   /**
    * POST /places/{hotelId} [호텔에 대한 객실 정보 추가]
@@ -159,52 +159,51 @@ public class PlaceRestController {
         .build();
   }
 
-  /**
-   * GET /places/{hotelId}/{roomId}?checkIn=날짜&checkOut=날짜 [숙소 아이디와 객실 아이디로 특정 기간 동안의 객실 정보 조회]
-   *
-   * @param hotelId
-   * @param roomId
-   * @param checkIn
-   * @param checkOut
-   * @return ResponseEntity<RoomResponse>\
-   */
-  @GetMapping(path = "/{hotelId}/{roomId}")
-  public ResponseEntity<RoomResponse> getRoomForDuration(
-      @PathVariable Long hotelId,
-      @PathVariable Long roomId,
-      @RequestParam LocalDate checkIn,
-      @RequestParam LocalDate checkOut
-  ) {
-    StayPeriod stayPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
-    RoomResult roomResult = placeService.findRoomForDuration(roomId, stayPeriod);
-    return ResponseEntity
-        .status(OK)
-        .body(RoomResponse.of(roomResult));
-  }
+    /**
+     * GET /places/{hotelId}/{roomId}?checkIn=날짜&checkOut=날짜 [숙소 아이디와 객실 아이디로 특정 기간 동안의 객실 정보 조회]
+     *
+     * @param hotelId
+     * @param roomId
+     * @param checkIn
+     * @param checkOut
+     * @return ResponseEntity<RoomResponse>\
+     */
+    @GetMapping(path = "/{hotelId}/{roomId}")
+    public ResponseEntity<RoomResponse> getRoomForDuration(
+            @PathVariable Long hotelId,
+            @PathVariable Long roomId,
+            @RequestParam LocalDate checkIn,
+            @RequestParam LocalDate checkOut
+    ) {
+        StayPeriod stayPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
+        RoomResult roomResult = placeService.findRoomForDuration(roomId, stayPeriod);
+        return ResponseEntity
+                .status(OK)
+                .body(RoomResponse.of(roomResult));
+    }
 
-  /**
-   * GET /places/{hotelId}/rooms?checkIn=날짜&checkOut=날짜&page=0&size=5 [숙소 아이디로 특정 기간 동안 해당 숙소에 모든 객실
-   * 정보를 조회]
-   *
-   * @param hotelId
-   * @param checkIn
-   * @param checkOut
-   * @param pageable
-   * @return ResponseEntity<RoomResponse>
-   */
-  @GetMapping(path = "/{hotelId}/rooms")
-  public ResponseEntity<RoomResponses> getRoomsOfHotelForDuration(
-      @PathVariable Long hotelId,
-      @RequestParam LocalDate checkIn,
-      @RequestParam LocalDate checkOut,
-      Pageable pageable
-  ) {
-    StayPeriod stayPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
-    Page<RoomResult> roomResults = placeService.findAllRoomsOfHotelForDuration(
-        hotelId, stayPeriod, pageable);
-    return ResponseEntity
-        .status(OK)
-        .body(RoomResponses.of(roomResults));
-  }
+    /**
+     * GET /places/{hotelId}/rooms?checkIn=날짜&checkOut=날짜&page=0&size=5 [숙소 아이디로 특정 기간 동안 해당 숙소에 모든 객실 정보를 조회]
+     *
+     * @param hotelId
+     * @param checkIn
+     * @param checkOut
+     * @param pageable
+     * @return ResponseEntity<RoomResponse>
+     */
+    @GetMapping(path = "/{hotelId}/rooms")
+    public ResponseEntity<RoomResponses> getRoomsOfHotelForDuration(
+            @PathVariable Long hotelId,
+            @RequestParam LocalDate checkIn,
+            @RequestParam LocalDate checkOut,
+            Pageable pageable
+    ) {
+        StayPeriod stayPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
+        Page<RoomResult> roomResults = placeService.findAllRoomsOfHotelForDuration(
+                hotelId, stayPeriod, pageable);
+        return ResponseEntity
+                .status(OK)
+                .body(RoomResponses.of(roomResults));
+    }
 
 }

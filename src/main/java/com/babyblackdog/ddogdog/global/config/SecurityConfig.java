@@ -25,74 +25,74 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 @EnableWebSecurity
 public class SecurityConfig {
 
-  private final ApplicationContext applicationContext;
-  private final JwtConfig jwtConfig;
+    private final ApplicationContext applicationContext;
+    private final JwtConfig jwtConfig;
 
-  public SecurityConfig(ApplicationContext applicationContext, JwtConfig jwtConfig) {
-    this.applicationContext = applicationContext;
-    this.jwtConfig = jwtConfig;
-  }
+    public SecurityConfig(ApplicationContext applicationContext, JwtConfig jwtConfig) {
+        this.applicationContext = applicationContext;
+        this.jwtConfig = jwtConfig;
+    }
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .authorizeHttpRequests(request -> request
-            .requestMatchers(
-                antMatcher("/login")).permitAll()
-            .anyRequest().authenticated())
-        .csrf(AbstractHttpConfigurer::disable)
-        .headers(AbstractHttpConfigurer::disable)
-        .formLogin(AbstractHttpConfigurer::disable)
-        .rememberMe(AbstractHttpConfigurer::disable)
-        .logout(AbstractHttpConfigurer::disable)
-        .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .oauth2Login(oauth2 -> oauth2
-            .authorizationEndpoint(endPoint -> endPoint
-                .authorizationRequestRepository(authorizationRequestRepository()))
-            .authorizedClientRepository(
-                applicationContext.getBean(OAuth2AuthorizedClientRepository.class))
-            .successHandler(oAuth2AuthenticationSuccessHandler(
-                jwtAuthenticationProvider(), applicationContext.getBean(UserService.class))))
-        .addFilterBefore(
-            jwtAuthenticationFilter(jwtAuthenticationProvider()),
-            AnonymousAuthenticationFilter.class)
-    ;
-    return http.build();
-  }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(
+                                antMatcher("/login")).permitAll()
+                        .anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .rememberMe(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(endPoint -> endPoint
+                                .authorizationRequestRepository(authorizationRequestRepository()))
+                        .authorizedClientRepository(
+                                applicationContext.getBean(OAuth2AuthorizedClientRepository.class))
+                        .successHandler(oAuth2AuthenticationSuccessHandler(
+                                jwtAuthenticationProvider(), applicationContext.getBean(UserService.class))))
+                .addFilterBefore(
+                        jwtAuthenticationFilter(jwtAuthenticationProvider()),
+                        AnonymousAuthenticationFilter.class)
+        ;
+        return http.build();
+    }
 
-  @Bean
-  public WebSecurityCustomizer webSecurityCustomizer() {
-    return web -> web.ignoring()
-        .requestMatchers(
-            antMatcher("/assets/**")
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring()
+                .requestMatchers(
+                        antMatcher("/assets/**")
+                );
+    }
+
+    @Bean
+    public JwtAuthenticationProvider jwtAuthenticationProvider() {
+        return new JwtAuthenticationProvider(
+                jwtConfig.getHeader(),
+                jwtConfig.getIssuer(),
+                jwtConfig.getClientSecret(),
+                jwtConfig.getExpirySeconds()
         );
-  }
+    }
 
-  @Bean
-  public JwtAuthenticationProvider jwtAuthenticationProvider() {
-    return new JwtAuthenticationProvider(
-        jwtConfig.getHeader(),
-        jwtConfig.getIssuer(),
-        jwtConfig.getClientSecret(),
-        jwtConfig.getExpirySeconds()
-    );
-  }
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtAuthenticationProvider jwtProvider) {
+        return new JwtAuthenticationFilter(jwtProvider);
+    }
 
-  public JwtAuthenticationFilter jwtAuthenticationFilter(JwtAuthenticationProvider jwtProvider) {
-    return new JwtAuthenticationFilter(jwtProvider);
-  }
+    @Bean
+    public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
+        return new HttpCookieOAuth2AuthorizationRequestRepository();
+    }
 
-  @Bean
-  public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository() {
-    return new HttpCookieOAuth2AuthorizationRequestRepository();
-  }
-
-  @Bean
-  public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler(
-      JwtAuthenticationProvider jwtAuthenticationProvider, UserService userService
-  ) {
-    return new OAuth2AuthenticationSuccessHandler(jwtAuthenticationProvider, userService);
-  }
+    @Bean
+    public OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler(
+            JwtAuthenticationProvider jwtAuthenticationProvider, UserService userService
+    ) {
+        return new OAuth2AuthenticationSuccessHandler(jwtAuthenticationProvider, userService);
+    }
 
 }

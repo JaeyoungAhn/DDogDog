@@ -5,11 +5,11 @@ import com.babyblackdog.ddogdog.user.service.dto.UserResult;
 
 public interface UserAccessorService {
 
-  UserResult findUserByEmail(String email);
+    UserResult findUserByEmail(String email);
 
-  boolean doesUserExist(Long userId);
+    boolean doesUserExist(Long userId);
 
-  boolean deductUserPoints(Long userId, Point point);
+    boolean deductUserPoints(Long userId, Point point);
 
 //  boolean doesUserExist(String email);
 //

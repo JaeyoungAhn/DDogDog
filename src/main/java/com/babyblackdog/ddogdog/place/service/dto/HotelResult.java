@@ -3,6 +3,7 @@ package com.babyblackdog.ddogdog.place.service.dto;
 import com.babyblackdog.ddogdog.place.model.Hotel;
 
 public record HotelResult(
+
     Long id,
     String name,
     String address,
@@ -25,5 +26,6 @@ public record HotelResult(
         entity.getRatingScore()
     );
   }
+
 
 }

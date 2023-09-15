@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PlaceTestData {
-
   private final Hotel hotelEntity;
   private final AddHotelRequest addHotelRequest;
   private final AddHotelParam addHotelParam;
@@ -160,4 +159,5 @@ public class PlaceTestData {
   public Rating getRatingEntity() {
     return ratingEntity;
   }
+
 }

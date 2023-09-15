@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-  @Query("select p from Hotel p where p.address.value like %:address%")
-  Page<Hotel> findContainsAddress(@Param("address") String address, Pageable pageable);
+    @Query("select p from Hotel p where p.address.value like %:address%")
+    Page<Hotel> findContainsAddress(@Param("address") String address, Pageable pageable);
 
 }

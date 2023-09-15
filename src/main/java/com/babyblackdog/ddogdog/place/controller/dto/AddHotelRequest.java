@@ -11,29 +11,29 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record AddHotelRequest(
-    @NotBlank
-    String hotelName,
-    @NotBlank
-    String province,
-    @Positive @NotNull
-    Long adminId,
-    @NotBlank
-    String contact,
-    @NotBlank
-    String representative,
-    @NotBlank
-    String businessName
+        @NotBlank
+        String hotelName,
+        @NotBlank
+        String province,
+        @Positive @NotNull
+        Long adminId,
+        @NotBlank
+        String contact,
+        @NotBlank
+        String representative,
+        @NotBlank
+        String businessName
 ) {
 
-  public static AddHotelParam to(AddHotelRequest request) {
-    return new AddHotelParam(
-        new HotelName(request.hotelName),
-        new Province(request.province),
-        request.adminId,
-        new PhoneNumber(request.contact),
-        new HumanName(request.representative),
-        new BusinessName(request.businessName)
-    );
-  }
+    public static AddHotelParam to(AddHotelRequest request) {
+        return new AddHotelParam(
+                new HotelName(request.hotelName),
+                new Province(request.province),
+                request.adminId,
+                new PhoneNumber(request.contact),
+                new HumanName(request.representative),
+                new BusinessName(request.businessName)
+        );
+    }
 
 }

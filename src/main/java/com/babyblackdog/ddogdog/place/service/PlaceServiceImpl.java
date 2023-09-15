@@ -25,18 +25,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class PlaceServiceImpl implements
-    PlaceService {
+        PlaceService {
 
-  private final HotelRepository hotelRepository;
-  private final RoomRepository roomRepository;
-  private final MappingService mappingService;
+    private final HotelRepository hotelRepository;
+    private final RoomRepository roomRepository;
+    private final MappingService mappingService;
 
-  public PlaceServiceImpl(HotelRepository hotelRepository, RoomRepository roomRepository,
-      MappingService mappingService) {
-    this.hotelRepository = hotelRepository;
-    this.roomRepository = roomRepository;
-    this.mappingService = mappingService;
-  }
+    public PlaceServiceImpl(HotelRepository hotelRepository, RoomRepository roomRepository,
+            MappingService mappingService) {
+        this.hotelRepository = hotelRepository;
+        this.roomRepository = roomRepository;
+        this.mappingService = mappingService;
+    }
 
   @Override
   @Transactional
@@ -75,41 +75,42 @@ public class PlaceServiceImpl implements
     return hotels.map(HotelResult::of);
   }
 
-  @Override
-  public HotelResult findHotel(Long id) {
-    Hotel hotel = hotelRepository.findById(id)
-        .orElseThrow(() -> new HotelException(HOTEL_NOT_FOUND));
-    return HotelResult.of(hotel);
-  }
+    @Override
+    public HotelResult findHotel(Long id) {
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(() -> new HotelException(HOTEL_NOT_FOUND));
+        return HotelResult.of(hotel);
+    }
 
-  @Override
-  public RoomResult findRoom(Long roomId) {
-    Room room = roomRepository.findById(roomId)
-        .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND));
-    return RoomResult.of(room);
-  }
+    @Override
+    public RoomResult findRoom(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND));
+        return RoomResult.of(room);
+    }
 
-  @Override
-  public RoomResult findRoomForDuration(Long roomId, StayPeriod stayPeriod) {
-    Room room = roomRepository.findById(roomId)
-        .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND));
-    boolean reservationAvailable = mappingService.isReservationAvailableForRoom(
-        roomId,
-        stayPeriod.checkIn(),
-        stayPeriod.checkOut());
-    return RoomResult.of(room, reservationAvailable);
-  }
+    @Override
+    public RoomResult findRoomForDuration(Long roomId, StayPeriod stayPeriod) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND));
+        boolean reservationAvailable = mappingService.isReservationAvailableForRoom(
+                roomId,
+                stayPeriod.checkIn(),
+                stayPeriod.checkOut());
+        return RoomResult.of(room, reservationAvailable);
+    }
 
-  @Override
-  public Page<RoomResult> findAllRoomsOfHotelForDuration(Long hotelId, StayPeriod stayPeriod,
-      Pageable pageable) {
-    Page<Room> rooms = roomRepository.findRoomsByHotelId(hotelId, pageable);
-    return rooms.map(room -> {
-      boolean reservationAvailable = mappingService.isReservationAvailableForRoom(
-          room.getId(),
-          stayPeriod.checkIn(),
-          stayPeriod.checkOut());
-      return RoomResult.of(room, reservationAvailable);
-    });
-  }
+    @Override
+    public Page<RoomResult> findAllRoomsOfHotelForDuration(
+            Long hotelId, StayPeriod stayPeriod, Pageable pageable
+    ) {
+        Page<Room> rooms = roomRepository.findRoomsByHotelId(hotelId, pageable);
+        return rooms.map(room -> {
+            boolean reservationAvailable = mappingService.isReservationAvailableForRoom(
+                    room.getId(),
+                    stayPeriod.checkIn(),
+                    stayPeriod.checkOut());
+            return RoomResult.of(room, reservationAvailable);
+        });
+    }
 }

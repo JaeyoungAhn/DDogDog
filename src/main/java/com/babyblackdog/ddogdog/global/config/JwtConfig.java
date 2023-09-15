@@ -7,40 +7,40 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
 
-  private String header;
-  private String issuer;
-  private String clientSecret;
-  private int expirySeconds;
+    private String header;
+    private String issuer;
+    private String clientSecret;
+    private int expirySeconds;
 
-  public String getHeader() {
-    return header;
-  }
+    public String getHeader() {
+        return header;
+    }
 
-  public void setHeader(String header) {
-    this.header = header;
-  }
+    public void setHeader(String header) {
+        this.header = header;
+    }
 
-  public String getIssuer() {
-    return issuer;
-  }
+    public String getIssuer() {
+        return issuer;
+    }
 
-  public void setIssuer(String issuer) {
-    this.issuer = issuer;
-  }
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
+    }
 
-  public String getClientSecret() {
-    return clientSecret;
-  }
+    public String getClientSecret() {
+        return clientSecret;
+    }
 
-  public void setClientSecret(String clientSecret) {
-    this.clientSecret = clientSecret;
-  }
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
 
-  public int getExpirySeconds() {
-    return expirySeconds;
-  }
+    public int getExpirySeconds() {
+        return expirySeconds;
+    }
 
-  public void setExpirySeconds(int expirySeconds) {
-    this.expirySeconds = expirySeconds;
-  }
+    public void setExpirySeconds(int expirySeconds) {
+        this.expirySeconds = expirySeconds;
+    }
 }

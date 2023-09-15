@@ -20,38 +20,38 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Transactional
 class PlaceAccessServiceImplTest {
 
-  @Autowired
-  private PlaceAccessService placeAccessService;
+    @Autowired
+    private PlaceAccessService placeAccessService;
 
-  @Autowired
-  private PlaceTestData placeTestData;
-  @Autowired
-  private HotelRepository hotelRepository;
-  @Autowired
-  private RoomRepository roomRepository;
+    @Autowired
+    private PlaceTestData placeTestData;
+    @Autowired
+    private HotelRepository hotelRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
-  private Hotel hotel;
-  private List<Room> rooms;
+    private Hotel hotel;
+    private List<Room> rooms;
 
-  @BeforeEach
-  void setUp() {
-    hotel = placeTestData.getHotelEntity();
-    rooms = placeTestData.getRoomEntities();
-  }
+    @BeforeEach
+    void setUp() {
+        hotel = placeTestData.getHotelEntity();
+        rooms = placeTestData.getRoomEntities();
+    }
 
-  @Test
-  @DisplayName("[findRoomSimpleInfo] 객실 아이디로 예약 정보에 표출할 간단한 객실 정보를 조회한다.")
-  void findRoomSimpleInfo_Success() {
-    // Given
-    Hotel savedHotel = hotelRepository.save(hotel);
-    Room savedRoom = roomRepository.save(placeTestData.bindHotelToRooms(savedHotel).get(0));
+    @Test
+    @DisplayName("[findRoomSimpleInfo] 객실 아이디로 예약 정보에 표출할 간단한 객실 정보를 조회한다.")
+    void findRoomSimpleInfo_Success() {
+        // Given
+        Hotel savedHotel = hotelRepository.save(hotel);
+        Room savedRoom = roomRepository.save(placeTestData.bindHotelToRooms(savedHotel).get(0));
 
-    // When
-    RoomSimpleResult roomSimpleInfo = placeAccessService.findRoomSimpleInfo(savedRoom.getId());
+        // When
+        RoomSimpleResult roomSimpleInfo = placeAccessService.findRoomSimpleInfo(savedRoom.getId());
 
-    // Then
-    assertThat(roomSimpleInfo.roomNumber()).isEqualTo(savedRoom.getRoomNumber());
-    assertThat(roomSimpleInfo.roomType()).isEqualTo(savedRoom.getRoomTypeName());
-  }
+        // Then
+        assertThat(roomSimpleInfo.roomNumber()).isEqualTo(savedRoom.getRoomNumber());
+        assertThat(roomSimpleInfo.roomType()).isEqualTo(savedRoom.getRoomTypeName());
+    }
 
 }

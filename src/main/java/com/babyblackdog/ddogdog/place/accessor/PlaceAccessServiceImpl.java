@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class PlaceAccessServiceImpl implements PlaceAccessService {
-
   private final PlaceService placeService;
   private final RatingRepository ratingRepository;
 

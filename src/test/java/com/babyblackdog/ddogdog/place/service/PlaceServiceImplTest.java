@@ -267,4 +267,5 @@ class PlaceServiceImplTest {
     assertThat(roomResults.getContent()).hasSize(rooms.size());
   }
 
+
 }

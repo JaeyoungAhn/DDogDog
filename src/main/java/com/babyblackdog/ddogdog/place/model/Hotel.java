@@ -20,90 +20,90 @@ import jakarta.persistence.Table;
 @Table(name = "hotels")
 public class Hotel {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Embedded
-  private HotelName name;
+    @Embedded
+    private HotelName name;
 
-  @Embedded
-  private Province address;
+    @Embedded
+    private Province address;
 
-  @Column(name = "admin_id", nullable = false)
-  private Long adminId;
+    @Column(name = "admin_id", nullable = false)
+    private Long adminId;
 
-  @Embedded
-  private PhoneNumber contact;
+    @Embedded
+    private PhoneNumber contact;
 
-  @Embedded
-  private HumanName representative;
+    @Embedded
+    private HumanName representative;
 
-  @Embedded
-  private BusinessName businessName;
+    @Embedded
+    private BusinessName businessName;
+  
+    @OneToOne(
+        fetch = FetchType.EAGER,
+        mappedBy = "hotel",
+        orphanRemoval = true,
+        cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Rating rating;
 
-  @OneToOne(
-      fetch = FetchType.EAGER,
-      mappedBy = "hotel",
-      orphanRemoval = true,
-      cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-  private Rating rating;
+    public Hotel(HotelName name, Province address, Long adminId, PhoneNumber contact,
+        HumanName representative, BusinessName businessName) {
+      this.name = name;
+      this.address = address;
+      this.adminId = adminId;
+      this.contact = contact;
+      this.representative = representative;
+      this.businessName = businessName;
+    }
 
-  public Hotel(HotelName name, Province address, Long adminId, PhoneNumber contact,
-      HumanName representative, BusinessName businessName) {
-    this.name = name;
-    this.address = address;
-    this.adminId = adminId;
-    this.contact = contact;
-    this.representative = representative;
-    this.businessName = businessName;
-  }
+    protected Hotel() {
+    }
 
-  protected Hotel() {
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public String getName() {
+        return name.getValue();
+    }
 
-  public String getName() {
-    return name.getValue();
-  }
+    public Province getAddress() {
+        return address;
+    }
 
-  public Province getAddress() {
-    return address;
-  }
+    public String getAddressValue() {
+        return address.getValue();
+    }
 
-  public String getAddressValue() {
-    return address.getValue();
-  }
+    public Long getAdminId() {
+        return adminId;
+    }
 
-  public Long getAdminId() {
-    return adminId;
-  }
+    public String getContact() {
+        return contact.getValue();
+    }
 
-  public String getContact() {
-    return contact.getValue();
-  }
+    public String getRepresentative() {
+        return representative.getValue();
+    }
 
-  public String getRepresentative() {
-    return representative.getValue();
-  }
+    public String getBusinessName() {
+      return businessName.getValue();
+    }
 
-  public String getBusinessName() {
-    return businessName.getValue();
-  }
+    public Rating getRating() {
+      return rating;
+    }
 
-  public Rating getRating() {
-    return rating;
-  }
+    public double getRatingScore() {
+      return rating.getRatingScore();
+    }
 
-  public double getRatingScore() {
-    return rating.getRatingScore();
-  }
-
-  public void setRating(Rating rating) {
-    this.rating = rating;
-    rating.setHotel(this);
-  }
+    public void setRating(Rating rating) {
+      this.rating = rating;
+      rating.setHotel(this);
+    }
 }
