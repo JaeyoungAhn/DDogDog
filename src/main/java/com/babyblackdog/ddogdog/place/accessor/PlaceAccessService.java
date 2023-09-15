@@ -11,4 +11,20 @@ public interface PlaceAccessService {
      */
     RoomSimpleResult findRoomSimpleInfo(Long roomId);
 
+  /**
+   * 리뷰 추가 시 해당 리뷰 점수를 평균 별점에 갱신
+   *
+   * @param hotelId
+   * @param ratingScore
+   */
+  void addRatingScoreOfHotel(Long hotelId, double ratingScore);
+
+  /**
+   * 리뷰 제거 시 해당 리뷰 점수를 평균 별점에 갱신
+   *
+   * @param hotelId
+   * @param ratingScore
+   */
+  void subRatingScoreOfHotel(Long hotelId, double ratingScore);
+
 }

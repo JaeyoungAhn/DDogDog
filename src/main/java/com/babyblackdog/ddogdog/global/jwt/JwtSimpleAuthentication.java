@@ -15,10 +15,9 @@ public class JwtSimpleAuthentication {
     private final String username;
     private final String email;
     private final Role role;
-
+  
     private static class SingletonHolder {
-
-        private static final JwtSimpleAuthentication INSTANCE = new JwtSimpleAuthentication();
+      private static final JwtSimpleAuthentication INSTANCE = new JwtSimpleAuthentication();
     }
 
     private JwtSimpleAuthentication() {

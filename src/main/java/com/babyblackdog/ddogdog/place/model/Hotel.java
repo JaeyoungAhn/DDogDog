@@ -5,12 +5,15 @@ import com.babyblackdog.ddogdog.place.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,15 +41,22 @@ public class Hotel {
 
     @Embedded
     private BusinessName businessName;
+  
+    @OneToOne(
+        fetch = FetchType.EAGER,
+        mappedBy = "hotel",
+        orphanRemoval = true,
+        cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Rating rating;
 
     public Hotel(HotelName name, Province address, Long adminId, PhoneNumber contact,
-            HumanName representative, BusinessName businessName) {
-        this.name = name;
-        this.address = address;
-        this.adminId = adminId;
-        this.contact = contact;
-        this.representative = representative;
-        this.businessName = businessName;
+        HumanName representative, BusinessName businessName) {
+      this.name = name;
+      this.address = address;
+      this.adminId = adminId;
+      this.contact = contact;
+      this.representative = representative;
+      this.businessName = businessName;
     }
 
     protected Hotel() {
@@ -81,6 +91,19 @@ public class Hotel {
     }
 
     public String getBusinessName() {
-        return businessName.getValue();
+      return businessName.getValue();
+    }
+
+    public Rating getRating() {
+      return rating;
+    }
+
+    public double getRatingScore() {
+      return rating.getRatingScore();
+    }
+
+    public void setRating(Rating rating) {
+      this.rating = rating;
+      rating.setHotel(this);
     }
 }

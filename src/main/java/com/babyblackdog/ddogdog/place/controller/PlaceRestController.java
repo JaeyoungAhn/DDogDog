@@ -7,6 +7,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.date.TimeProvider;
+import com.babyblackdog.ddogdog.global.aop.FilterAdmin;
 import com.babyblackdog.ddogdog.place.controller.dto.AddHotelRequest;
 import com.babyblackdog.ddogdog.place.controller.dto.AddRoomRequest;
 import com.babyblackdog.ddogdog.place.controller.dto.HotelResponse;
@@ -44,43 +45,45 @@ public class PlaceRestController {
         this.placeService = placeService;
         this.timeProvider = timeProvider;
     }
+  
+  /**
+   * POST /places [숙소 정보 등록]
+   *
+   * @param request
+   * @return ResponseEntity<HotelResponse>
+   */
+  @FilterAdmin
+  @PostMapping(consumes = APPLICATION_JSON_VALUE)
+  public ResponseEntity<HotelResponse> addHotel(
+      @Validated @RequestBody AddHotelRequest request
+  ) {
+    HotelResult hotelResult = placeService.registerHotel(AddHotelRequest.to(request));
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{hotelId}")
+        .buildAndExpand(hotelResult.id())
+        .toUri();
+    return ResponseEntity
+        .status(CREATED)
+        .location(location)
+        .body(HotelResponse.of(hotelResult));
+  }
 
-    /**
-     * POST /places [숙소 정보 등록]
-     *
-     * @param request
-     * @return ResponseEntity<HotelResponse>
-     */
-    @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<HotelResponse> addHotel(
-            @Validated @RequestBody AddHotelRequest request
-    ) {
-        HotelResult hotelResult = placeService.registerHotel(AddHotelRequest.to(request));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{hotelId}")
-                .buildAndExpand(hotelResult.id())
-                .toUri();
-        return ResponseEntity
-                .status(CREATED)
-                .location(location)
-                .body(HotelResponse.of(hotelResult));
-    }
-
-    /**
-     * 숙소를 제거한다. 숙소에 달린 객실도 모두 제거한다. DELETE /places/{hotelId}
-     *
-     * @param hotelId
-     * @return ResponseEntity<Void> : 204
-     */
-    @DeleteMapping(path = "/{hotelId}")
-    public ResponseEntity<Void> removeHotel(
-            @PathVariable Long hotelId
-    ) {
-        placeService.deleteHotel(hotelId);
-        return ResponseEntity
-                .status(NO_CONTENT)
-                .build();
-    }
+  /**
+   * 숙소를 제거한다. 숙소에 달린 객실도 모두 제거한다. DELETE /places/{hotelId}
+   *
+   * @param hotelId
+   * @return ResponseEntity<Void> : 204
+   */
+  @FilterAdmin
+  @DeleteMapping(path = "/{hotelId}")
+  public ResponseEntity<Void> removeHotel(
+      @PathVariable Long hotelId
+  ) {
+    placeService.deleteHotel(hotelId);
+    return ResponseEntity
+        .status(NO_CONTENT)
+        .build();
+  }
 
     /**
      * GET /places/{hotelId} [숙소 아이디로 해당 숙소 조회]
@@ -115,44 +118,46 @@ public class PlaceRestController {
                 .body(HotelResponses.of(result));
     }
 
-    /**
-     * POST /places/{hotelId} [호텔에 대한 객실 정보 추가]
-     *
-     * @param hotelId
-     * @param request
-     * @return
-     */
-    @PostMapping(path = "/{hotelId}", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RoomResponse> createRoomOfHotel(
-            @PathVariable Long hotelId,
-            @Validated @RequestBody AddRoomRequest request
-    ) {
-        RoomResult roomResult = placeService.registerRoomOfHotel(AddRoomRequest.to(hotelId, request));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{hotelId}/{roomId}")
-                .buildAndExpand(hotelId, roomResult.id())
-                .toUri();
-        return ResponseEntity
-                .status(CREATED)
-                .location(location)
-                .body(RoomResponse.of(roomResult));
-    }
+  /**
+   * POST /places/{hotelId} [호텔에 대한 객실 정보 추가]
+   *
+   * @param hotelId
+   * @param request
+   * @return
+   */
+  @FilterAdmin
+  @PostMapping(path = "/{hotelId}", consumes = APPLICATION_JSON_VALUE)
+  public ResponseEntity<RoomResponse> createRoomOfHotel(
+      @PathVariable Long hotelId,
+      @Validated @RequestBody AddRoomRequest request
+  ) {
+    RoomResult roomResult = placeService.registerRoomOfHotel(AddRoomRequest.to(hotelId, request));
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{hotelId}/{roomId}")
+        .buildAndExpand(hotelId, roomResult.id())
+        .toUri();
+    return ResponseEntity
+        .status(CREATED)
+        .location(location)
+        .body(RoomResponse.of(roomResult));
+  }
 
-    /**
-     * DELETE /places/{hotelId}/{roomId} 숙소의 객실을 제거한다.
-     *
-     * @param hotelId
-     * @param roomId
-     * @return ResponseEntity<Void>
-     */
-    @DeleteMapping(path = "/{hotelId}/{roomId}")
-    public ResponseEntity<Void> removeRoomOfHotel(@PathVariable Long hotelId,
-            @PathVariable Long roomId) {
-        placeService.deleteRoom(roomId);
-        return ResponseEntity
-                .status(NO_CONTENT)
-                .build();
-    }
+  /**
+   * DELETE /places/{hotelId}/{roomId} 숙소의 객실을 제거한다.
+   *
+   * @param hotelId
+   * @param roomId
+   * @return ResponseEntity<Void>
+   */
+  @FilterAdmin
+  @DeleteMapping(path = "/{hotelId}/{roomId}")
+  public ResponseEntity<Void> removeRoomOfHotel(@PathVariable Long hotelId,
+      @PathVariable Long roomId) {
+    placeService.deleteRoom(roomId);
+    return ResponseEntity
+        .status(NO_CONTENT)
+        .build();
+  }
 
     /**
      * GET /places/{hotelId}/{roomId}?checkIn=날짜&checkOut=날짜 [숙소 아이디와 객실 아이디로 특정 기간 동안의 객실 정보 조회]
