@@ -11,7 +11,7 @@ public interface OrderService {
 
     void complete(Long createdOrderId);
 
-    OrderInformationResult find(long orderId, long userId);
+    OrderInformationResult find(long orderId);
 
-    OrderCancelResult cancel(Long orderId, long userId);
+    OrderCancelResult cancel(Long orderId);
 }
