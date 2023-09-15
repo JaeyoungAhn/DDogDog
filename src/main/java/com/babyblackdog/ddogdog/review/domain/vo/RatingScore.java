@@ -10,20 +10,20 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 
 @Embeddable
-public class Rating {
+public class RatingScore {
 
     @NotBlank(message = "별점을 입력해야 합니다.")
     @Column(name = "rating", nullable = false)
     private Double value;
 
-    public Rating(Double value) {
+    public RatingScore(Double value) {
         validateNotNull(value);
         validateDecimalPoint(value);
         validateRatingRange(value);
         this.value = value;
     }
 
-    protected Rating() {
+    protected RatingScore() {
     }
 
     private void validateNotNull(Double value) {

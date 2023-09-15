@@ -1,12 +1,13 @@
-package com.babyblackdog.ddogdog.review.domain.vo;
+package com.babyblackdog.ddogdog.common.auth;
 
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.EMPTY_REVIEW_EMAIL;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.EMPTY_EMAIL;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_EMAIL_FORMAT;
 
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Embeddable
 public class Email {
@@ -26,7 +27,7 @@ public class Email {
 
     private void validateNull(String value) {
         if (value == null || value.isBlank()) {
-            throw new ReviewException(EMPTY_REVIEW_EMAIL);
+            throw new ReviewException(EMPTY_EMAIL);
         }
     }
 
@@ -38,5 +39,22 @@ public class Email {
 
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Email email = (Email) o;
+        return Objects.equals(value, email.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

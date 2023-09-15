@@ -1,6 +1,5 @@
 package com.babyblackdog.ddogdog.place.service;
 
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
 import com.babyblackdog.ddogdog.place.service.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.service.dto.AddRoomParam;
@@ -25,9 +24,8 @@ public interface PlaceService {
 
     RoomResult findRoom(Long roomId);
 
-    RoomResult findRoomForDuration(Long roomId, StayPeriod stayPeriod);
+    RoomResult findRoomForDuration(Long roomId);
 
-    Page<RoomResult> findAllRoomsOfHotelForDuration(Long hotelId, StayPeriod stayPeriod,
-            Pageable pageable);
+    Page<RoomResult> findAllRoomsOfHotelForDuration(Long hotelId, Pageable pageable);
 
 }

@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.wishlist.application;
 
+import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
 import com.babyblackdog.ddogdog.wishlist.service.WishlistService;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResults;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Service;
 public class WishlistFacade {
 
     private final WishlistService service;
+    private final PlaceAccessService placeAccessService;
 
-    public WishlistFacade(WishlistService service) {
+    public WishlistFacade(WishlistService service, PlaceAccessService placeAccessService) {
         this.service = service;
+        this.placeAccessService = placeAccessService;
     }
 
     public WishlistResult registerWishlist(String email, Long hotelId) {

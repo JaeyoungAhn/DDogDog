@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.babyblackdog.ddogdog.mapping.MappingService;
 import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.controller.dto.AddHotelRequest;
 import com.babyblackdog.ddogdog.place.controller.dto.AddRoomRequest;

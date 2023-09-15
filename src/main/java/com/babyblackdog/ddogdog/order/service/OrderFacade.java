@@ -1,7 +1,5 @@
 package com.babyblackdog.ddogdog.order.service;
 
-import com.babyblackdog.ddogdog.common.StayCostEstimator;
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
@@ -9,7 +7,8 @@ import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
 import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
 import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.ReservationService;
-import com.babyblackdog.ddogdog.user.service.UserService;
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
+import com.babyblackdog.ddogdog.user.accessor.UserAccessorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,16 +19,16 @@ public class OrderFacade {
     private final OrderService service;
     private final PlaceAccessService placeAccessService;
     private final ReservationService reservationService;
-    private final UserService userService;
+    private final UserAccessorService userAccessorService;
     private final StayCostEstimator stayCostEstimator;
 
     public OrderFacade(OrderService service, PlaceAccessService placeAccessService,
-            ReservationService reservationService, UserService userService,
+            ReservationService reservationService, UserAccessorService userAccessorService,
             StayCostEstimator stayCostEstimator) {
         this.service = service;
         this.placeAccessService = placeAccessService;
         this.reservationService = reservationService;
-        this.userService = userService;
+        this.userAccessorService = userAccessorService;
         this.stayCostEstimator = stayCostEstimator;
     }
 
@@ -42,8 +41,7 @@ public class OrderFacade {
                 roomSimpleResult.roomType(),
                 roomSimpleResult.roomDescription(),
                 roomSimpleResult.roomNumber(),
-                stayCostEstimator.calculateTotalCost(stayPeriod,
-                        new Point(roomSimpleResult.point())),
+                stayCostEstimator.calculateTotalCost(stayPeriod, roomSimpleResult.point()),
                 stayPeriod.getCheckIn(),
                 stayPeriod.getCheckOut()
         );
@@ -52,9 +50,8 @@ public class OrderFacade {
     public OrderCreateResult order(Long roomId, StayPeriod stayPeriod) {
         RoomSimpleResult roomInfo = placeAccessService.findRoomSimpleInfo(roomId);
 
-        Point pointToPay = stayCostEstimator.calculateTotalCost(stayPeriod,
-                new Point(roomInfo.point()));
-        userService.debitPoint(pointToPay);
+        Point pointToPay = stayCostEstimator.calculateTotalCost(stayPeriod, roomInfo.point());
+        userAccessorService.debitPoint(pointToPay);
 
         Long createdOrderId = service.create(stayPeriod, pointToPay);
 
@@ -64,10 +61,11 @@ public class OrderFacade {
         return new OrderCreateResult(createdOrderId);
     }
 
+    // order
     public OrderCancelResult cancelOrder(Long orderId) {
         OrderCancelResult orderCancelResult = service.cancel(orderId);
 
-        userService.creditPoint(orderCancelResult.point());
+        userAccessorService.creditPoint(orderCancelResult.point());
 
         return orderCancelResult;
     }

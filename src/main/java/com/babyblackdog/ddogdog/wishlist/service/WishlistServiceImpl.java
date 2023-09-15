@@ -2,8 +2,9 @@ package com.babyblackdog.ddogdog.wishlist.service;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_WISHLIST_PERMISSION;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
+import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.global.exception.WishlistException;
-import com.babyblackdog.ddogdog.wishlist.model.Email;
 import com.babyblackdog.ddogdog.wishlist.model.Wishlist;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResults;
@@ -35,10 +36,10 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     public void deleteWishlist(Long wishlistId) {
         JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        String email = jwt.getEmail();
+        Email email = jwt.getEmail();
 
         Wishlist wishlist = reader.findWishlistById(wishlistId);
-        if (!email.equals(wishlist.getEmail())) {
+        if (!email.getValue().equals(wishlist.getEmail())) {
             throw new WishlistException(INVALID_WISHLIST_PERMISSION);
         }
 

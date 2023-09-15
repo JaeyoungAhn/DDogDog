@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
-import com.babyblackdog.ddogdog.common.date.TimeProvider;
-import com.babyblackdog.ddogdog.common.date.TodayDateProvider;
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
+import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
+import com.babyblackdog.ddogdog.reservation.service.TodayDateProvider;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
@@ -26,14 +27,14 @@ class OrderTest {
         @ParameterizedTest
         @MethodSource("com.babyblackdog.ddogdog.order.domain.OrderTest#provideValidArgumentsForConstructor")
         @DisplayName("유효한 값이라면 객체를 생성한다.")
-        void success(Long userId, StayPeriod stayPeriod, Point usedPoint) {
+        void success(Email userEmail, StayPeriod stayPeriod, Point usedPoint) {
             // Given
             LocalDate expectedCheckIn = stayPeriod.getCheckIn();
             LocalDate expectedCheckOut = stayPeriod.getCheckOut();
             long expectedPeriod = stayPeriod.getPeriod();
 
             // WHen
-            Order order = new Order(userId, stayPeriod, usedPoint);
+            Order order = new Order(userEmail, stayPeriod, usedPoint);
 
             // Then
             assertThat(order).isNotNull();
@@ -46,9 +47,9 @@ class OrderTest {
         @ParameterizedTest
         @MethodSource("com.babyblackdog.ddogdog.order.domain.OrderTest#provideInvalidArgumentsForConstructor")
         @DisplayName("1개라도 null이라면 예외를 발생시킨다.")
-        void failed(Long userId, StayPeriod stayPeriod, Point usedPoint) {
+        void failed(Email userEmail, StayPeriod stayPeriod, Point usedPoint) {
             // When & Then
-            assertThatThrownBy(() -> new Order(userId, stayPeriod, usedPoint))
+            assertThatThrownBy(() -> new Order(userEmail, stayPeriod, usedPoint))
                     .isInstanceOf(NullPointerException.class);
         }
     }
@@ -59,9 +60,9 @@ class OrderTest {
         @ParameterizedTest
         @MethodSource("com.babyblackdog.ddogdog.order.domain.OrderTest#provideValidArgumentsForConstructor")
         @DisplayName("주문 대기 상태라면 주문 성공으로 넘어갈 수 있다.")
-        void success(Long userId, StayPeriod stayPeriod, Point usedPoint) {
+        void success(Email userEmail, StayPeriod stayPeriod, Point usedPoint) {
             // Given
-            Order order = new Order(userId, stayPeriod, usedPoint);
+            Order order = new Order(userEmail, stayPeriod, usedPoint);
 
             // When & Then
             assertThatCode(order::complete).doesNotThrowAnyException();
@@ -71,9 +72,9 @@ class OrderTest {
         @ParameterizedTest
         @MethodSource("com.babyblackdog.ddogdog.order.domain.OrderTest#provideValidArgumentsForConstructor")
         @DisplayName("주문 대기가 아니라면 예외를 발생시킨다.")
-        void failed(Long userId, StayPeriod stayPeriod, Point usedPoint) {
+        void failed(Email userEmail, StayPeriod stayPeriod, Point usedPoint) {
             // Given
-            Order order = new Order(userId, stayPeriod, usedPoint);
+            Order order = new Order(userEmail, stayPeriod, usedPoint);
             order.complete();
 
             // When & Then
@@ -85,12 +86,12 @@ class OrderTest {
     @ParameterizedTest
     @MethodSource("com.babyblackdog.ddogdog.order.domain.OrderTest#provideValidArgumentsForConstructor")
     @DisplayName("주문한 아이디와 동일하다면 true를 반환한다.")
-    void isOrderAuthorValid_success(Long userId, StayPeriod stayPeriod, Point usedPoint) {
+    void isOrderAuthorValid_success(Email userEmail, StayPeriod stayPeriod, Point usedPoint) {
         // Given
-        Order order = new Order(userId, stayPeriod, usedPoint);
+        Order order = new Order(userEmail, stayPeriod, usedPoint);
 
         // When & Then
-        assertThat(order.isOrderAuthorValid(userId)).isTrue();
+        assertThat(order.isOrderAuthorValid(userEmail)).isTrue();
     }
 
     @Nested
@@ -99,26 +100,26 @@ class OrderTest {
         @ParameterizedTest
         @MethodSource("com.babyblackdog.ddogdog.order.domain.OrderTest#provideValidArgumentsForConstructor")
         @DisplayName("주문 취소가 가능한 상태라면 주문 취소를 한다.")
-        void success(Long userId, StayPeriod stayPeriod, Point usedPoint) {
+        void success(Email userEmail, StayPeriod stayPeriod, Point usedPoint) {
             // Given
-            Order order = new Order(userId, stayPeriod, usedPoint);
+            Order order = new Order(userEmail, stayPeriod, usedPoint);
             order.complete();
 
             // When & Then
-            assertThatCode(() -> order.cancel(userId)).doesNotThrowAnyException();
+            assertThatCode(() -> order.cancel(userEmail)).doesNotThrowAnyException();
             assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.CANCELED);
         }
 
         @ParameterizedTest
         @MethodSource("com.babyblackdog.ddogdog.order.domain.OrderTest#provideValidArgumentsForConstructor")
         @DisplayName("주문 취소가 불가능한 상태라면 예외를 발생시킨다.")
-        void failedToNotOrderAuthor(Long userId, StayPeriod stayPeriod, Point usedPoint) {
+        void failedToNotOrderAuthor(Email userEmail, StayPeriod stayPeriod, Point usedPoint) {
             // Given
-            Order order = new Order(userId, stayPeriod, usedPoint);
+            Order order = new Order(userEmail, stayPeriod, usedPoint);
             order.complete();
 
             // When & Then
-            assertThatThrownBy(() -> order.cancel(0L))
+            assertThatThrownBy(() -> order.cancel(userEmail))
                     .isInstanceOf(IllegalStateException.class);
         }
 
@@ -136,7 +137,7 @@ class OrderTest {
     }
 
     private static Stream<Arguments> provideValidArgumentsForConstructor() {
-        long userId = 1L;
+        Email userEmail = new Email("honggildong@naver.com");
         LocalDate today = TIME_PROVIDER.getCurrentDate();
         LocalDate tomorrow = TIME_PROVIDER.getCurrentDate().plusDays(5);
         StayPeriod stayPeriod = new StayPeriod(today, tomorrow, TIME_PROVIDER);
@@ -144,11 +145,12 @@ class OrderTest {
         Point usedPoint = new Point(500);
 
         return Stream.of(
-                Arguments.arguments(userId, stayPeriod, usedPoint)
+                Arguments.arguments(userEmail, stayPeriod, usedPoint)
         );
     }
 
     private static Stream<Arguments> provideInvalidArgumentsForConstructor() {
+        Email userEmail = new Email("honggildong@naver.com");
         LocalDate today = TIME_PROVIDER.getCurrentDate();
         LocalDate tomorrow = TIME_PROVIDER.getCurrentDate().plusDays(1);
         StayPeriod stayPeriod = new StayPeriod(today, tomorrow, TIME_PROVIDER);
@@ -157,8 +159,8 @@ class OrderTest {
 
         return Stream.of(
                 Arguments.arguments(null, stayPeriod, usedPoint),
-                Arguments.arguments(1L, null, usedPoint),
-                Arguments.arguments(1L, stayPeriod, null)
+                Arguments.arguments(userEmail, null, usedPoint),
+                Arguments.arguments(userEmail, stayPeriod, null)
         );
     }
 }

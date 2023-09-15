@@ -28,9 +28,7 @@ public enum ErrorCode {
     INVALID_REVIEW_LENGTH(BAD_REQUEST, "R-230", "리뷰 길이는 최소 10글자 이상이어야 합니다."),
     INVALID_RATING_RANGE(BAD_REQUEST, "R-240", "유효하지 않은 리뷰 별점입니다."),
     INVALID_REVIEW_PARAMETER(BAD_REQUEST, "R-250", "유효하지 않은 파라미터입니다."),
-    INVALID_EMAIL_FORMAT(BAD_REQUEST, "R-260", "유효하지 않은 이메일입니다."),
     EMPTY_REVIEW_CONTENT(BAD_REQUEST, "R-300", "리뷰 내용이 비어있습니다."),
-    EMPTY_REVIEW_EMAIL(BAD_REQUEST, "R-310", "이메일란이 비어있습니다."),
     INVALID_REVIEW_PERMISSION(FORBIDDEN, "R-400", "리뷰 접근 권한이 없습니다."),
 
     // room
@@ -43,17 +41,17 @@ public enum ErrorCode {
     // user
     USER_NOT_FOUND(BAD_REQUEST, "US-100", "존재하지 않는 유저입니다."),
     INVALID_ROLE(BAD_REQUEST, "US-110", "유효하지 않은 권한입니다."),
-  FORBIDDEN_ROLE(FORBIDDEN, "US-120", "접근 권한이 부족합니다."),
+    FORBIDDEN_ROLE(FORBIDDEN, "US-120", "접근 권한이 부족합니다."),
+    EMPTY_EMAIL(BAD_REQUEST, "R-310", "이메일란이 비어있습니다."),
+    INVALID_EMAIL_FORMAT(BAD_REQUEST, "W-200", "유효하지 않은 이메일입니다"),
+    EMAIL_NOT_FOUND(NOT_FOUND, "W-100", "존재하지 않는 이메일입니다."),
 
-  // rating
-  INVALID_RATING_SCORE(BAD_REQUEST, "RT-100", "평균별점은 0 이상이어야 합니다."),
-  INVALID_RATING_COUNT(BAD_REQUEST, "RT-110", "별점 수는 0 이상이어야 합니다.");
-  
+    // rating
+    INVALID_RATING_SCORE(BAD_REQUEST, "RT-100", "평균별점은 0 이상이어야 합니다."),
+    INVALID_RATING_COUNT(BAD_REQUEST, "RT-110", "별점 수는 0 이상이어야 합니다."),
+
     // wishlist
-    WISHLIST_EMAIL_NOT_FOUND(NOT_FOUND, "W-100", "존재하지 않는 이메일입니다."),
     WISHLIST_NOT_FOUND(NOT_FOUND, "W-110", "존재하지 않는 찜입니다."),
-    INVALID_WISHLIST_EMAIL(BAD_REQUEST, "W-200", "유효하지 않은 이메일입니다"),
-    EMPTY_WISHLIST_EMAIL(BAD_REQUEST, "W-210", "비어있는 이메일입니다"),
     INVALID_WISHLIST_PERMISSION(FORBIDDEN, "W-300", "찜에 대한 권한이 없습니다.");
 
     private final HttpStatus httpStatus;

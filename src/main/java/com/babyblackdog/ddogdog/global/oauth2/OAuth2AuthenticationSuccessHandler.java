@@ -67,7 +67,7 @@ public class OAuth2AuthenticationSuccessHandler extends
                   "role": "%s",
                   "point": "%d"
                 }
-                """.formatted(token, user.getUsername(), user.getEmail(), user.getRole(), user.getPoint());
+                """.formatted(token, user.getUsername(), user.getEmail(), user.getRole(), user.getPointValue());
     }
 
     private String generateToken(User user) {

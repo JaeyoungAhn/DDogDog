@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.place;
 
+import com.babyblackdog.ddogdog.common.auth.HumanName;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.place.controller.dto.AddHotelRequest;
 import com.babyblackdog.ddogdog.place.controller.dto.AddRoomRequest;
@@ -8,7 +9,6 @@ import com.babyblackdog.ddogdog.place.model.Rating;
 import com.babyblackdog.ddogdog.place.model.Room;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
-import com.babyblackdog.ddogdog.place.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.model.vo.Occupancy;
 import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
@@ -21,143 +21,144 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PlaceTestData {
-  private final Hotel hotelEntity;
-  private final AddHotelRequest addHotelRequest;
-  private final AddHotelParam addHotelParam;
 
-  private List<Room> roomEntities;
-  private final AddRoomRequest addRoomRequest;
-  private AddRoomParam addRoomParam;
+    private final Hotel hotelEntity;
+    private final AddHotelRequest addHotelRequest;
+    private final AddHotelParam addHotelParam;
 
-  private Rating ratingEntity;
+    private List<Room> roomEntities;
+    private final AddRoomRequest addRoomRequest;
+    private AddRoomParam addRoomParam;
 
-  public PlaceTestData() {
-    this.hotelEntity = instanceofHotel();
-    this.addHotelRequest = instanceofHotelRequest();
-    this.addHotelParam = instanceofHotelParam();
+    private Rating ratingEntity;
 
-    this.roomEntities = instanceofRooms();
-    this.addRoomRequest = instanceofRoomRequest();
+    public PlaceTestData() {
+        this.hotelEntity = instanceofHotel();
+        this.addHotelRequest = instanceofHotelRequest();
+        this.addHotelParam = instanceofHotelParam();
 
-    this.ratingEntity = instanceofRating();
-  }
+        this.roomEntities = instanceofRooms();
+        this.addRoomRequest = instanceofRoomRequest();
 
-  private Hotel instanceofHotel() {
-    return new Hotel(
-        new HotelName("신라호텔"),
-        new Province("서울"),
-        1L,
-        new PhoneNumber("010-1234-1234"),
-        new HumanName("이부진"),
-        new BusinessName("신세계")
-    );
-  }
+        this.ratingEntity = instanceofRating();
+    }
 
-  private AddHotelRequest instanceofHotelRequest() {
-    return new AddHotelRequest(
-        "신라호텔",
-        "서울",
-        1L,
-        "010-1234-4321",
-        "이부진",
-        "신세계"
-    );
-  }
+    private Hotel instanceofHotel() {
+        return new Hotel(
+                new HotelName("신라호텔"),
+                new Province("서울"),
+                1L,
+                new PhoneNumber("010-1234-1234"),
+                new HumanName("이부진"),
+                new BusinessName("신세계")
+        );
+    }
 
-  private AddHotelParam instanceofHotelParam() {
-    return AddHotelRequest.to(addHotelRequest);
-  }
+    private AddHotelRequest instanceofHotelRequest() {
+        return new AddHotelRequest(
+                "신라호텔",
+                "서울",
+                1L,
+                "010-1234-4321",
+                "이부진",
+                "신세계"
+        );
+    }
 
-  private List<Room> instanceofRooms() {
-    return List.of(
-        new Room(
-            null,
-            RoomType.SINGLE,
-            "첫 번째 방입니다.",
-            new Occupancy(1),
-            true,
-            false,
-            true,
-            new RoomNumber("404"),
-            new Point(1000)
-        ),
-        new Room(
-            null,
-            RoomType.DELUXE,
-            "두 번째 방입니다.",
-            new Occupancy(10),
-            false,
-            true,
-            false,
-            new RoomNumber("402"),
-            new Point(4321)
-        )
-    );
-  }
+    private AddHotelParam instanceofHotelParam() {
+        return AddHotelRequest.to(addHotelRequest);
+    }
 
-  private AddRoomRequest instanceofRoomRequest() {
-    return new AddRoomRequest(
-        "더블",
-        "침대가 두 개지요",
-        4,
-        true,
-        false,
-        true,
-        "404",
-        50_000
-    );
-  }
+    private List<Room> instanceofRooms() {
+        return List.of(
+                new Room(
+                        null,
+                        RoomType.SINGLE,
+                        "첫 번째 방입니다.",
+                        new Occupancy(1),
+                        true,
+                        false,
+                        true,
+                        new RoomNumber("404"),
+                        new Point(1000)
+                ),
+                new Room(
+                        null,
+                        RoomType.DELUXE,
+                        "두 번째 방입니다.",
+                        new Occupancy(10),
+                        false,
+                        true,
+                        false,
+                        new RoomNumber("402"),
+                        new Point(4321)
+                )
+        );
+    }
 
-  private Rating instanceofRating() {
-    return new Rating(0, 0);
-  }
+    private AddRoomRequest instanceofRoomRequest() {
+        return new AddRoomRequest(
+                "더블",
+                "침대가 두 개지요",
+                4,
+                true,
+                false,
+                true,
+                "404",
+                50_000
+        );
+    }
 
-  public AddRoomParam bindHotelIdToRoomParam(Long hotelId) {
-    return AddRoomRequest.to(hotelId, addRoomRequest);
-  }
+    private Rating instanceofRating() {
+        return new Rating(0, 0);
+    }
 
-  public List<Room> bindHotelToRooms(Hotel hotel) {
-    this.roomEntities = roomEntities.stream()
-        .map(room -> new Room(
-            hotel,
-            room.getRoomType(),
-            room.getDescription(),
-            new Occupancy(room.getMaxOccupancy()),
-            room.isHasBed(),
-            room.isHasAmenities(),
-            room.isSmokingAvailable(),
-            new RoomNumber(room.getRoomNumber()),
-            new Point(room.getPoint())
-        )).toList();
-    return this.roomEntities;
-  }
+    public AddRoomParam bindHotelIdToRoomParam(Long hotelId) {
+        return AddRoomRequest.to(hotelId, addRoomRequest);
+    }
 
-  public Hotel getHotelEntity() {
-    return hotelEntity;
-  }
+    public List<Room> bindHotelToRooms(Hotel hotel) {
+        this.roomEntities = roomEntities.stream()
+                .map(room -> new Room(
+                        hotel,
+                        room.getRoomType(),
+                        room.getDescription(),
+                        new Occupancy(room.getMaxOccupancy()),
+                        room.isHasBed(),
+                        room.isHasAmenities(),
+                        room.isSmokingAvailable(),
+                        new RoomNumber(room.getRoomNumber()),
+                        new Point(room.getPoint())
+                )).toList();
+        return this.roomEntities;
+    }
 
-  public AddHotelRequest getAddHotelRequest() {
-    return addHotelRequest;
-  }
+    public Hotel getHotelEntity() {
+        return hotelEntity;
+    }
 
-  public AddHotelParam getAddHotelParam() {
-    return addHotelParam;
-  }
+    public AddHotelRequest getAddHotelRequest() {
+        return addHotelRequest;
+    }
 
-  public List<Room> getRoomEntities() {
-    return roomEntities;
-  }
+    public AddHotelParam getAddHotelParam() {
+        return addHotelParam;
+    }
 
-  public AddRoomRequest getAddRoomRequest() {
-    return addRoomRequest;
-  }
+    public List<Room> getRoomEntities() {
+        return roomEntities;
+    }
 
-  public AddRoomParam getAddRoomParam() {
-    return addRoomParam;
-  }
+    public AddRoomRequest getAddRoomRequest() {
+        return addRoomRequest;
+    }
 
-  public Rating getRatingEntity() {
-    return ratingEntity;
-  }
+    public AddRoomParam getAddRoomParam() {
+        return addRoomParam;
+    }
+
+    public Rating getRatingEntity() {
+        return ratingEntity;
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.place.accessor.vo;
 
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.place.service.dto.RoomResult;
 
 public record RoomSimpleResult(
@@ -7,7 +8,7 @@ public record RoomSimpleResult(
         String roomType,
         String roomDescription,
         String roomNumber,
-        long point
+        Point point
 ) {
 
     public static RoomSimpleResult of(RoomResult roomResult) {
@@ -16,7 +17,7 @@ public record RoomSimpleResult(
                 roomResult.roomType(),
                 roomResult.description(),
                 roomResult.roomNumber(),
-                roomResult.point()
+                new Point(roomResult.point())
         );
     }
 }

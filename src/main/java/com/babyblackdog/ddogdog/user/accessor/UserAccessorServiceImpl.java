@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.user.accessor;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.USER_NOT_FOUND;
 
+import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.UserException;
 import com.babyblackdog.ddogdog.user.model.User;
@@ -28,24 +29,19 @@ public class UserAccessorServiceImpl implements
         return UserResult.of(user);
     }
 
-    @Override
-    public boolean doesUserExist(Long userId) {
-        return false;
+    @Transactional
+    public void creditPoint(Point point) {
+        getUser().addPoint(point);
     }
 
-    @Override
-    public boolean deductUserPoints(Long userId, Point point) {
-        return false;
+    @Transactional
+    public void debitPoint(Point point) {
+        getUser().subPoint(point);
     }
 
-//  @Override
-//  public boolean doesUserExist(String email) {
-//    return userRepository.existsByEmail(email);
-//  }
-//
-//  @Override
-//  public boolean deductUserPoints(String email, Point pointsToDeduct) {
-//    UserResult userResult = findUserByEmail(email);
-//    return userResult.point() >= pointsToDeduct.getValue();
-//  }
+    private User getUser() {
+        JwtSimpleAuthentication jwtSimpleAuthentication = JwtSimpleAuthentication.getInstance();
+        return userRepository.findByEmail(jwtSimpleAuthentication.getEmailAddress())
+                .orElseThrow(() -> new UserException(USER_NOT_FOUND));
+    }
 }

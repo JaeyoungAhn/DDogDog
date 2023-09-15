@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.wishlist.model;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.place.model.vo;
+package com.babyblackdog.ddogdog.common.auth;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_HUMAN_NAME;
 

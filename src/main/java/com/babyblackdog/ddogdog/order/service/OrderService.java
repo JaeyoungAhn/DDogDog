@@ -1,13 +1,13 @@
 package com.babyblackdog.ddogdog.order.service;
 
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderInformationResult;
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
 
 public interface OrderService {
 
-    Long create(Long userId, StayPeriod stayPeriod, Point pointToPay);
+    Long create(StayPeriod stayPeriod, Point pointToPay);
 
     void complete(Long createdOrderId);
 

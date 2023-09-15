@@ -28,9 +28,9 @@ public class WishlistReaderImpl implements WishlistReader {
                 .orElseThrow(() -> new WishlistException(WISHLIST_NOT_FOUND));
     }
 
-    @Override
-    public Boolean isInWishlist(Long userId, Long placeId) {
-        return repository.existsByUserIdAndPlaceId(userId, placeId);
-    }
+//    @Override
+//    public Boolean isInWishlist(Long userId, Long placeId) {
+//        return repository.existsByUserIdAndPlaceId(userId, placeId);
+//    }
 
 }

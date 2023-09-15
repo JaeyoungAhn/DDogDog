@@ -2,6 +2,8 @@ package com.babyblackdog.ddogdog.common.date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
+import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

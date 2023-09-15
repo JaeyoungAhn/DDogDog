@@ -1,7 +1,7 @@
 package com.babyblackdog.ddogdog.review.service;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.review.domain.Review;
-import com.babyblackdog.ddogdog.review.domain.vo.Email;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

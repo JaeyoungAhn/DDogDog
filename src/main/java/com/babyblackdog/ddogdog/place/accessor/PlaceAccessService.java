@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.place.accessor;
 
 import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
+import java.util.List;
 
 public interface PlaceAccessService {
 
@@ -11,20 +12,22 @@ public interface PlaceAccessService {
      */
     RoomSimpleResult findRoomSimpleInfo(Long roomId);
 
-  /**
-   * 리뷰 추가 시 해당 리뷰 점수를 평균 별점에 갱신
-   *
-   * @param hotelId
-   * @param ratingScore
-   */
-  void addRatingScoreOfHotel(Long hotelId, double ratingScore);
+    /**
+     * 리뷰 추가 시 해당 리뷰 점수를 평균 별점에 갱신
+     *
+     * @param hotelId
+     * @param ratingScore
+     */
+    void addRatingScoreOfHotel(Long hotelId, double ratingScore);
 
-  /**
-   * 리뷰 제거 시 해당 리뷰 점수를 평균 별점에 갱신
-   *
-   * @param hotelId
-   * @param ratingScore
-   */
-  void subRatingScoreOfHotel(Long hotelId, double ratingScore);
+    /**
+     * 리뷰 등록을 위해 호텔에 대한 객실 조회
+     *
+     * @param hotelId
+     * @return
+     */
+    List<Long> findRoomIdsOfHotel(Long hotelId);
 
+    //TODO - 찜할 때 유효한 숙소인지 확인
+    boolean isHotelValid(Long hotelId);
 }

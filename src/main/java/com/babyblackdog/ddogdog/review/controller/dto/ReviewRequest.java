@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.review.controller.dto;
 
-public record ReviewRequest(Long roomId,
+public record ReviewRequest(Long orderId,
+                            Long roomId,
                             String content,
-                            Double rating,
-                            Long userId) {
+                            Double rating) {
 
 }

@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.user.model;
 
 import static io.micrometer.common.util.StringUtils.isNotEmpty;
 
+import com.babyblackdog.ddogdog.common.auth.Role;
 import com.babyblackdog.ddogdog.common.point.Point;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -59,7 +60,11 @@ public class User {
         return role.name();
     }
 
-    public long getPoint() {
+    public Point getPoint() {
+        return point;
+    }
+
+    public long getPointValue() {
         return point.getValue();
     }
 
@@ -69,11 +74,15 @@ public class User {
                 .add("username='" + username + "'")
                 .add("email='" + email + "'")
                 .add("role=" + getRole())
-                .add("point=" + getPoint())
+                .add("point=" + getPointValue())
                 .toString();
     }
 
-    public void addPoint(long charge) {
-        this.point = new Point(getPoint() + charge);
+    public void addPoint(Point point) {
+        this.point = Point.addPoint(this.point, point);
+    }
+
+    public void subPoint(Point point) {
+        this.point = Point.subPoint(this.point, point);
     }
 }

@@ -3,10 +3,10 @@ package com.babyblackdog.ddogdog.place.model;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchException;
 
+import com.babyblackdog.ddogdog.common.auth.HumanName;
 import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
-import com.babyblackdog.ddogdog.place.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
 import org.junit.jupiter.api.DisplayName;

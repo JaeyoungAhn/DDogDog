@@ -2,8 +2,8 @@ package com.babyblackdog.ddogdog.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.babyblackdog.ddogdog.common.auth.Role;
 import com.babyblackdog.ddogdog.common.point.Point;
-import com.babyblackdog.ddogdog.user.model.Role;
 import com.babyblackdog.ddogdog.user.model.User;
 import com.babyblackdog.ddogdog.user.repository.UserRepository;
 import java.util.Optional;
@@ -43,7 +43,7 @@ class UserServiceTest {
     void chargePoint_Success() {
         // Given
         String email = savedUser.getEmail();
-        long charge = 2_000L;
+        Point charge = new Point(2_000L);
 
         // When
         userService.chargePoint(email, charge);
@@ -52,6 +52,6 @@ class UserServiceTest {
         Optional<User> user = userService.findByEmail(email);
 
         assertThat(user.isPresent()).isTrue();
-        assertThat(user.get().getPoint()).isEqualTo(charge);
+        assertThat(user.get().getPointValue()).isEqualTo(charge);
     }
 }

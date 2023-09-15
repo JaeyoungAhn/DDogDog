@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.user.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(path = "/users")
 public class UserRestController {
 
     private final UserService userService;
@@ -25,7 +26,7 @@ public class UserRestController {
             @PathVariable String email,
             @RequestBody long charge
     ) {
-        userService.chargePoint(email, charge);
+        userService.chargePoint(email, new Point(charge));
         String message = "%d point charged to %s".formatted(email, charge);
         return ResponseEntity
                 .status(OK)

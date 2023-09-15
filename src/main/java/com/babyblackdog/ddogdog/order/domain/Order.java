@@ -1,7 +1,8 @@
 package com.babyblackdog.ddogdog.order.domain;
 
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -21,7 +22,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @AttributeOverride(name = "value", column = @Column(name = "user_email"))
+    private Email userEmail;
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "point_used"))
@@ -37,13 +39,13 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    public Order(Long userId, StayPeriod stayPeriod, Point usedPoint) {
-        Validate.notNull(userId, "userId는 Null일 수 없습니다.");
+    public Order(Email userEmail, StayPeriod stayPeriod, Point usedPoint) {
+        Validate.notNull(userEmail, "userId는 Null일 수 없습니다.");
         Validate.notNull(stayPeriod, "stayPeriod는 Null일 수 없습니다.");
         Validate.notNull(usedPoint, "pointUsed는 Null일 수 없습니다.");
 
         orderStatus = OrderStatus.PREPARED;
-        this.userId = userId;
+        this.userEmail = userEmail;
         this.stayPeriod = stayPeriod;
         this.usedPoint = usedPoint;
     }
@@ -74,19 +76,19 @@ public class Order {
         this.orderStatus = OrderStatus.COMPLETED;
     }
 
-    public boolean isOrderAuthorValid(long userId) {
-        return this.userId == userId;
+    public boolean isOrderAuthorValid(Email userEmail) {
+        return this.userEmail.equals(userEmail);
     }
 
-    public void cancel(long userId) {
-        if (!canCanceled(userId)) {
+    public void cancel(Email userEmail) {
+        if (!canCanceled(userEmail)) {
             throw new IllegalStateException("주문을 취소할 수 없습니다.");
         }
         this.orderStatus = OrderStatus.CANCELED;
     }
 
-    private boolean canCanceled(long userId) {
-        if (!isOrderAuthorValid(userId)) {
+    private boolean canCanceled(Email userEmail) {
+        if (!isOrderAuthorValid(userEmail)) {
             return false;
         }
         if (this.orderStatus != OrderStatus.COMPLETED) {

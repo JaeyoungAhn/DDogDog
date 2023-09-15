@@ -2,6 +2,8 @@ package com.babyblackdog.ddogdog.wishlist.controller;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
+import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.wishlist.application.WishlistFacade;
 import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistResponse;
 import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistResponses;
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/reviews")
+@RequestMapping(path = "/wishlists")
 public class WishlistRestController {
 
     private final WishlistFacade facade;
@@ -31,9 +33,9 @@ public class WishlistRestController {
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<WishlistResponse> createWishlist(@RequestBody Long placeId) {
         JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        String email = jwt.getEmail();
+        Email email = jwt.getEmail();
 
-        WishlistResult addedWishlistResult = facade.registerWishlist(email, placeId);
+        WishlistResult addedWishlistResult = facade.registerWishlist(email.getValue(), placeId);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -46,12 +48,12 @@ public class WishlistRestController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/me}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/me", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<WishlistResponses> getWishlistsForMe(Pageable pageable) {
         JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        String email = jwt.getEmail();
+        Email email = jwt.getEmail();
 
-        WishlistResults retrievedReviewsResult = facade.findWishlistsByEmail(email, pageable);
+        WishlistResults retrievedReviewsResult = facade.findWishlistsByEmail(email.getValue(), pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(WishlistResponses.of(retrievedReviewsResult));

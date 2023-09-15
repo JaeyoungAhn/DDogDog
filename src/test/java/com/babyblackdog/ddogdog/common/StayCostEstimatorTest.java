@@ -3,8 +3,9 @@ package com.babyblackdog.ddogdog.common;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.order.service.StayCostEstimator;
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

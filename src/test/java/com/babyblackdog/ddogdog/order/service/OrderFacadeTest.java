@@ -5,15 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
-import com.babyblackdog.ddogdog.common.date.TimeProvider;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
-import com.babyblackdog.ddogdog.place.reader.PlaceReaderService;
-import com.babyblackdog.ddogdog.place.reader.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.ReservationService;
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
+import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
 import com.babyblackdog.ddogdog.user.service.UserService;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +21,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+/**
+ * JwtSimpleAuthentication 에 Email 이 없으면 테스트를 어떻게 하지?
+ * <p>
+ * 1. User 테이블에 테스트용 레코드 하나 넣어놓기 2. 해당 User 와 일치하는 정보를 가진 JwtSimpleAuthentication 객체를 생성하기 3. 위 2 항목을 전역변수화하고,
+ *
+ * @BeforeEach 메소드에서 초기화하기
+ */
 @SpringBootTest
 class OrderFacadeTest {
 

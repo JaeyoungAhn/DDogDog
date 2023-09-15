@@ -3,11 +3,11 @@ package com.babyblackdog.ddogdog.place.model;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.babyblackdog.ddogdog.common.auth.HumanName;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
-import com.babyblackdog.ddogdog.place.model.vo.HumanName;
 import com.babyblackdog.ddogdog.place.model.vo.Occupancy;
 import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.model.vo.Province;

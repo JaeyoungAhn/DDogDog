@@ -16,7 +16,7 @@ public record UserResult(
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole(),
-                user.getPoint()
+                user.getPointValue()
         );
     }
 
@@ -26,7 +26,7 @@ public record UserResult(
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole(),
-                user.getPoint()
+                user.getPointValue()
         );
     }
 }

@@ -1,41 +1,46 @@
 package com.babyblackdog.ddogdog.review.application;
 
-import com.babyblackdog.ddogdog.place.application.PlaceAccessService;
+import com.babyblackdog.ddogdog.order.service.OrderReaderService;
+import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
+import com.babyblackdog.ddogdog.review.domain.vo.RatingScore;
 import com.babyblackdog.ddogdog.review.service.ReviewService;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResult;
 import com.babyblackdog.ddogdog.review.service.dto.ReviewResults;
-import com.babyblackdog.ddogdog.user.service.UserAccessService;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ReviewFacade {
 
-  private final ReviewService service;
-  private final PlaceAccessService placeAccessService;
+    private final ReviewService service;
+    private final OrderReaderService orderReaderService;
+    private final PlaceAccessService placeAccessService;
 
-  public ReviewFacade(ReviewService service, PlaceAccessService placeAccessService) {
-    this.service = service;
-    this.placeAccessService = placeAccessService;
-  }
+    public ReviewFacade(ReviewService service, OrderReaderService orderReaderService,
+            PlaceAccessService placeAccessService) {
+        this.service = service;
+        this.orderReaderService = orderReaderService;
+        this.placeAccessService = placeAccessService;
+    }
 
-  public ReviewResult registerReview(Long roomId, String content, Double rating, String email) {
-    placeAccessService.addRating(roomId, rating);
-    return service.registerReview(roomId, content, rating, email);
-  }
+    public ReviewResult registerReview(Long orderId, Long roomId, String content, RatingScore rating, String email) {
 
-  public ReviewResult updateReview(Long reviewId, String content) {
-    return service.updateReview(reviewId, content);
-  }
+        placeAccessService.addRatingScoreOfHotel(roomId, rating.getValue());
+        orderReaderService.isStayOver(orderId);
+        return service.registerReview(roomId, content, rating.getValue(), email);
+    }
 
-  public ReviewResults findReviewsByEmail(String email, Pageable pageable) {
-    return service.findReviewsByEmail(email, pageable);
-  }
+    public ReviewResult updateReview(Long reviewId, String content) {
+        return service.updateReview(reviewId, content);
+    }
 
-  public ReviewResults findReviewsByHotelId(Long hotelId, Pageable pageable) {
-    List<Long> roomIds = placeAccessService.findRoomIds(hotelId);
-    return service.findReviewsByRoomIds(roomIds, pageable);
-  }
+    public ReviewResults findReviewsByEmail(String email, Pageable pageable) {
+        return service.findReviewsByEmail(email, pageable);
+    }
+
+    public ReviewResults findReviewsByHotelId(Long hotelId, Pageable pageable) {
+        List<Long> roomIds = placeAccessService.findRoomIdsOfHotel(hotelId);
+        return service.findReviewsByRoomIds(roomIds, pageable);
+    }
 }

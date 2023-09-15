@@ -24,6 +24,14 @@ public class Point {
         }
     }
 
+    public static Point addPoint(Point origin, Point charge) {
+        return new Point(origin.getValue() + charge.getValue());
+    }
+
+    public static Point subPoint(Point origin, Point charge) {
+        return new Point(origin.getValue() - charge.getValue());
+    }
+
     public long getValue() {
         return value;
     }

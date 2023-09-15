@@ -3,10 +3,8 @@ package com.babyblackdog.ddogdog.place.service;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.HOTEL_NOT_FOUND;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.ROOM_NOT_FOUND;
 
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
 import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
-import com.babyblackdog.ddogdog.mapping.MappingService;
 import com.babyblackdog.ddogdog.place.model.Hotel;
 import com.babyblackdog.ddogdog.place.model.Rating;
 import com.babyblackdog.ddogdog.place.model.Room;
@@ -29,51 +27,48 @@ public class PlaceServiceImpl implements
 
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
-    private final MappingService mappingService;
 
-    public PlaceServiceImpl(HotelRepository hotelRepository, RoomRepository roomRepository,
-            MappingService mappingService) {
+    public PlaceServiceImpl(HotelRepository hotelRepository, RoomRepository roomRepository) {
         this.hotelRepository = hotelRepository;
         this.roomRepository = roomRepository;
-        this.mappingService = mappingService;
     }
 
-  @Override
-  @Transactional
-  public HotelResult registerHotel(AddHotelParam param) {
-    Hotel hotel = AddHotelParam.to(param);
-    hotel.setRating(new Rating(0, 0));
-    Hotel savedHotel = hotelRepository.save(hotel);
-    return HotelResult.of(savedHotel);
-  }
+    @Override
+    @Transactional
+    public HotelResult registerHotel(AddHotelParam param) {
+        Hotel hotel = AddHotelParam.to(param);
+        hotel.setRating(new Rating(0, 0));
+        Hotel savedHotel = hotelRepository.save(hotel);
+        return HotelResult.of(savedHotel);
+    }
 
-  @Override
-  @Transactional
-  public void deleteHotel(Long hotelId) {
-    hotelRepository.deleteById(hotelId);
-    roomRepository.deleteByHotelId(hotelId);
-  }
+    @Override
+    @Transactional
+    public void deleteHotel(Long hotelId) {
+        hotelRepository.deleteById(hotelId);
+        roomRepository.deleteByHotelId(hotelId);
+    }
 
-  @Override
-  @Transactional
-  public RoomResult registerRoomOfHotel(AddRoomParam addRoomParam) {
-    Hotel hotel = hotelRepository.findById(addRoomParam.hotelId())
-        .orElseThrow(() -> new RoomException(HOTEL_NOT_FOUND));
-    Room room = AddRoomParam.to(hotel, addRoomParam);
-    return RoomResult.of(roomRepository.save(room));
-  }
+    @Override
+    @Transactional
+    public RoomResult registerRoomOfHotel(AddRoomParam addRoomParam) {
+        Hotel hotel = hotelRepository.findById(addRoomParam.hotelId())
+                .orElseThrow(() -> new RoomException(HOTEL_NOT_FOUND));
+        Room room = AddRoomParam.to(hotel, addRoomParam);
+        return RoomResult.of(roomRepository.save(room));
+    }
 
-  @Override
-  @Transactional
-  public void deleteRoom(Long roomId) {
-    roomRepository.deleteById(roomId);
-  }
+    @Override
+    @Transactional
+    public void deleteRoom(Long roomId) {
+        roomRepository.deleteById(roomId);
+    }
 
-  @Override
-  public Page<HotelResult> findHotelsInProvince(Province province, Pageable pageable) {
-    Page<Hotel> hotels = hotelRepository.findContainsAddress(province.getValue(), pageable);
-    return hotels.map(HotelResult::of);
-  }
+    @Override
+    public Page<HotelResult> findHotelsInProvince(Province province, Pageable pageable) {
+        Page<Hotel> hotels = hotelRepository.findContainsAddress(province.getValue(), pageable);
+        return hotels.map(HotelResult::of);
+    }
 
     @Override
     public HotelResult findHotel(Long id) {
@@ -90,27 +85,15 @@ public class PlaceServiceImpl implements
     }
 
     @Override
-    public RoomResult findRoomForDuration(Long roomId, StayPeriod stayPeriod) {
+    public RoomResult findRoomForDuration(Long roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND));
-        boolean reservationAvailable = mappingService.isReservationAvailableForRoom(
-                roomId,
-                stayPeriod.checkIn(),
-                stayPeriod.checkOut());
-        return RoomResult.of(room, reservationAvailable);
+        return RoomResult.of(room);
     }
 
     @Override
-    public Page<RoomResult> findAllRoomsOfHotelForDuration(
-            Long hotelId, StayPeriod stayPeriod, Pageable pageable
-    ) {
+    public Page<RoomResult> findAllRoomsOfHotelForDuration(Long hotelId, Pageable pageable) {
         Page<Room> rooms = roomRepository.findRoomsByHotelId(hotelId, pageable);
-        return rooms.map(room -> {
-            boolean reservationAvailable = mappingService.isReservationAvailableForRoom(
-                    room.getId(),
-                    stayPeriod.checkIn(),
-                    stayPeriod.checkOut());
-            return RoomResult.of(room, reservationAvailable);
-        });
+        return rooms.map(RoomResult::of);
     }
 }

@@ -1,7 +1,5 @@
 package com.babyblackdog.ddogdog.order.controller;
 
-import com.babyblackdog.ddogdog.common.date.StayPeriod;
-import com.babyblackdog.ddogdog.common.date.TimeProvider;
 import com.babyblackdog.ddogdog.order.controller.dto.request.OrderCreateRequest;
 import com.babyblackdog.ddogdog.order.controller.dto.response.OrderCancelResponse;
 import com.babyblackdog.ddogdog.order.controller.dto.response.OrderCreateResponse;
@@ -13,6 +11,8 @@ import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderInformationResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
+import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -59,23 +59,21 @@ public class OrderRestController {
             @RequestBody @Valid OrderCreateRequest request) {
         StayPeriod stayPeriod = new StayPeriod(request.checkIn(), request.checkOut(), timeProvider);
 
-        OrderCreateResult result = facade.order(request.userId(), request.roomId(), stayPeriod);
+        OrderCreateResult result = facade.order(request.roomId(), stayPeriod);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderCreateResponse.of(result));
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderInformationResponse> getOrderInformation(@PathVariable long orderId,
-            @RequestParam long userId) {
-        OrderInformationResult result = service.find(orderId, userId);
+    public ResponseEntity<OrderInformationResponse> getOrderInformation(@PathVariable long orderId) {
+        OrderInformationResult result = service.find(orderId);
 
         return ResponseEntity.status(HttpStatus.OK).body(OrderInformationResponse.of(result));
     }
 
     @PostMapping("/{orderId}/cancel")
-    public ResponseEntity<OrderCancelResponse> cancelOrder(@PathVariable Long orderId,
-            @RequestParam long userId) {
-        OrderCancelResult result = facade.cancelOrder(orderId, userId);
+    public ResponseEntity<OrderCancelResponse> cancelOrder(@PathVariable Long orderId) {
+        OrderCancelResult result = facade.cancelOrder(orderId);
 
         return ResponseEntity.status(HttpStatus.OK).body(OrderCancelResponse.of(result));
     }

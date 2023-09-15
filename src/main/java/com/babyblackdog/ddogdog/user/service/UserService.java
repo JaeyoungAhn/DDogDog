@@ -2,9 +2,9 @@ package com.babyblackdog.ddogdog.user.service;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.USER_NOT_FOUND;
 
+import com.babyblackdog.ddogdog.common.auth.Role;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.UserException;
-import com.babyblackdog.ddogdog.user.model.Role;
 import com.babyblackdog.ddogdog.user.model.User;
 import com.babyblackdog.ddogdog.user.repository.UserRepository;
 import java.util.Map;
@@ -56,13 +56,10 @@ public class UserService {
     }
 
     @Transactional
-    public void chargePoint(String email, long charge) {
+    public void chargePoint(String email, Point charge) {
         userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserException(USER_NOT_FOUND))
                 .addPoint(charge);
     }
 
-    void creditPoint(long userId, Point point);
-
-    void debitPoint(Long userId, Point point);
 }

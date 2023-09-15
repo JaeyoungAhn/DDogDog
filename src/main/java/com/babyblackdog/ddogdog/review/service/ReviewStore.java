@@ -4,5 +4,5 @@ import com.babyblackdog.ddogdog.review.domain.Review;
 
 public interface ReviewStore {
 
-  Review registerReview(Review review);
+    Review registerReview(Review review);
 }

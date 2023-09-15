@@ -2,9 +2,9 @@ package com.babyblackdog.ddogdog.review.repository;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.REVIEW_NOT_FOUND;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import com.babyblackdog.ddogdog.review.domain.Review;
-import com.babyblackdog.ddogdog.review.domain.vo.Email;
 import com.babyblackdog.ddogdog.review.service.ReviewReader;
 import java.util.List;
 import org.springframework.data.domain.Page;

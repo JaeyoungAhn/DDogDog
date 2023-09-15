@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.global.aop;
+package com.babyblackdog.ddogdog.common.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

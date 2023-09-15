@@ -18,70 +18,70 @@ import jakarta.persistence.Table;
 @Table(name = "ratings")
 public class Rating {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "total_rating", nullable = false)
-  private double totalRating;
+    @Column(name = "total_rating", nullable = false)
+    private double totalRating;
 
-  @Column(name = "total_count", nullable = false)
-  private long totalCount;
+    @Column(name = "total_count", nullable = false)
+    private long totalCount;
 
-  @OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "hotel_id", nullable = false)
-  private Hotel hotel;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hotel_id", nullable = false)
+    private Hotel hotel;
 
-  public Rating(double totalRating, long totalCount) {
-    validate(totalRating, totalCount);
-    this.totalRating = totalRating;
-    this.totalCount = totalCount;
-  }
-
-  protected Rating() {
-  }
-
-  private void validate(double totalRating, long totalCount) {
-    if (totalRating < 0) {
-      throw new RatingException(INVALID_RATING_SCORE);
+    public Rating(double totalRating, long totalCount) {
+        validate(totalRating, totalCount);
+        this.totalRating = totalRating;
+        this.totalCount = totalCount;
     }
-    if (totalCount < 0) {
-      throw new RatingException(INVALID_RATING_COUNT);
+
+    protected Rating() {
     }
-  }
 
-  public Long getId() {
-    return id;
-  }
-
-  public double getTotalRating() {
-    return totalRating;
-  }
-
-  public long getTotalCount() {
-    return totalCount;
-  }
-
-  public double getRatingScore() {
-    if (totalCount == 0) {
-      return 0.0;
+    private void validate(double totalRating, long totalCount) {
+        if (totalRating < 0) {
+            throw new RatingException(INVALID_RATING_SCORE);
+        }
+        if (totalCount < 0) {
+            throw new RatingException(INVALID_RATING_COUNT);
+        }
     }
-    return Math.round((totalRating / totalCount) * 10.0) / 10.0;
-  }
 
-  public void setHotel(Hotel hotel) {
-    this.hotel = hotel;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void addRatingScore(double ratingScore) {
-    this.totalRating += ratingScore;
-    this.totalCount++;
-    validate(totalRating, totalCount);
-  }
+    public double getTotalRating() {
+        return totalRating;
+    }
 
-  public void subRatingScore(double ratingScore) {
-    this.totalRating -= ratingScore;
-    this.totalCount--;
-    validate(totalRating, totalCount);
-  }
+    public long getTotalCount() {
+        return totalCount;
+    }
+
+    public double getRatingScore() {
+        if (totalCount == 0) {
+            return 0.0;
+        }
+        return Math.round((totalRating / totalCount) * 10.0) / 10.0;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public void addRatingScore(double ratingScore) {
+        this.totalRating += ratingScore;
+        this.totalCount++;
+        validate(totalRating, totalCount);
+    }
+
+    public void subRatingScore(double ratingScore) {
+        this.totalRating -= ratingScore;
+        this.totalCount--;
+        validate(totalRating, totalCount);
+    }
 }

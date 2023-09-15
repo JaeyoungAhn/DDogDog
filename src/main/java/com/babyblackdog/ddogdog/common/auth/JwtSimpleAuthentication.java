@@ -1,9 +1,8 @@
-package com.babyblackdog.ddogdog.global.jwt;
+package com.babyblackdog.ddogdog.common.auth;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_ROLE;
 
 import com.babyblackdog.ddogdog.global.exception.UserException;
-import com.babyblackdog.ddogdog.user.model.Role;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -12,19 +11,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class JwtSimpleAuthentication {
 
-    private final String username;
-    private final String email;
+    private final HumanName username;
+    private final Email email;
     private final Role role;
-  
+
     private static class SingletonHolder {
-      private static final JwtSimpleAuthentication INSTANCE = new JwtSimpleAuthentication();
+
+        private static final JwtSimpleAuthentication INSTANCE = new JwtSimpleAuthentication();
     }
 
     private JwtSimpleAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Map<String, String> principal = getPrincipal(authentication);
-        this.username = principal.get("username");
-        this.email = principal.get("email");
+        this.username = new HumanName(principal.get("username"));
+        this.email = new Email(principal.get("email"));
         this.role = getAuthority(authentication);
     }
 
@@ -54,12 +54,20 @@ public class JwtSimpleAuthentication {
         return SingletonHolder.INSTANCE;
     }
 
-    public String getUsername() {
+    public HumanName getUsername() {
         return username;
     }
 
-    public String getEmail() {
+    public String getUsernameValue() {
+        return username.getValue();
+    }
+
+    public Email getEmail() {
         return email;
+    }
+
+    public String getEmailAddress() {
+        return email.getValue();
     }
 
     public Role getRole() {

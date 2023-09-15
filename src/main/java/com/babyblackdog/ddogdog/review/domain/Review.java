@@ -1,79 +1,92 @@
 package com.babyblackdog.ddogdog.review.domain;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.review.domain.vo.Content;
-import com.babyblackdog.ddogdog.review.domain.vo.Email;
-import com.babyblackdog.ddogdog.review.domain.vo.Rating;
-import jakarta.persistence.*;
+import com.babyblackdog.ddogdog.review.domain.vo.RatingScore;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDate;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "reviews")
 public class Review {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "room_id")
-  private Long roomId;
+    @Column(name = "order_id", unique = true)
+    private Long orderId;
 
-  @Embedded
-  private Email email;
+    @Column(name = "room_id")
+    private Long roomId;
 
-  @Embedded
-  private Content content;
+    @Embedded
+    private Email email;
 
-  @Embedded
-  private Rating rating;
+    @Embedded
+    private Content content;
 
-  @CreatedDate
-  private LocalDate createdDate;
+    @Embedded
+    private RatingScore ratingScore;
 
+    @CreatedDate
+    private LocalDate createdDate;
 
-  public Review(Long roomId, Content content, Rating rating, Email email) {
-    this.roomId = roomId;
-    this.content = content;
-    this.rating = rating;
-    this.email = email;
-  }
+    public Review(Long orderId, Long roomId, Content content, RatingScore ratingScore, Email email) {
+        this.orderId = orderId;
+        this.roomId = roomId;
+        this.content = content;
+        this.ratingScore = ratingScore;
+        this.email = email;
+    }
 
-  protected Review() {
-  }
+    protected Review() {
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getContent() {
-    return content.getValue();
-  }
+    public Long getOrderId() {
+        return orderId;
+    }
 
-  public void setContent(Content content) {
-    this.content = content;
-  }
+    public String getContent() {
+        return content.getValue();
+    }
 
-  public Double getRating() {
-    return rating.getValue();
-  }
+    public void setContent(Content content) {
+        this.content = content;
+    }
 
-  public void setRating(Rating rating) {
-    this.rating = rating;
-  }
+    public Double getRating() {
+        return ratingScore.getValue();
+    }
 
-  public LocalDate getCreatedDate() {
-    return createdDate;
-  }
+    public void setRating(RatingScore ratingScore) {
+        this.ratingScore = ratingScore;
+    }
 
-  public Long getRoomId() {
-    return roomId;
-  }
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
 
-  public String getEmail() {
-    return email.getValue();
-  }
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public String getEmail() {
+        return email.getValue();
+    }
 
 }

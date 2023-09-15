@@ -7,12 +7,8 @@ public interface UserAccessorService {
 
     UserResult findUserByEmail(String email);
 
-    boolean doesUserExist(Long userId);
+    void creditPoint(Point point);
 
-    boolean deductUserPoints(Long userId, Point point);
-
-//  boolean doesUserExist(String email);
-//
-//  boolean deductUserPoints(String email, Point pointsToDeduct);
+    void debitPoint(Point point);
 
 }
