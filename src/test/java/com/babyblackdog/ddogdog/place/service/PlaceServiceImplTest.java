@@ -113,7 +113,7 @@ class PlaceServiceImplTest {
   @DisplayName("유효하지 않은 숙소 아이디를 이용해 숙소를 조회하면 실패한다.")
   void findPlaceById_ReadException() {
     // Given
-    Long invalidId = 1L;
+    Long invalidId = 1_000L;
 
     // When & Then
     assertThatThrownBy(() -> placeService.findHotel(invalidId))

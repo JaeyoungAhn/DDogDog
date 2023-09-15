@@ -37,7 +37,11 @@ public enum ErrorCode {
   // reservation
   INVALID_ROOM_ID(BAD_REQUEST, "RRR100", "유효하지 않은 객실번호입니다."),
   INVALID_RESERVATION_ID(BAD_REQUEST, "RRR200", "유효하지 않은 예약번호입니다."),
-  INVALID_REVIEW_ID(BAD_REQUEST, "RRR300", "유효하지 않은 리뷰번호입니다.");
+  INVALID_REVIEW_ID(BAD_REQUEST, "RRR300", "유효하지 않은 리뷰번호입니다."),
+
+  // user
+  USER_NOT_FOUND(BAD_REQUEST, "US-100", "존재하지 않는 유저입니다."),
+  INVALID_ROLE(BAD_REQUEST, "US-110", "유효하지 않은 권한입니다.");
 
   private final HttpStatus httpStatus;
   private final String code;
@@ -51,6 +55,10 @@ public enum ErrorCode {
 
   public HttpStatus getHttpStatus() {
     return httpStatus;
+  }
+
+  public String getCode() {
+    return code;
   }
 
   public String getMessage() {

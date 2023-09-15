@@ -15,37 +15,41 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(HotelException.class)
   public ResponseEntity<ErrorResponse> placeExceptionHandler(HotelException exception) {
-    ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode());
+    ErrorCode errorCode = exception.getErrorCode();
+    ErrorResponse errorResponse = ErrorResponse.of(errorCode);
     logger.info("HotelException: {}", errorResponse);
     return ResponseEntity
-        .status(errorResponse.getStatusCode())
+        .status(errorCode.getHttpStatus())
         .body(errorResponse);
   }
 
   @ExceptionHandler(ReviewException.class)
   public ResponseEntity<ErrorResponse> reviewExceptionHandler(ReviewException exception) {
-    ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode());
+    ErrorCode errorCode = exception.getErrorCode();
+    ErrorResponse errorResponse = ErrorResponse.of(errorCode);
     logger.info("ReviewException: {}", errorResponse);
     return ResponseEntity
-        .status(errorResponse.getStatusCode())
+        .status(errorCode.getHttpStatus())
         .body(errorResponse);
   }
 
   @ExceptionHandler(RoomException.class)
   public ResponseEntity<ErrorResponse> roomExceptionHandler(RoomException exception) {
-    ErrorResponse errorResponse = ErrorResponse.of(exception.getErrorCode());
+    ErrorCode errorCode = exception.getErrorCode();
+    ErrorResponse errorResponse = ErrorResponse.of(errorCode);
     logger.info("ReviewException: {}", errorResponse);
     return ResponseEntity
-        .status(errorResponse.getStatusCode())
+        .status(errorCode.getHttpStatus())
         .body(errorResponse);
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> internalServerErrorExceptionHandler(Exception exception) {
-    ErrorResponse errorResponse = ErrorResponse.of(INTERNAL_SERVER_ERROR);
+    ErrorCode errorCode = INTERNAL_SERVER_ERROR;
+    ErrorResponse errorResponse = ErrorResponse.of(errorCode);
     logger.info("Exception: {}", errorResponse);
     return ResponseEntity
-        .status(errorResponse.getStatusCode())
+        .status(errorCode.getHttpStatus())
         .body(errorResponse);
   }
 

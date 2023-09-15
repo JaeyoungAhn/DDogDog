@@ -6,7 +6,7 @@ import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
 import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.OrderedReservationResult;
 import com.babyblackdog.ddogdog.reservation.service.dto.result.RoomOrderPageResult;
-import com.babyblackdog.ddogdog.user.service.UserService;
+import com.babyblackdog.ddogdog.user.accessor.UserAccessorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +16,11 @@ public class ReservationFacade {
 
   private final ReservationService service;
   private final PlaceAccessService placeAccessService;
-  private final UserService userService;
+  private final UserAccessorService userService;
 
 
   public ReservationFacade(ReservationService service, PlaceAccessService placeAccessService,
-      UserService userService) {
+      UserAccessorService userService) {
     this.service = service;
     this.placeAccessService = placeAccessService;
     this.userService = userService;
