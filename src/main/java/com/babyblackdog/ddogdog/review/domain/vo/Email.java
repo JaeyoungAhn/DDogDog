@@ -1,14 +1,16 @@
 package com.babyblackdog.ddogdog.review.domain.vo;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.EMPTY_REVIEW_EMAIL;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_EMAIL_FORMAT;
+
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.*;
-
 @Embeddable
 public class Email {
+
     @NotBlank(message = "이메일이 입력되어야 합니다.")
     @Column(name = "email", nullable = false)
     private String value;
