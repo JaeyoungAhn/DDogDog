@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class MappingServiceImpl implements MappingService {
 
-  private final ReservationService reservationService;
+    private final ReservationService reservationService;
 
-  public MappingServiceImpl(ReservationService reservationService) {
-    this.reservationService = reservationService;
-  }
+    public MappingServiceImpl(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
-  @Override
-  public boolean isReservationAvailableForRoom(Long roomId, LocalDate checkIn, LocalDate checkOut) {
-    return reservationService.isRoomAvailableOnDate(roomId, checkIn, checkOut);
-  }
+    @Override
+    public boolean isReservationAvailableForRoom(Long roomId, LocalDate checkIn, LocalDate checkOut) {
+        return reservationService.isRoomAvailableOnDate(roomId, checkIn, checkOut);
+    }
 }

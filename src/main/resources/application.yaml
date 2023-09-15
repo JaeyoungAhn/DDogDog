@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -22,3 +22,30 @@ spring:
           type:
             descriptor:
               sql: debug
+
+  security:
+    oauth2:
+      client:
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+        registration:
+          kakao:
+            client-id: bb0ffec0ead0fae87c462e6973b31c84
+            client-secret: q7v2wvgZ01jowD0XddyJ1g95Af1xEpYp
+            client-authentication-method: client_secret_post
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            client-name: kakao
+            scope:
+              - profile_nickname
+              - account_email
+
+jwt:
+  header: Authorization
+  issuer: baby-blackdog
+  expirySeconds: 2592000
+  client-secret: YmFieS1ibGFjay1kb2ctZGRvZy1kb2c=
