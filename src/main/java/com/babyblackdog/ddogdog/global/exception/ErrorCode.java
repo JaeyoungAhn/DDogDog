@@ -35,10 +35,14 @@ public enum ErrorCode {
     INVALID_ROOM_NUMBER(BAD_REQUEST, "RM-220", "방 번호는 반드시 주어져야 합니다."),
     INVALID_ROOM_TYPE(BAD_REQUEST, "RM-230", "유효하지 않은 방 타입입니다."),
 
-    // reservation
-    INVALID_ROOM_ID(BAD_REQUEST, "RRR100", "유효하지 않은 객실번호입니다."),
-    INVALID_RESERVATION_ID(BAD_REQUEST, "RRR200", "유효하지 않은 예약번호입니다."),
-    INVALID_REVIEW_ID(BAD_REQUEST, "RRR300", "유효하지 않은 리뷰번호입니다."),
+  // reservation
+  INVALID_ROOM_ID(BAD_REQUEST, "RRR100", "유효하지 않은 객실번호입니다."),
+  INVALID_RESERVATION_ID(BAD_REQUEST, "RRR200", "유효하지 않은 예약번호입니다."),
+  INVALID_REVIEW_ID(BAD_REQUEST, "RRR300", "유효하지 않은 리뷰번호입니다."),
+
+  // user
+  USER_NOT_FOUND(BAD_REQUEST, "US-100", "존재하지 않는 유저입니다."),
+  INVALID_ROLE(BAD_REQUEST, "US-110", "유효하지 않은 권한입니다.");
 
     // wishlist
     WISHLIST_EMAIL_NOT_FOUND(NOT_FOUND, "W-100", "존재하지 않는 이메일입니다."),
@@ -59,6 +63,10 @@ public enum ErrorCode {
 
   public HttpStatus getHttpStatus() {
     return httpStatus;
+  }
+
+  public String getCode() {
+    return code;
   }
 
   public String getMessage() {

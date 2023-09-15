@@ -39,6 +39,7 @@ public class PlaceServiceImpl implements
 
   @Override
   public HotelResult registerHotel(AddHotelParam param) {
+
     Hotel hotel = hotelRepository.save(AddHotelParam.to(param));
     return HotelResult.of(hotel);
   }
