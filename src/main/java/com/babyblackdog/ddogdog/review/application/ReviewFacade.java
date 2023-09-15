@@ -28,7 +28,7 @@ public class ReviewFacade {
 
         placeAccessService.addRatingScoreOfHotel(roomId, rating.getValue());
         orderReaderService.isStayOver(orderId);
-        return service.registerReview(roomId, content, rating.getValue(), email);
+        return service.registerReview(orderId, roomId, content, rating.getValue(), email);
     }
 
     public ReviewResult updateReview(Long reviewId, String content) {

@@ -13,7 +13,7 @@ public interface ReviewService {
      * @param roomId, content, rating, userId
      * @return ReviewResult
      */
-    ReviewResult registerReview(Long roomId, String content, Double rating, String email);
+    ReviewResult registerReview(Long orderId, Long roomId, String content, Double rating, String email);
 
     /**
      * reviewId, content 을 받아 리뷰 수정

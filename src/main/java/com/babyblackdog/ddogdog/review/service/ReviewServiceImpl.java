@@ -30,8 +30,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public ReviewResult registerReview(Long roomId, String content, Double rating, String email) {
-        Review review = new Review(roomId, new Content(content), new RatingScore(rating), new Email(email));
+    public ReviewResult registerReview(Long orderId, Long roomId, String content, Double rating, String email) {
+        Review review = new Review(orderId, roomId, new Content(content), new RatingScore(rating), new Email(email));
         Review savedReview = store.registerReview(review);
         return ReviewResult.of(savedReview);
     }
