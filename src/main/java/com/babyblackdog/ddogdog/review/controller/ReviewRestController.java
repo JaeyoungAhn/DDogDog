@@ -40,7 +40,6 @@ public class ReviewRestController {
         JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
         Email email = jwt.getEmail();
 
-        //TODO : 리뷰 등록 시 orderId 를 받아서 처리
         ReviewResult addedReviewResult = facade.registerReview(
                 reviewRequest.orderId(),
                 reviewRequest.roomId(),

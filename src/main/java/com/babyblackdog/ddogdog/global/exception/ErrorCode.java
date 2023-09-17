@@ -30,6 +30,8 @@ public enum ErrorCode {
     INVALID_REVIEW_PARAMETER(BAD_REQUEST, "R-250", "유효하지 않은 파라미터입니다."),
     EMPTY_REVIEW_CONTENT(BAD_REQUEST, "R-300", "리뷰 내용이 비어있습니다."),
     INVALID_REVIEW_PERMISSION(FORBIDDEN, "R-400", "리뷰 접근 권한이 없습니다."),
+    STAY_NOT_OVER(BAD_REQUEST, "R-410", "숙박이 끝나지 않아 리뷰를 달 수 없습니다."),
+
 
     // room
     ROOM_NOT_FOUND(NOT_FOUND, "RM-100", "존재하지 않는 객실입니다."),

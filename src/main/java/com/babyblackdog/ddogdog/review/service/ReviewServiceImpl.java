@@ -36,6 +36,10 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewResult.of(savedReview);
     }
 
+    private static boolean doesNotMatch(Review retrievedReview, Email email) {
+        return !email.getValue().equals(retrievedReview.getEmail());
+    }
+
     @Transactional
     @Override
     public ReviewResult updateReview(Long reviewId, String content) {
@@ -44,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
         JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
         Email email = jwt.getEmail();
 
-        if (!email.getValue().equals(retrievedReview.getEmail())) {
+        if (doesNotMatch(retrievedReview, email)) {
             throw new ReviewException(INVALID_REVIEW_PERMISSION);
         }
 
