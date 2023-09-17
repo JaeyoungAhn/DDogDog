@@ -51,7 +51,7 @@ class UserServiceTest {
         // Then
         Optional<User> user = userService.findByEmail(email);
 
-        assertThat(user.isPresent()).isTrue();
-        assertThat(user.get().getPointValue()).isEqualTo(charge);
+        assertThat(user).isPresent();
+        assertThat(user.get().getPoint()).isEqualTo(charge);
     }
 }

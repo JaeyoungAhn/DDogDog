@@ -28,6 +28,5 @@ public interface PlaceAccessService {
      */
     List<Long> findRoomIdsOfHotel(Long hotelId);
 
-    //TODO - 찜할 때 유효한 숙소인지 확인
     boolean isHotelValid(Long hotelId);
 }
