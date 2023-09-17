@@ -1,5 +1,8 @@
 package com.babyblackdog.ddogdog.wishlist.application;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.WISHLIST_HOTEL_NOT_FOUND;
+
+import com.babyblackdog.ddogdog.global.exception.WishlistException;
 import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
 import com.babyblackdog.ddogdog.wishlist.service.WishlistService;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
@@ -19,6 +22,10 @@ public class WishlistFacade {
     }
 
     public WishlistResult registerWishlist(String email, Long hotelId) {
+        if (!placeAccessService.isHotelValid(hotelId)) {
+            throw new WishlistException(WISHLIST_HOTEL_NOT_FOUND);
+        }
+
         return service.registerWishlist(email, hotelId);
     }
 
