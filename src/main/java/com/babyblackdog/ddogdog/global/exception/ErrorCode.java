@@ -55,8 +55,8 @@ public enum ErrorCode {
     // wishlist
     WISHLIST_NOT_FOUND(NOT_FOUND, "W-100", "존재하지 않는 찜입니다."),
     INVALID_WISHLIST_PERMISSION(FORBIDDEN, "W-300", "찜에 대한 권한이 없습니다."),
-    WISHLIST_HOTEL_NOT_FOUND(FORBIDDEN, "W-200", "존재하지 않는 호텔입니다. ");
-
+    WISHLIST_HOTEL_NOT_FOUND(FORBIDDEN, "W-200", "존재하지 않는 호텔입니다. "),
+    WISHLIST_ALREADY_EXIST(BAD_REQUEST, "W-310", "이미 등록된 찜입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

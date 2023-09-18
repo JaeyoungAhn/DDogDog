@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface WishlistReader {
 
-//    Boolean isInWishlist(Long userId, Long placeId);
-
     Page<Wishlist> findWishlistsByEmail(String email, Pageable pageable);
 
     Wishlist findWishlistById(Long wishlistId);
+
+    Boolean existsByEmailAndPlaceId(String email, Long placeId);
 }

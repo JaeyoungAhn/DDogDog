@@ -32,8 +32,9 @@ public class WishlistRestController {
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<WishlistResponse> createWishlist(@RequestBody Long placeId) {
-        JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        Email email = jwt.getEmail();
+        Email email = new Email("test@test.dog");
+//        JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
+//        Email email = jwt.getEmail();
 
         WishlistResult addedWishlistResult = facade.registerWishlist(email.getValue(), placeId);
 
