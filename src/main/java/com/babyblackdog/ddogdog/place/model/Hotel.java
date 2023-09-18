@@ -1,10 +1,10 @@
 package com.babyblackdog.ddogdog.place.model;
 
-import com.babyblackdog.ddogdog.common.auth.HumanName;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
+import com.babyblackdog.ddogdog.user.model.vo.HumanName;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

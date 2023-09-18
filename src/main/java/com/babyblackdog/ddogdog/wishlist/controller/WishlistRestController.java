@@ -25,15 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class WishlistRestController {
 
     private final WishlistFacade facade;
+    private final JwtSimpleAuthentication authentication;
 
-    public WishlistRestController(WishlistFacade facade) {
+    public WishlistRestController(WishlistFacade facade, JwtSimpleAuthentication authentication) {
         this.facade = facade;
+        this.authentication = authentication;
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<WishlistResponse> createWishlist(@RequestBody Long placeId) {
-        JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        Email email = jwt.getEmail();
+        Email email = authentication.getEmail();
 
         WishlistResult addedWishlistResult = facade.registerWishlist(email.getValue(), placeId);
 
@@ -50,8 +51,7 @@ public class WishlistRestController {
 
     @GetMapping(value = "/me", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<WishlistResponses> getWishlistsForMe(Pageable pageable) {
-        JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        Email email = jwt.getEmail();
+        Email email = authentication.getEmail();
 
         WishlistResults retrievedReviewsResult = facade.findWishlistsByEmail(email.getValue(), pageable);
         return ResponseEntity

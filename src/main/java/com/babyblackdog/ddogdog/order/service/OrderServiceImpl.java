@@ -14,14 +14,16 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository repository;
+    private final JwtSimpleAuthentication authentication;
 
-    public OrderServiceImpl(OrderRepository repository) {
+    public OrderServiceImpl(OrderRepository repository, JwtSimpleAuthentication authentication) {
         this.repository = repository;
+        this.authentication = authentication;
     }
 
     @Override
     public Long create(StayPeriod stayPeriod, Point pointToPay) {
-        Email userEmail = JwtSimpleAuthentication.getInstance().getEmail();
+        Email userEmail = authentication.getEmail();
 
         Order savedOrder = repository.save(new Order(userEmail, stayPeriod, pointToPay));
         return savedOrder.getId();
@@ -35,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderInformationResult find(long orderId) {
-        Email userEmail = JwtSimpleAuthentication.getInstance().getEmail();
+        Email userEmail = authentication.getEmail();
 
         Order foundOrder = repository.findById(orderId).orElseThrow(IllegalArgumentException::new);
         if (foundOrder.isOrderAuthorValid(userEmail)) {
@@ -51,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderCancelResult cancel(Long orderId) {
-        Email userEmail = JwtSimpleAuthentication.getInstance().getEmail();
+        Email userEmail = authentication.getEmail();
 
         Order foundOrder = repository.findById(orderId).orElseThrow(IllegalArgumentException::new);
 

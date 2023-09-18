@@ -29,11 +29,14 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
-    // spring security
+    // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // OAuth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-    // jwt
+    // JWT
     implementation 'com.auth0:java-jwt:4.4.0'
 }
 

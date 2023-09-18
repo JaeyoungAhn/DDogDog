@@ -11,7 +11,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private final Object principal;
     private Object credentials;
 
-    JwtAuthenticationToken(JwtAuthenticationPrincipal principal, Object credentials,
+    public JwtAuthenticationToken(Object principal, Object credentials,
             Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         super.setAuthenticated(true);
@@ -70,7 +70,8 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     public String toString() {
         return new StringJoiner(", ", JwtAuthenticationToken.class.getSimpleName() + "[", "]")
                 .add("principal=" + principal)
-                .add("credentials='" + credentials + "'")
+                .add("credentials=" + credentials)
+                .add("authorities=" + super.getAuthorities())
                 .toString();
     }
 }
