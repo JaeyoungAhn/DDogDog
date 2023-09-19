@@ -5,6 +5,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.wishlist.application.WishlistFacade;
+import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistRequest;
 import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistResponse;
 import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistResponses;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
@@ -33,10 +34,10 @@ public class WishlistRestController {
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<WishlistResponse> createWishlist(@RequestBody Long placeId) {
+    public ResponseEntity<WishlistResponse> createWishlist(@RequestBody WishlistRequest wishlistRequest) {
         Email email = authentication.getEmail();
 
-        WishlistResult addedWishlistResult = facade.registerWishlist(email.getValue(), placeId);
+        WishlistResult addedWishlistResult = facade.registerWishlist(email.getValue(), wishlistRequest.hotelId());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
