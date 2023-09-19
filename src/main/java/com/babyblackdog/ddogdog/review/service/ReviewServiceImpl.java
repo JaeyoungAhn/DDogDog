@@ -23,9 +23,11 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewStore store;
     private final ReviewReader reader;
 
-    public ReviewServiceImpl(ReviewStore store, ReviewReader reader) {
+    private final JwtSimpleAuthentication authentication;
+    public ReviewServiceImpl(ReviewStore store, ReviewReader reader, JwtSimpleAuthentication authentication) {
         this.store = store;
         this.reader = reader;
+        this.authentication = authentication;
     }
 
     @Transactional
@@ -45,8 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResult updateReview(Long reviewId, String content) {
         Review retrievedReview = reader.findReviewById(reviewId);
 
-        JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        Email email = jwt.getEmail();
+        Email email = authentication.getEmail();
 
         if (doesNotMatch(retrievedReview, email)) {
             throw new ReviewException(INVALID_REVIEW_PERMISSION);
