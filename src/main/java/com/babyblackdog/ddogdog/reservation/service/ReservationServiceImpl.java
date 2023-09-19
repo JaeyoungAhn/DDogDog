@@ -24,7 +24,9 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public boolean isRoomAvailableOnDate(Long roomId, LocalDate checkIn, LocalDate checkOut) {
         List<Reservation> reservationList = findReservations(roomId, checkIn, checkOut);
-        return areAllDatesAvailable(reservationList);
+
+        long period = new StayPeriod(checkIn, checkOut, timeProvider).getPeriod();
+        return reservationList.size() == period && areAllDatesAvailable(reservationList);
     }
 
     @Override
@@ -32,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
     public List<Long> reserve(Long roomId, StayPeriod stayPeriod, Long orderId) {
         List<Reservation> reservationList = findReservations(roomId, stayPeriod.getCheckIn(), stayPeriod.getCheckOut());
 
-        if (!areAllDatesAvailable(reservationList)) {
+        if (reservationList.size() != stayPeriod.getPeriod() || !areAllDatesAvailable(reservationList)) {
             throw new UnreservableDateException(ErrorCode.UNRESERVED_PERIOD);
         }
 
