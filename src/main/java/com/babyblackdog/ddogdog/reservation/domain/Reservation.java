@@ -1,5 +1,7 @@
 package com.babyblackdog.ddogdog.reservation.domain;
 
+import com.babyblackdog.ddogdog.global.exception.ErrorCode;
+import com.babyblackdog.ddogdog.global.exception.ReserveException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -54,7 +56,7 @@ public class Reservation {
 
     public void reserve(Long orderId) {
         if (isReserved()) {
-            throw new IllegalStateException("이미 예약이 되어 있습니다.");
+            throw new ReserveException(ErrorCode.ALREADY_RESERVED);
         }
         this.status = ReservationStatus.RESERVED;
         this.orderId = orderId;
