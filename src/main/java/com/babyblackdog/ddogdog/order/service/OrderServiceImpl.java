@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
         return new OrderInformationResult(
                 foundOrder.getUsedPoint(),
                 foundOrder.getStayPeriod(),
-                foundOrder.getOrderStatus().toString()
+                foundOrder.getOrderStatus().getDescription()
         );
     }
 
