@@ -7,10 +7,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
 import org.apache.commons.lang3.Validate;
 
-@Entity
+@Entity(name = "reservations")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"roomId", "date"}))
 public class Reservation {
 
     @Id
