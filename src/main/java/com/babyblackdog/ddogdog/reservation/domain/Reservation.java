@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
+import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 
 @Entity(name = "reservations")
@@ -57,5 +58,28 @@ public class Reservation {
         }
         this.status = ReservationStatus.RESERVED;
         this.orderId = orderId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Reservation that = (Reservation) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(roomId, that.roomId)
+                && Objects.equals(date, that.date) && Objects.equals(orderId, that.orderId)
+                && status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), roomId, date, orderId, status);
+    }
+
+    public boolean isAvailable() {
+        return !isReserved();
     }
 }
