@@ -12,8 +12,7 @@ public record RoomResponse(
         boolean hasAmenities,
         boolean smokingAvailable,
         String roomNumber,
-        long point,
-        boolean reservationAvailable
+        long point
 ) {
 
     public static RoomResponse of(RoomResult roomResult) {
@@ -27,8 +26,7 @@ public record RoomResponse(
                 roomResult.hasAmenities(),
                 roomResult.smokingAvailable(),
                 roomResult.roomNumber(),
-                roomResult.point(),
-                roomResult.reservationAvailable()
+                roomResult.point()
         );
     }
 }

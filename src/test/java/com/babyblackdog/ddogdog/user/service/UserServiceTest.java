@@ -30,7 +30,6 @@ class UserServiceTest {
     void setUp() {
         savedUser = userRepository.save(
                 new User(
-                        "다나카",
                         "danaka@naver.com",
                         Role.USER,
                         new Point(0)
@@ -51,7 +50,8 @@ class UserServiceTest {
         // Then
         Optional<User> user = userService.findByEmail(email);
 
-        assertThat(user.isPresent()).isTrue();
-        assertThat(user.get().getPointValue()).isEqualTo(charge);
+        assertThat(user).isPresent();
+        assertThat(user.get().getPoint()).isEqualTo(charge);
     }
+
 }

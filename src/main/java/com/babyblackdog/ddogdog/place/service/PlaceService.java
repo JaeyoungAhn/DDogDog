@@ -24,8 +24,8 @@ public interface PlaceService {
 
     RoomResult findRoom(Long roomId);
 
-    RoomResult findRoomForDuration(Long roomId);
+    Page<RoomResult> findRoomsOfHotel(Long hotelId, Pageable pageable);
 
-    Page<RoomResult> findAllRoomsOfHotelForDuration(Long hotelId, Pageable pageable);
+    boolean existsHotel(Long hotelId);
 
 }

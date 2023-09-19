@@ -29,16 +29,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReviewRestController {
 
     private final ReviewFacade facade;
+    private final JwtSimpleAuthentication authentication;
 
-    public ReviewRestController(ReviewFacade facade) {
+    public ReviewRestController(ReviewFacade facade, JwtSimpleAuthentication authentication) {
         this.facade = facade;
+        this.authentication = authentication;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ReviewResponse> createReview(@RequestBody ReviewRequest reviewRequest) {
-
-        JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        Email email = jwt.getEmail();
+        Email email = authentication.getEmail();
 
         //TODO : 리뷰 등록 시 orderId 를 받아서 처리
         ReviewResult addedReviewResult = facade.registerReview(
@@ -75,9 +75,7 @@ public class ReviewRestController {
 
     @GetMapping(value = "/me", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ReviewResponses> getReviewsForMe(Pageable pageable) {
-
-        JwtSimpleAuthentication jwt = JwtSimpleAuthentication.getInstance();
-        Email email = jwt.getEmail();
+        Email email = authentication.getEmail();
 
         ReviewResults retrievedReviewsResult = facade.findReviewsByEmail(email.getValue(), pageable);
         return ResponseEntity

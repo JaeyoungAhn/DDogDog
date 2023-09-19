@@ -1,11 +1,11 @@
 package com.babyblackdog.ddogdog.place.service.dto;
 
-import com.babyblackdog.ddogdog.common.auth.HumanName;
 import com.babyblackdog.ddogdog.place.model.Hotel;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
+import com.babyblackdog.ddogdog.user.model.vo.HumanName;
 import jakarta.validation.constraints.NotNull;
 
 public record AddHotelParam(

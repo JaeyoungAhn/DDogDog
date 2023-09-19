@@ -1,5 +1,8 @@
 package com.babyblackdog.ddogdog.common.point;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_POINT;
+
+import com.babyblackdog.ddogdog.global.exception.PointException;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Positive;
 import java.util.Objects;
@@ -20,7 +23,7 @@ public class Point {
 
     private void validate(long value) {
         if (value < 0) {
-            throw new IllegalArgumentException("포인트 값은 양수여야 합니다.");
+            throw new PointException(INVALID_POINT);
         }
     }
 
