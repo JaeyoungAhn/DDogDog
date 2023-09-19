@@ -15,6 +15,7 @@ public class WishlistStoreImpl implements WishlistStore {
 
     @Override
     public Wishlist registerWishlist(Wishlist wishlist) {
+        repository.existsByEmailAndPlaceId(wishlist.getEmail(), wishlist.getPlaceId());
         return repository.save(wishlist);
     }
 

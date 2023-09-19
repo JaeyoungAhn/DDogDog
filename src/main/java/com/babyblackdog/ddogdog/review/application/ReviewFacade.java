@@ -1,5 +1,8 @@
 package com.babyblackdog.ddogdog.review.application;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.STAY_NOT_OVER;
+
+import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import com.babyblackdog.ddogdog.order.service.OrderReaderService;
 import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
 import com.babyblackdog.ddogdog.review.domain.vo.RatingScore;
@@ -25,10 +28,15 @@ public class ReviewFacade {
     }
 
     public ReviewResult registerReview(Long orderId, Long roomId, String content, RatingScore rating, String email) {
+        if (!orderReaderService.isStayOver(orderId)) {
+            throw new ReviewException(STAY_NOT_OVER);
+        }
+
+        ReviewResult savedReviewResult = service.registerReview(orderId, roomId, content, rating.getValue(), email);
 
         placeAccessService.addRatingScoreOfHotel(roomId, rating.getValue());
-        orderReaderService.isStayOver(orderId);
-        return service.registerReview(orderId, roomId, content, rating.getValue(), email);
+
+        return savedReviewResult;
     }
 
     public ReviewResult updateReview(Long reviewId, String content) {

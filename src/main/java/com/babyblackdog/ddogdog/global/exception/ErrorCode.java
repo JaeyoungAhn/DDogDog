@@ -30,6 +30,8 @@ public enum ErrorCode {
     INVALID_REVIEW_PARAMETER(BAD_REQUEST, "R-250", "유효하지 않은 파라미터입니다."),
     EMPTY_REVIEW_CONTENT(BAD_REQUEST, "R-300", "리뷰 내용이 비어있습니다."),
     INVALID_REVIEW_PERMISSION(FORBIDDEN, "R-400", "리뷰 접근 권한이 없습니다."),
+    STAY_NOT_OVER(BAD_REQUEST, "R-410", "숙박이 끝나지 않아 리뷰를 달 수 없습니다."),
+
 
     // room
     ROOM_NOT_FOUND(NOT_FOUND, "RM-100", "존재하지 않는 객실입니다."),
@@ -42,15 +44,17 @@ public enum ErrorCode {
     USER_NOT_FOUND(BAD_REQUEST, "US-100", "존재하지 않는 유저입니다."),
     INVALID_ROLE(BAD_REQUEST, "US-110", "유효하지 않은 권한입니다."),
     FORBIDDEN_ROLE(FORBIDDEN, "US-120", "접근 권한이 부족합니다."),
-    EMPTY_EMAIL(BAD_REQUEST, "R-310", "이메일란이 비어있습니다."),
-    INVALID_EMAIL_FORMAT(BAD_REQUEST, "W-200", "유효하지 않은 이메일입니다"),
-    EMAIL_NOT_FOUND(NOT_FOUND, "W-100", "존재하지 않는 이메일입니다."),
+    EMPTY_EMAIL(BAD_REQUEST, "US-130", "이메일란이 비어있습니다."),
+    INVALID_EMAIL_FORMAT(BAD_REQUEST, "US-140", "유효하지 않은 이메일입니다"),
+    EMAIL_NOT_FOUND(NOT_FOUND, "US-150", "존재하지 않는 이메일입니다."),
 
     // rating
     INVALID_RATING_SCORE(BAD_REQUEST, "RT-100", "평균별점은 0 이상이어야 합니다."),
     INVALID_RATING_COUNT(BAD_REQUEST, "RT-110", "별점 수는 0 이상이어야 합니다."),
 
     // wishlist
+    WISHLIST_HOTEL_NOT_FOUND(FORBIDDEN, "W-200", "존재하지 않는 호텔입니다. "),
+    WISHLIST_ALREADY_EXIST(BAD_REQUEST, "W-310", "이미 등록된 찜입니다.")
     WISHLIST_NOT_FOUND(NOT_FOUND, "W-110", "존재하지 않는 찜입니다."),
     INVALID_WISHLIST_PERMISSION(FORBIDDEN, "W-300", "찜에 대한 권한이 없습니다."),
 

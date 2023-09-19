@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/wishlists")
+@RequestMapping(path = "/wishlist")
 public class WishlistRestController {
 
     private final WishlistFacade facade;
     private final JwtSimpleAuthentication authentication;
-
+  
     public WishlistRestController(WishlistFacade facade, JwtSimpleAuthentication authentication) {
         this.facade = facade;
         this.authentication = authentication;
