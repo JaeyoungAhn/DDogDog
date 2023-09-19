@@ -1,13 +1,19 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
+import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+@Embeddable
 public class StayPeriod {
 
-    private final LocalDate checkIn;
-    private final LocalDate checkOut;
+    private LocalDate checkIn;
+    private LocalDate checkOut;
+
+    protected StayPeriod() {
+
+    }
 
     public StayPeriod(LocalDate checkIn, LocalDate checkOut, TimeProvider timeProvider) {
         this.checkIn = adjustIfInvalid(checkIn, timeProvider);

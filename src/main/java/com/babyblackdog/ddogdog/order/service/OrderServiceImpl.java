@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
         Email userEmail = authentication.getEmail();
 
         Order foundOrder = repository.findById(orderId).orElseThrow(IllegalArgumentException::new);
-        if (foundOrder.isOrderAuthorValid(userEmail)) {
+        if (!foundOrder.isOrderAuthorValid(userEmail)) {
             throw new IllegalStateException("주문을 한 유저만 내역을 확인할 수 있습니다.");
         }
 
