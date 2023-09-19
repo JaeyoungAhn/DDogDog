@@ -62,7 +62,10 @@ public enum ErrorCode {
     INVALID_POINT(BAD_REQUEST, "P-100", "포인트 값은 양수여야 합니다."),
 
     // reservation
-    UNRESERVED_PERIOD(BAD_REQUEST, "RSV-100", "예약할 수 없는 날짜가 포함되어 있습니다.");
+    UNRESERVED_PERIOD(BAD_REQUEST, "RSV-100", "예약할 수 없는 날짜가 포함되어 있습니다."),
+    NOT_COMPLETE(BAD_REQUEST, "RSV-210", "주문을 완료할 수 없습니다."),
+    NOT_CANCEL(BAD_REQUEST, "RSV-210", "주문을 취소할 수 없습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;
