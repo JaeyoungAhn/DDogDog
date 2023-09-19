@@ -85,15 +85,13 @@ public class PlaceServiceImpl implements
     }
 
     @Override
-    public RoomResult findRoomForDuration(Long roomId) {
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND));
-        return RoomResult.of(room);
+    public Page<RoomResult> findRoomsOfHotel(Long hotelId, Pageable pageable) {
+        Page<Room> rooms = roomRepository.findRoomsByHotelId(hotelId, pageable);
+        return rooms.map(RoomResult::of);
     }
 
     @Override
-    public Page<RoomResult> findAllRoomsOfHotelForDuration(Long hotelId, Pageable pageable) {
-        Page<Room> rooms = roomRepository.findRoomsByHotelId(hotelId, pageable);
-        return rooms.map(RoomResult::of);
+    public boolean existsHotel(Long hotelId) {
+        return hotelRepository.existsById(hotelId);
     }
 }

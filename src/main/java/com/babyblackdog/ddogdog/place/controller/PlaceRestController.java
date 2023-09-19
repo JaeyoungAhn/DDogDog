@@ -118,7 +118,7 @@ public class PlaceRestController {
      *
      * @param hotelId
      * @param request
-     * @return
+     * @return ResponseEntity<RoomResponse>
      */
     @FilterAdmin
     @PostMapping(path = "/{hotelId}", consumes = APPLICATION_JSON_VALUE)
@@ -164,11 +164,11 @@ public class PlaceRestController {
      * @return ResponseEntity<RoomResponse>\
      */
     @GetMapping(path = "/{hotelId}/{roomId}")
-    public ResponseEntity<RoomResponse> getRoomForDuration(
+    public ResponseEntity<RoomResponse> getRoom(
             @PathVariable Long hotelId,
             @PathVariable Long roomId
     ) {
-        RoomResult roomResult = placeService.findRoomForDuration(roomId);
+        RoomResult roomResult = placeService.findRoom(roomId);
         return ResponseEntity
                 .status(OK)
                 .body(RoomResponse.of(roomResult));
@@ -182,11 +182,11 @@ public class PlaceRestController {
      * @return ResponseEntity<RoomResponse>
      */
     @GetMapping(path = "/{hotelId}/rooms")
-    public ResponseEntity<RoomResponses> getRoomsOfHotelForDuration(
+    public ResponseEntity<RoomResponses> getRoomsOfHotel(
             @PathVariable Long hotelId,
             Pageable pageable
     ) {
-        Page<RoomResult> roomResults = placeService.findAllRoomsOfHotelForDuration(hotelId, pageable);
+        Page<RoomResult> roomResults = placeService.findRoomsOfHotel(hotelId, pageable);
         return ResponseEntity
                 .status(OK)
                 .body(RoomResponses.of(roomResults));

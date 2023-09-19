@@ -3,7 +3,6 @@ package com.babyblackdog.ddogdog.place.model;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.babyblackdog.ddogdog.common.auth.HumanName;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
@@ -13,6 +12,7 @@ import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
 import com.babyblackdog.ddogdog.place.model.vo.RoomNumber;
 import com.babyblackdog.ddogdog.place.model.vo.RoomType;
+import com.babyblackdog.ddogdog.user.model.vo.HumanName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

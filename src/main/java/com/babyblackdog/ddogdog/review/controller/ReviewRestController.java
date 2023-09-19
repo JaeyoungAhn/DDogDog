@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReviewRestController {
 
     private final ReviewFacade facade;
-
     private final JwtSimpleAuthentication authentication;
 
     public ReviewRestController(ReviewFacade facade, JwtSimpleAuthentication authentication) {
@@ -75,7 +74,6 @@ public class ReviewRestController {
 
     @GetMapping(value = "/me", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ReviewResponses> getReviewsForMe(Pageable pageable) {
-
         Email email = authentication.getEmail();
 
         ReviewResults retrievedReviewsResult = facade.findReviewsByEmail(email.getValue(), pageable);

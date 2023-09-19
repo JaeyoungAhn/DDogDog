@@ -17,9 +17,11 @@ public class UserAccessorServiceImpl implements
         UserAccessorService {
 
     private final UserRepository userRepository;
+    private final JwtSimpleAuthentication authentication;
 
-    public UserAccessorServiceImpl(UserRepository userRepository) {
+    public UserAccessorServiceImpl(UserRepository userRepository, JwtSimpleAuthentication authentication) {
         this.userRepository = userRepository;
+        this.authentication = authentication;
     }
 
     @Override
@@ -40,8 +42,7 @@ public class UserAccessorServiceImpl implements
     }
 
     private User getUser() {
-        JwtSimpleAuthentication jwtSimpleAuthentication = JwtSimpleAuthentication.getInstance();
-        return userRepository.findByEmail(jwtSimpleAuthentication.getEmailAddress())
+        return userRepository.findByEmail(authentication.getEmailAddress())
                 .orElseThrow(() -> new UserException(USER_NOT_FOUND));
     }
 }

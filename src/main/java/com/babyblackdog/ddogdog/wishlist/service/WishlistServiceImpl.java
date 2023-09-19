@@ -20,9 +20,8 @@ public class WishlistServiceImpl implements WishlistService {
 
     private final WishlistReader reader;
     private final WishlistStore store;
-
     private final JwtSimpleAuthentication authentication;
-
+  
     public WishlistServiceImpl(WishlistReader reader, WishlistStore store, JwtSimpleAuthentication authentication) {
         this.reader = reader;
         this.store = store;
@@ -43,7 +42,6 @@ public class WishlistServiceImpl implements WishlistService {
     @Transactional
     @Override
     public void deleteWishlist(Long wishlistId) {
-
         Email email = authentication.getEmail();
 
         Wishlist wishlist = reader.findWishlistById(wishlistId);

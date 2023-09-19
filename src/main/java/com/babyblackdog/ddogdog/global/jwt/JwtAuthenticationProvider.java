@@ -38,9 +38,8 @@ public final class JwtAuthenticationProvider {
         if (expirySeconds > 0) {
             builder.withExpiresAt(new Date(now.getTime() + expirySeconds * 1_000L));
         }
-        builder.withClaim("username", claims.getUsername());
         builder.withClaim("email", claims.getEmail());
-        builder.withClaim("role", claims.getRole());
+        builder.withClaim("role", claims.getRole().get(0).getAuthority());
         return builder.sign(algorithm);
     }
 

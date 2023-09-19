@@ -12,12 +12,10 @@ public record RoomResult(
         boolean hasAmenities,
         boolean smokingAvailable,
         String roomNumber,
-        long point,
-        boolean reservationAvailable
+        long point
 ) {
 
     public static RoomResult of(Room room) {
-        boolean notUsingValue = false;
         return new RoomResult(
                 room.getId(),
                 room.getHotelName(),
@@ -28,24 +26,7 @@ public record RoomResult(
                 room.isHasAmenities(),
                 room.isSmokingAvailable(),
                 room.getRoomNumber(),
-                room.getPoint(),
-                notUsingValue
-        );
-    }
-
-    public static RoomResult of(Room room, boolean reservationAvailable) {
-        return new RoomResult(
-                room.getId(),
-                room.getHotelName(),
-                room.getRoomTypeName(),
-                room.getDescription(),
-                room.getMaxOccupancy(),
-                room.isHasBed(),
-                room.isHasAmenities(),
-                room.isSmokingAvailable(),
-                room.getRoomNumber(),
-                room.getPoint(),
-                reservationAvailable
+                room.getPoint()
         );
     }
 }

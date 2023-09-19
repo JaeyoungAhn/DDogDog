@@ -14,14 +14,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilterAdminAspect {
 
+    private final JwtSimpleAuthentication authentication;
+
+    public FilterAdminAspect(JwtSimpleAuthentication authentication) {
+        this.authentication = authentication;
+    }
+
     @Pointcut("@annotation(com.babyblackdog.ddogdog.common.aop.FilterAdmin)")
     private void enableFilter() {
     }
 
     @Before("enableFilter()")
     public void before() {
-        JwtSimpleAuthentication jwtSimpleAuthentication = JwtSimpleAuthentication.getInstance();
-        if (jwtSimpleAuthentication.getRole() == Role.USER) {
+        if (authentication.getRole() == Role.USER) {
             throw new UserException(FORBIDDEN_ROLE);
         }
     }

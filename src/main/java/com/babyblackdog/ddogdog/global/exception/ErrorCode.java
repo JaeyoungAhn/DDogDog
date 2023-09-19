@@ -53,10 +53,13 @@ public enum ErrorCode {
     INVALID_RATING_COUNT(BAD_REQUEST, "RT-110", "별점 수는 0 이상이어야 합니다."),
 
     // wishlist
-    WISHLIST_NOT_FOUND(NOT_FOUND, "W-100", "존재하지 않는 찜입니다."),
-    INVALID_WISHLIST_PERMISSION(FORBIDDEN, "W-300", "찜에 대한 권한이 없습니다."),
     WISHLIST_HOTEL_NOT_FOUND(FORBIDDEN, "W-200", "존재하지 않는 호텔입니다. "),
-    WISHLIST_ALREADY_EXIST(BAD_REQUEST, "W-310", "이미 등록된 찜입니다.");
+    WISHLIST_ALREADY_EXIST(BAD_REQUEST, "W-310", "이미 등록된 찜입니다.")
+    WISHLIST_NOT_FOUND(NOT_FOUND, "W-110", "존재하지 않는 찜입니다."),
+    INVALID_WISHLIST_PERMISSION(FORBIDDEN, "W-300", "찜에 대한 권한이 없습니다."),
+
+    // point
+    INVALID_POINT(BAD_REQUEST, "P-100", "포인트 값은 양수여야 합니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

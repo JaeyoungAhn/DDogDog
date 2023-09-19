@@ -4,12 +4,11 @@ import static com.babyblackdog.ddogdog.global.exception.ErrorCode.HOTEL_NOT_FOUN
 
 import com.babyblackdog.ddogdog.global.exception.RatingException;
 import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
-import com.babyblackdog.ddogdog.place.repository.HotelRepository;
 import com.babyblackdog.ddogdog.place.repository.RatingRepository;
-import com.babyblackdog.ddogdog.place.repository.RoomRepository;
 import com.babyblackdog.ddogdog.place.service.PlaceService;
 import com.babyblackdog.ddogdog.place.service.dto.RoomResult;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,15 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaceAccessServiceImpl implements PlaceAccessService {
 
     private final PlaceService placeService;
-    private final HotelRepository hotelRepository;
-    private final RoomRepository roomRepository;
     private final RatingRepository ratingRepository;
 
-    public PlaceAccessServiceImpl(PlaceService placeService, HotelRepository hotelRepository,
-            RoomRepository roomRepository, RatingRepository ratingRepository) {
+    public PlaceAccessServiceImpl(PlaceService placeService, RatingRepository ratingRepository) {
         this.placeService = placeService;
-        this.hotelRepository = hotelRepository;
-        this.roomRepository = roomRepository;
         this.ratingRepository = ratingRepository;
     }
 
@@ -46,11 +40,14 @@ public class PlaceAccessServiceImpl implements PlaceAccessService {
 
     @Override
     public List<Long> findRoomIdsOfHotel(Long hotelId) {
-        return null;
+        return placeService.findRoomsOfHotel(hotelId, Pageable.unpaged())
+                .stream()
+                .map(RoomResult::id)
+                .toList();
     }
 
     @Override
     public boolean isHotelValid(Long hotelId) {
-        return false;
+        return placeService.existsHotel(hotelId);
     }
 }
