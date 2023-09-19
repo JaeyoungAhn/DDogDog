@@ -27,14 +27,15 @@ public class ReviewFacade {
         this.placeAccessService = placeAccessService;
     }
 
-    public ReviewResult registerReview(Long orderId, Long roomId, String content, RatingScore rating, String email) {
+    public ReviewResult registerReview(Long orderId, Long hotelId, Long roomId, String content, RatingScore rating,
+            String email) {
         if (!orderReaderService.isStayOver(orderId)) {
             throw new ReviewException(STAY_NOT_OVER);
         }
 
         ReviewResult savedReviewResult = service.registerReview(orderId, roomId, content, rating.getValue(), email);
 
-        placeAccessService.addRatingScoreOfHotel(roomId, rating.getValue());
+        placeAccessService.addRatingScoreOfHotel(hotelId, rating.getValue());
 
         return savedReviewResult;
     }

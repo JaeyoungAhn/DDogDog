@@ -5,7 +5,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.wishlist.application.WishlistFacade;
-import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistRequest;
 import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistResponse;
 import com.babyblackdog.ddogdog.wishlist.controller.dto.WishlistResponses;
 import com.babyblackdog.ddogdog.wishlist.service.dto.WishlistResult;
@@ -17,8 +16,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,10 +33,10 @@ public class WishlistRestController {
     }
 
     @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<WishlistResponse> createWishlist(@RequestBody WishlistRequest wishlistRequest) {
+    public ResponseEntity<WishlistResponse> createWishlist(@RequestParam Long hotelId) {
         Email email = authentication.getEmail();
 
-        WishlistResult addedWishlistResult = facade.registerWishlist(email.getValue(), wishlistRequest.hotelId());
+        WishlistResult addedWishlistResult = facade.registerWishlist(email.getValue(), hotelId);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

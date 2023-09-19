@@ -85,8 +85,8 @@ public class Review {
         return roomId;
     }
 
-    public String getEmail() {
-        return email.getValue();
+    public Email getEmail() {
+        return email;
     }
 
 }
