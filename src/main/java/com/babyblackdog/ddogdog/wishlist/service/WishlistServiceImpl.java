@@ -31,7 +31,7 @@ public class WishlistServiceImpl implements WishlistService {
     @Transactional
     @Override
     public WishlistResult registerWishlist(String email, Long placeId) {
-        if (Boolean.TRUE.equals(reader.existsByEmailAndPlaceId(email, placeId))) {
+        if (Boolean.TRUE.equals(reader.existsByEmailAndPlaceId(new Email(email), placeId))) {
            throw new WishlistException(WISHLIST_ALREADY_EXIST);
         }
 
@@ -45,16 +45,20 @@ public class WishlistServiceImpl implements WishlistService {
         Email email = authentication.getEmail();
 
         Wishlist wishlist = reader.findWishlistById(wishlistId);
-        if (!email.getValue().equals(wishlist.getEmail())) {
+        if (doesNotMatch(email, wishlist)) {
             throw new WishlistException(INVALID_WISHLIST_PERMISSION);
         }
 
         store.deleteWishlist(wishlistId);
     }
 
+    private static boolean doesNotMatch(Email email, Wishlist wishlist) {
+        return !email.getValue().equals(wishlist.getEmail().getValue());
+    }
+
     @Override
     public WishlistResults findWishlistsByEmail(String email, Pageable pageable) {
-        Page<Wishlist> retrievedWishlists = reader.findWishlistsByEmail(email, pageable);
+        Page<Wishlist> retrievedWishlists = reader.findWishlistsByEmail(new Email(email), pageable);
         return WishlistResults.of(retrievedWishlists);
     }
 }

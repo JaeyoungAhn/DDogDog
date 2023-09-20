@@ -38,8 +38,8 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewResult.of(savedReview);
     }
 
-    private static boolean doesNotMatch(Review retrievedReview, Email email) {
-        return !email.getValue().equals(retrievedReview.getEmail());
+    private static boolean doesNotMatch(Email retrievedEmail, Email email) {
+        return !email.getValue().equals(retrievedEmail.getValue());
     }
 
     @Transactional
@@ -48,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review retrievedReview = reader.findReviewById(reviewId);
         Email email = authentication.getEmail();
 
-        if (doesNotMatch(retrievedReview, email)) {
+        if (doesNotMatch(retrievedReview.getEmail(), email)) {
             throw new ReviewException(INVALID_REVIEW_PERMISSION);
         }
 

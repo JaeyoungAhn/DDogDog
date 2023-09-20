@@ -16,7 +16,7 @@ public record ReviewResult(
         return new ReviewResult(
                 entity.getId(),
                 entity.getRoomId(),
-                entity.getEmail(),
+                entity.getEmail().getValue(),
                 entity.getContent(),
                 entity.getRating(),
                 entity.getCreatedDate()

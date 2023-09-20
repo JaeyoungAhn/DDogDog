@@ -5,6 +5,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.review.application.ReviewFacade;
+import com.babyblackdog.ddogdog.review.controller.dto.ReviewModifyRequest;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewRequest;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponse;
 import com.babyblackdog.ddogdog.review.controller.dto.ReviewResponses;
@@ -43,6 +44,7 @@ public class ReviewRestController {
 
         ReviewResult addedReviewResult = facade.registerReview(
                 reviewRequest.orderId(),
+                reviewRequest.hotelId(),
                 reviewRequest.roomId(),
                 reviewRequest.content(),
                 new RatingScore(reviewRequest.rating()),
@@ -55,8 +57,8 @@ public class ReviewRestController {
 
     @PatchMapping(value = "/{reviewId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<ReviewResponse> modifyReview(@PathVariable Long reviewId,
-            @RequestParam String content) {
-        ReviewResult updatedReviewResult = facade.updateReview(reviewId, content);
+            @RequestBody ReviewModifyRequest reviewModifyRequest) {
+        ReviewResult updatedReviewResult = facade.updateReview(reviewId, reviewModifyRequest.content());
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(ReviewResponse.of(updatedReviewResult));

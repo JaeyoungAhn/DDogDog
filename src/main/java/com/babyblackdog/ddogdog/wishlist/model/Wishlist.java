@@ -38,8 +38,8 @@ public class Wishlist {
         return id;
     }
 
-    public String getEmail() {
-        return email.getValue();
+    public Email getEmail() {
+        return email;
     }
 
     public Long getPlaceId() {
