@@ -1,5 +1,7 @@
 package com.babyblackdog.ddogdog.reservation.service;
 
+import com.babyblackdog.ddogdog.global.exception.ErrorCode;
+import com.babyblackdog.ddogdog.global.exception.UnreservableDateException;
 import com.babyblackdog.ddogdog.reservation.domain.Reservation;
 import com.babyblackdog.ddogdog.reservation.domain.ReservationRepository;
 import java.time.LocalDate;
@@ -21,45 +23,35 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public boolean isRoomAvailableOnDate(Long roomId, LocalDate checkIn, LocalDate checkOut) {
-        StayPeriod reservationPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
-        List<Reservation> reservationList =
-                repository.findReservationsByDateRange(roomId,
-                        reservationPeriod.getCheckIn(), reservationPeriod.getCheckOut());
+        List<Reservation> reservationList = findReservations(roomId, checkIn, checkOut);
 
-        if (reservationPeriod.getPeriod() != reservationList.size()) {
-            return false;
-        }
-
-        for (Reservation reservation : reservationList) {
-            if (reservation.isReserved()) {
-                return false;
-            }
-        }
-        return true;
+        long period = new StayPeriod(checkIn, checkOut, timeProvider).getPeriod();
+        return reservationList.size() == period && areAllDatesAvailable(reservationList);
     }
 
     @Override
-    public Long create(Long roomId, LocalDate reservationDate) {
-        Reservation savedReservation = repository.save(new Reservation(roomId, reservationDate));
-        return savedReservation.getId();
-    }
-
-    @Override
+    @Transactional
     public List<Long> reserve(Long roomId, StayPeriod stayPeriod, Long orderId) {
-        List<Reservation> reservationList =
-                repository.findReservationsByDateRange(roomId, stayPeriod.getCheckIn(),
-                        stayPeriod.getCheckOut());
+        List<Reservation> reservationList = findReservations(roomId, stayPeriod.getCheckIn(), stayPeriod.getCheckOut());
 
-        if (stayPeriod.getPeriod() != reservationList.size()) {
-            throw new IllegalStateException("예약할 수 없는 날짜가 포함되어 있습니다.");
+        if (reservationList.size() != stayPeriod.getPeriod() || !areAllDatesAvailable(reservationList)) {
+            throw new UnreservableDateException(ErrorCode.UNRESERVED_PERIOD);
         }
 
-        for (Reservation reservation : reservationList) {
-            reservation.reserve(orderId);
-        }
+        reservationList.forEach(reservation -> reservation.reserve(orderId));
 
         return reservationList.stream()
                 .map(Reservation::getId)
                 .toList();
+    }
+
+    private List<Reservation> findReservations(Long roomId, LocalDate checkIn, LocalDate checkOut) {
+        StayPeriod reservationPeriod = new StayPeriod(checkIn, checkOut, timeProvider);
+        return repository.findReservationsByDateRange(roomId,
+                reservationPeriod.getCheckIn(), reservationPeriod.getCheckOut());
+    }
+
+    private boolean areAllDatesAvailable(List<Reservation> reservations) {
+        return reservations.stream().allMatch(Reservation::isAvailable);
     }
 }

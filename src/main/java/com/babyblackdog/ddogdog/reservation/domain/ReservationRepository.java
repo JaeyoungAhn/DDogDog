@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    @Query("SELECT r FROM Reservation r WHERE r.roomId = :roomId AND :checkIn <= r.date AND r.date < :checkOut")
+    @Query("SELECT r FROM reservations r WHERE r.roomId = :roomId AND :checkIn <= r.date AND r.date < :checkOut")
     List<Reservation> findReservationsByDateRange(Long roomId, LocalDate checkIn,
             LocalDate checkOut);
 }

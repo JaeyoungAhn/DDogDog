@@ -3,14 +3,18 @@ package com.babyblackdog.ddogdog.order.service;
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.global.exception.ErrorCode;
+import com.babyblackdog.ddogdog.global.exception.OrderException;
 import com.babyblackdog.ddogdog.order.domain.Order;
 import com.babyblackdog.ddogdog.order.domain.OrderRepository;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderInformationResult;
 import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository repository;
@@ -22,46 +26,57 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Long create(StayPeriod stayPeriod, Point pointToPay) {
-        Email userEmail = authentication.getEmail();
-
-        Order savedOrder = repository.save(new Order(userEmail, stayPeriod, pointToPay));
+        Order savedOrder = repository.save(new Order(getCurrentUserEmail(), stayPeriod, pointToPay));
         return savedOrder.getId();
     }
 
     @Override
+    @Transactional
     public void complete(Long orderId) {
-        Order foundOrder = repository.findById(orderId).orElseThrow(IllegalArgumentException::new);
+        Order foundOrder = findOrderById(orderId);
         foundOrder.complete();
     }
 
     @Override
     public OrderInformationResult find(long orderId) {
-        Email userEmail = authentication.getEmail();
-
-        Order foundOrder = repository.findById(orderId).orElseThrow(IllegalArgumentException::new);
-        if (foundOrder.isOrderAuthorValid(userEmail)) {
-            throw new IllegalStateException("주문을 한 유저만 내역을 확인할 수 있습니다.");
-        }
+        Order foundOrder = findOrderById(orderId);
+        validateOrderOwner(foundOrder);
 
         return new OrderInformationResult(
                 foundOrder.getUsedPoint(),
                 foundOrder.getStayPeriod(),
-                foundOrder.getOrderStatus().toString()
+                foundOrder.getOrderStatus().getDescription()
         );
     }
 
     @Override
+    @Transactional
     public OrderCancelResult cancel(Long orderId) {
-        Email userEmail = authentication.getEmail();
+        Order foundOrder = findOrderById(orderId);
 
-        Order foundOrder = repository.findById(orderId).orElseThrow(IllegalArgumentException::new);
-
-        foundOrder.cancel(userEmail);
+        foundOrder.cancel(getCurrentUserEmail());
 
         return new OrderCancelResult(
                 foundOrder.getUsedPoint(),
                 foundOrder.getStayPeriod()
         );
+    }
+
+    private Email getCurrentUserEmail() {
+        return authentication.getEmail();
+    }
+
+    private Order findOrderById(Long orderId) {
+        return repository.findById(orderId).orElseThrow(
+                () -> new OrderException(ErrorCode.ORDER_NOT_FOUND)
+        );
+    }
+
+    private void validateOrderOwner(Order foundOrder) {
+        if (!foundOrder.isOrderAuthorValid(getCurrentUserEmail())) {
+            throw new OrderException(ErrorCode.UNAUTHORIZED_TO_VIEW_ORDER);
+        }
     }
 }

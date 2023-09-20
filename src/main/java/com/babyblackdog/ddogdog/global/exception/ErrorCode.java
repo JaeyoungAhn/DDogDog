@@ -59,7 +59,18 @@ public enum ErrorCode {
     INVALID_WISHLIST_PERMISSION(FORBIDDEN, "W-300", "찜에 대한 권한이 없습니다."),
 
     // point
-    INVALID_POINT(BAD_REQUEST, "P-100", "포인트 값은 양수여야 합니다.");
+    INVALID_POINT(BAD_REQUEST, "P-100", "포인트 값은 양수여야 합니다."),
+
+    // reservation
+    UNRESERVED_PERIOD(BAD_REQUEST, "RSV-100", "예약할 수 없는 날짜가 포함되어 있습니다."),
+    NOT_COMPLETE(BAD_REQUEST, "RSV-210", "주문을 완료할 수 없습니다."),
+    NOT_CANCEL(BAD_REQUEST, "RSV-220", "주문을 취소할 수 없습니다."),
+    ALREADY_RESERVED(BAD_REQUEST, "RSV-310", "이미 예약이 되어 있습니다."),
+
+    // Order
+    ORDER_NOT_FOUND(NOT_FOUND, "ORD-200", "주문을 찾을 수 없습니다."),
+    UNAUTHORIZED_TO_VIEW_ORDER(FORBIDDEN, "ORD-210", "주문을 한 유저만 내역을 확인할 수 있습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;
