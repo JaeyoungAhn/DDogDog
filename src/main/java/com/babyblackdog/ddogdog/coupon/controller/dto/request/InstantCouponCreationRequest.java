@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.coupon.controller.dto;
+package com.babyblackdog.ddogdog.coupon.controller.dto.request;
 
 import java.time.LocalDate;
 

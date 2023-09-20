@@ -1,5 +1,9 @@
 package com.babyblackdog.ddogdog.coupon.service.dto;
 
-public class InstantCouponCreationResult {
+import java.time.LocalDate;
+
+public record InstantCouponCreationResult(Long couponId, Long roomId, String couponName, String couponType,
+                                          String discountType, Double discountValue, LocalDate startDate,
+                                          LocalDate endDate) {
 
 }
