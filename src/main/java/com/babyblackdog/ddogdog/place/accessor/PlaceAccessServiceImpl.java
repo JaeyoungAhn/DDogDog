@@ -32,8 +32,8 @@ public class PlaceAccessServiceImpl implements PlaceAccessService {
 
     @Override
     @Transactional
-    public void addRatingScoreOfHotel(Long hotelId, double ratingScore) {
-        ratingRepository.findByHotelId(hotelId)
+    public void addRatingScoreOfHotel(Long roomId, double ratingScore) {
+        ratingRepository.findByHotelId(placeService.findRoom(roomId).id())
                 .orElseThrow(() -> new RatingException(HOTEL_NOT_FOUND))
                 .addRatingScore(ratingScore);
     }

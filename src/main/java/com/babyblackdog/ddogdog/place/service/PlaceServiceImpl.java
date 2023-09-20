@@ -71,8 +71,8 @@ public class PlaceServiceImpl implements
     }
 
     @Override
-    public HotelResult findHotel(Long id) {
-        Hotel hotel = hotelRepository.findById(id)
+    public HotelResult findHotel(Long hotelId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new HotelException(HOTEL_NOT_FOUND));
         return HotelResult.of(hotel);
     }
