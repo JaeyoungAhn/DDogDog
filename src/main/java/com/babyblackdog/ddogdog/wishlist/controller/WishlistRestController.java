@@ -26,7 +26,7 @@ public class WishlistRestController {
 
     private final WishlistFacade facade;
     private final JwtSimpleAuthentication authentication;
-  
+
     public WishlistRestController(WishlistFacade facade, JwtSimpleAuthentication authentication) {
         this.facade = facade;
         this.authentication = authentication;

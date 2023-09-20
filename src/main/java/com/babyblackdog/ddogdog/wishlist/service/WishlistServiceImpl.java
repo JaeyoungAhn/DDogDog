@@ -21,7 +21,7 @@ public class WishlistServiceImpl implements WishlistService {
     private final WishlistReader reader;
     private final WishlistStore store;
     private final JwtSimpleAuthentication authentication;
-  
+
     public WishlistServiceImpl(WishlistReader reader, WishlistStore store, JwtSimpleAuthentication authentication) {
         this.reader = reader;
         this.store = store;
@@ -32,7 +32,7 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     public WishlistResult registerWishlist(String email, Long placeId) {
         if (Boolean.TRUE.equals(reader.existsByEmailAndPlaceId(new Email(email), placeId))) {
-           throw new WishlistException(WISHLIST_ALREADY_EXIST);
+            throw new WishlistException(WISHLIST_ALREADY_EXIST);
         }
 
         Wishlist savedWishlist = store.registerWishlist(new Wishlist(new Email(email), placeId));

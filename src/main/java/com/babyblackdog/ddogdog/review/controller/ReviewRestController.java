@@ -65,7 +65,8 @@ public class ReviewRestController {
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReviewResponses> getReviewsByHotelId(@RequestParam("hotelId") Long hotelId, Pageable pageable) {
+    public ResponseEntity<ReviewResponses> getReviewsByHotelId(@RequestParam("hotelId") Long hotelId,
+            Pageable pageable) {
 
         ReviewResults retrievedReviewsResult = facade.findReviewsByHotelId(hotelId, pageable);
         return ResponseEntity

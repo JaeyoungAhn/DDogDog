@@ -23,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewStore store;
     private final ReviewReader reader;
     private final JwtSimpleAuthentication authentication;
-  
+
     public ReviewServiceImpl(ReviewStore store, ReviewReader reader, JwtSimpleAuthentication authentication) {
         this.store = store;
         this.reader = reader;
