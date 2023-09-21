@@ -1,18 +1,15 @@
 package com.babyblackdog.ddogdog.coupon.domain;
 
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponName;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponPeriod;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponType;
 import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountValue;
-import com.babyblackdog.ddogdog.place.model.Room;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
@@ -24,9 +21,8 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @Column(name = "room_id")
+    private Long roomId;
 
     @Embedded
     private CouponName couponName;
@@ -46,22 +42,25 @@ public class Coupon {
     @Column(name = "remaining_count")
     private Long remainingCount;
 
-    @Column(name = "start_date")
-    private LocalDate startDate;
-
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    @Embedded
+    private CouponPeriod couponPeriod;
 
     public Coupon(CouponName couponName, DiscountValue discountValue, String promoCode,
             Long issueCount,
-            LocalDate startDate,
-            LocalDate endDate) {
+            CouponPeriod couponPeriod) {
         this.couponName = couponName;
         this.discountValue = discountValue;
         this.promoCode = promoCode;
         this.issueCount = issueCount;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.couponPeriod = couponPeriod;
+    }
+
+    public Coupon(Long roomId, CouponName couponName, DiscountValue discountValue,
+            CouponPeriod couponPeriod) {
+        this.roomId = roomId;
+        this.couponName = couponName;
+        this.discountValue = discountValue;
+        this.couponPeriod = couponPeriod;
     }
 
     protected Coupon() {
@@ -95,19 +94,19 @@ public class Coupon {
         return remainingCount;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
     public void setCouponType(CouponType couponType) {
         this.couponType = couponType;
     }
 
     public void setRemainingCount(Long remainingCount) {
         this.remainingCount = remainingCount;
+    }
+
+    public LocalDate getStartDate() {
+        return couponPeriod.getStartDate();
+    }
+
+    public LocalDate getEndDate() {
+        return couponPeriod.getEndDate();
     }
 }

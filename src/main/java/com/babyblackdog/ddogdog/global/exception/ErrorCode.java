@@ -63,7 +63,8 @@ public enum ErrorCode {
 
     // coupon
     INVALID_DISCOUNT_TYPE(BAD_REQUEST, "C-100", "유효하지 않은 쿠폰 타입입니다."),
-    INVALID_DISCOUNT_VALUE(BAD_REQUEST, "C-110", "유효하지 않은 할인값입니다."),
+    INVALID_DISCOUNT_VALUE(BAD_REQUEST, "C-110", "유효하지 않은 할인 값입니다."),
+    INVALID_COUPON_PERIOD(BAD_REQUEST, "C-120", "유효하지 않은 쿠폰 기간입니다."),
     INVALID_COUPON_NAME(BAD_REQUEST, "C-120", "유효하지 않은 쿠폰명입니다."),
     INVALID_COUPON_STATUS(BAD_REQUEST, "C-200", "이미 사용된 쿠폰입니다."),
     INVALID_INSTANT_COUPON_DATE(BAD_REQUEST, "C-210", "이미 만료된 즉시 할인 쿠폰입니다."),
