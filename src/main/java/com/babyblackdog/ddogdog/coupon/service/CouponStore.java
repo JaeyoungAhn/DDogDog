@@ -1,6 +1,5 @@
 package com.babyblackdog.ddogdog.coupon.service;
 
-import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
 
