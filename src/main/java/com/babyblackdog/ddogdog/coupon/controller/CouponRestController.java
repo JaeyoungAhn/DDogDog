@@ -9,18 +9,18 @@ import com.babyblackdog.ddogdog.coupon.controller.dto.request.InstantCouponCreat
 import com.babyblackdog.ddogdog.coupon.controller.dto.request.ManualCouponClaimRequest;
 import com.babyblackdog.ddogdog.coupon.controller.dto.request.ManualCouponCreationRequest;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.InstantCouponCreationResponse;
-import com.babyblackdog.ddogdog.coupon.controller.dto.response.InstantCouponResponses;
+import com.babyblackdog.ddogdog.coupon.controller.dto.response.InstantCouponFindResponses;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.InstantCouponUsageResponse;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponClaimResponse;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponCreationResponse;
-import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponResponses;
+import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponFindResponses;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponUsageResponse;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponClaimResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponUsageResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -80,23 +80,23 @@ public class CouponRestController {
     }
 
     @GetMapping(value = "/manual/available", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ManualCouponResponses> getAvailableManualCoupon() {
+    public ResponseEntity<ManualCouponFindResponses> getAvailableManualCoupon() {
         Email email = authentication.getEmail();
 
-        ManualCouponResults manualCouponResults = facade.findAvailableManualCouponsByEmail(email);
+        ManualCouponFindResults manualCouponFindResults = facade.findAvailableManualCouponsByEmail(email);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ManualCouponResponses.of(manualCouponResults));
+                .body(ManualCouponFindResponses.of(manualCouponFindResults));
     }
 
     @GetMapping(value = "/instant", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<InstantCouponResponses> getAvailableInstantCoupon(@RequestParam Long hotelId) {
+    public ResponseEntity<InstantCouponFindResponses> getAvailableInstantCoupon(@RequestParam Long hotelId) {
 
-        InstantCouponResults instantCouponResults = facade.findAvailableInstantCouponsByHotelId(hotelId);
+        InstantCouponFindResults instantCouponFindResults = facade.findAvailableInstantCouponsByHotelId(hotelId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(InstantCouponResponses.of(instantCouponResults));
+                .body(InstantCouponFindResponses.of(instantCouponFindResults));
     }
 
     @PostMapping(value = "/manual/claim", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -116,7 +116,7 @@ public class CouponRestController {
     public ResponseEntity<ManualCouponUsageResponse> useManualCoupon(@PathVariable Long couponUsageId) {
         Email email = authentication.getEmail();
 
-        ManualCouponUsageResult manualCouponUsageResult = facade.useManualCoupon(couponUsageId);
+        ManualCouponUsageResult manualCouponUsageResult = facade.useManualCoupon(email, couponUsageId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(ManualCouponUsageResponse.of(manualCouponUsageResult));
@@ -126,7 +126,7 @@ public class CouponRestController {
     public ResponseEntity<InstantCouponUsageResponse> useInstantCoupon(@PathVariable Long couponId) {
         Email email = authentication.getEmail();
 
-        InstantCouponUsageResult instantCouponUsageResult = facade.useInstantCoupon();
+        InstantCouponUsageResult instantCouponUsageResult = facade.useInstantCoupon(email, couponId);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
