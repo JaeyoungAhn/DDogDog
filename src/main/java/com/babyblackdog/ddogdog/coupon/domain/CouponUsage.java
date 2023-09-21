@@ -60,14 +60,6 @@ public class CouponUsage {
         return email;
     }
 
-    public LocalDate getClaimDate() {
-        return claimDate;
-    }
-
-    public LocalDate getActivationDate() {
-        return activationDate;
-    }
-
     public CouponUsageStatus getCouponUsageStatus() {
         return couponUsageStatus;
     }
