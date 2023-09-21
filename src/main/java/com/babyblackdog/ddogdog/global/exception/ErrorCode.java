@@ -62,9 +62,13 @@ public enum ErrorCode {
     INVALID_POINT(BAD_REQUEST, "P-100", "포인트 값은 양수여야 합니다."),
 
     // coupon
+    INVALID_DISCOUNT_TYPE(BAD_REQUEST, "C-100", "유효하지 않은 쿠폰 타입입니다."),
+    INVALID_DISCOUNT_VALUE(BAD_REQUEST, "C-110", "유효하지 않은 할인값입니다."),
+    INVALID_COUPON_NAME(BAD_REQUEST, "C-120", "유효하지 않은 쿠폰명입니다."),
     INVALID_COUPON_STATUS(BAD_REQUEST, "C-200", "이미 사용된 쿠폰입니다."),
     INVALID_INSTANT_COUPON_DATE(BAD_REQUEST, "C-210", "이미 만료된 즉시 할인 쿠폰입니다."),
     COUPON_PERMISSION_DENIED(FORBIDDEN, "C-300", "쿠폰 생성에 대한 권한이 없습니다.");
+
 
 
 

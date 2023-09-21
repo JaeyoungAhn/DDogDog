@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.coupon.domain.vo;
 
-public class DiscountType {
-
+public enum DiscountType {
+    FIXED,
+    PERCENT
 }

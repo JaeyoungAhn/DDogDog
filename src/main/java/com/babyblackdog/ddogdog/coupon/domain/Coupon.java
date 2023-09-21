@@ -1,7 +1,8 @@
 package com.babyblackdog.ddogdog.coupon.domain;
 
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponName;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponType;
-import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountType;
+import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountValue;
 import com.babyblackdog.ddogdog.place.model.Room;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -27,17 +28,17 @@ public class Coupon {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @Column(name = "coupon_name")
-    private String couponName;
+    @Embedded
+    private CouponName couponName;
 
     @Embedded
     private CouponType couponType;
 
     @Embedded
-    private DiscountType discountType;
+    private DiscountValue discountValue;
 
-    @Column(name = "redemption_code")
-    private String redemptionCode;
+    @Column(name = "promo_code")
+    private String promoCode;
 
     @Column(name = "issue_count")
     private Long issueCount;
@@ -51,12 +52,13 @@ public class Coupon {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    public Coupon(String couponName, DiscountType discountType, String redemptionCode, Long issueCount,
+    public Coupon(CouponName couponName, DiscountValue discountValue, String promoCode,
+            Long issueCount,
             LocalDate startDate,
             LocalDate endDate) {
         this.couponName = couponName;
-        this.discountType = discountType;
-        this.redemptionCode = redemptionCode;
+        this.discountValue = discountValue;
+        this.promoCode = promoCode;
         this.issueCount = issueCount;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -69,7 +71,7 @@ public class Coupon {
         return id;
     }
 
-    public String getCouponName() {
+    public CouponName getCouponName() {
         return couponName;
     }
 
@@ -77,12 +79,12 @@ public class Coupon {
         return couponType;
     }
 
-    public DiscountType getDiscountType() {
-        return discountType;
+    public DiscountValue getDiscountValue() {
+        return discountValue;
     }
 
-    public String getRedemptionCode() {
-        return redemptionCode;
+    public String getPromoCode() {
+        return promoCode;
     }
 
     public Long getIssueCount() {
