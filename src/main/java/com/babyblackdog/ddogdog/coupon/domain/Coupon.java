@@ -37,18 +37,22 @@ public class Coupon {
     @Column(name = "remaining_count")
     private Long remainingCount;
 
-    @Column(name = "expire_date")
-    private LocalDate expireDate;
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     public Coupon(String couponName, CouponType couponType, DiscountType discountType, String redemptionCode,
-            Long issueCount, Long remainingCount, LocalDate expireDate) {
+            Long issueCount, Long remainingCount, LocalDate startDate, LocalDate endDate) {
         this.couponName = couponName;
         this.couponType = couponType;
         this.discountType = discountType;
         this.redemptionCode = redemptionCode;
         this.issueCount = issueCount;
         this.remainingCount = remainingCount;
-        this.expireDate = expireDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     protected Coupon() {
@@ -82,9 +86,11 @@ public class Coupon {
         return remainingCount;
     }
 
-    public LocalDate getExpireDate() {
-        return expireDate;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 }

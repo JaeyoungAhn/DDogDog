@@ -4,6 +4,8 @@ import com.babyblackdog.ddogdog.common.auth.Email;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +36,9 @@ public class CouponUsage {
     @Column(name = "activation_date")
     private LocalDate activationDate;
 
+    @Enumerated(EnumType.STRING)
+    private CouponUsageStatus couponUsageStatus;
+
     public Coupon getCoupon() {
         return coupon;
     }
@@ -48,5 +53,17 @@ public class CouponUsage {
 
     public LocalDate getActivationDate() {
         return activationDate;
+    }
+
+    public CouponUsageStatus getCouponUsageStatus() {
+        return couponUsageStatus;
+    }
+
+    public void setActivationDate(LocalDate activationDate) {
+        this.activationDate = activationDate;
+    }
+
+    public void setCouponUsageStatus(CouponUsageStatus couponUsageStatus) {
+        this.couponUsageStatus = couponUsageStatus;
     }
 }
