@@ -1,13 +1,13 @@
 package com.babyblackdog.ddogdog.coupon.application;
 
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INSTANT_COUPON_DATE_NOT_VALID;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_INSTANT_COUPON_DATE;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON_STATUS;
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.PERMISSION_DENIED_COUPON;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_PERMISSION_DENIED;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
-import com.babyblackdog.ddogdog.coupon.domain.CouponUsageStatus;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponUsageStatus;
 import com.babyblackdog.ddogdog.coupon.service.CouponService;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
@@ -44,7 +44,7 @@ public class CouponFacade {
             LocalDate endDate) {
 
         if (!userAccessorService.isWoonYoungJa(email)) {
-            throw new CouponException(PERMISSION_DENIED_COUPON);
+            throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
         return service.registerManualCoupon(couponName, discountType, discountValue, promoCode, issueCount, startDate,
@@ -56,7 +56,7 @@ public class CouponFacade {
             LocalDate startDate, LocalDate endDate) {
 
         if (!placeAccessService.hasRoomAccess(email, roomId)) {
-            throw new CouponException(PERMISSION_DENIED_COUPON);
+            throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
         return service.registerInstantCoupon(roomId, couponName, discountType, discountValue, startDate, endDate);
@@ -85,7 +85,7 @@ public class CouponFacade {
         CouponUsage retrievedCouponUsage = service.findCouponUsageById(couponUsageId);
 
         if (doesNotMatch(email, retrievedCouponUsage.getEmail())) {
-            throw new CouponException(PERMISSION_DENIED_COUPON);
+            throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
         if (statusNotValid(retrievedCouponUsage)) {
@@ -97,7 +97,7 @@ public class CouponFacade {
         retrievedCouponUsage.setCouponUsageStatus(changedCouponStatus);
         retrievedCouponUsage.setActivationDate(LocalDate.now());
 
-        return new ManualCouponUsageResult(changedCouponStatus);
+        return ManualCouponUsageResult.of(changedCouponStatus);
 
         // todo : 실제 가격 변동 처리..
         // todo : order에 couponUsageId가 notNull인 경우, 쿠폰 측에 할인후 가격을 요청
@@ -115,7 +115,7 @@ public class CouponFacade {
         Coupon retrievedCoupon = service.findCouponById(couponId);
 
         if (isDateNotBetween(retrievedCoupon.getStartDate(), retrievedCoupon.getEndDate())) {
-            throw new CouponException(INSTANT_COUPON_DATE_NOT_VALID);
+            throw new CouponException(INVALID_INSTANT_COUPON_DATE);
         }
 
         return service.useInstantCoupon(email, couponId);
@@ -129,12 +129,11 @@ public class CouponFacade {
         return (timeNow.isBefore(startDate) || timeNow.isAfter(endDate));
     }
 
-    @Transactional
     public void deleteInstantCoupon(Email email, Long couponId) {
         Long roomId = service.findRoomIdByCouponId(couponId);
 
         if (!placeAccessService.hasRoomAccess(email, roomId)) {
-            throw new CouponException(PERMISSION_DENIED_COUPON);
+            throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
         service.deleteInstantCoupon(couponId);
