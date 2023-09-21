@@ -7,8 +7,9 @@ public record ManualCouponFindResponse(Long couponUsageId, String couponName, St
                                        Double discountValue, LocalDate endDate) {
 
     public static ManualCouponFindResponse of(ManualCouponFindResult manualCouponFindResult) {
-        return new ManualCouponFindResponse(manualCouponFindResult.couponUsageId(), manualCouponFindResult.couponName(),
-                manualCouponFindResult.couponType(), manualCouponFindResult.discountType(),
+        return new ManualCouponFindResponse(manualCouponFindResult.couponUsageId(),
+                manualCouponFindResult.couponName().getValue(),
+                manualCouponFindResult.couponType().name(), manualCouponFindResult.discountType().name(),
                 manualCouponFindResult.discountValue(),
                 manualCouponFindResult.endDate());
     }

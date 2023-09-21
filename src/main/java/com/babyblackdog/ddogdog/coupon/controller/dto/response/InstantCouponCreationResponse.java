@@ -9,8 +9,8 @@ public record InstantCouponCreationResponse(Long couponId, Long roomId, String c
 
     public static InstantCouponCreationResponse of(InstantCouponCreationResult instantCouponCreationResult) {
         return new InstantCouponCreationResponse(instantCouponCreationResult.couponId(),
-                instantCouponCreationResult.roomId(), instantCouponCreationResult.couponName(),
-                instantCouponCreationResult.couponType(), instantCouponCreationResult.discountType(),
+                instantCouponCreationResult.roomId(), instantCouponCreationResult.couponName().getValue(),
+                instantCouponCreationResult.couponType().name(), instantCouponCreationResult.discountType().name(),
                 instantCouponCreationResult.discountValue(), instantCouponCreationResult.startDate(),
                 instantCouponCreationResult.endDate());
     }

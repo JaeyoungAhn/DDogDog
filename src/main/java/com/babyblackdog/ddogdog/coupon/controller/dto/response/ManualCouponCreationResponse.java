@@ -10,8 +10,8 @@ public record ManualCouponCreationResponse(Long couponId, String couponName, Str
 
     public static ManualCouponCreationResponse of(ManualCouponCreationResult manualCouponCreationResult) {
         return new ManualCouponCreationResponse(manualCouponCreationResult.couponId(),
-                manualCouponCreationResult.couponName(), manualCouponCreationResult.couponType(),
-                manualCouponCreationResult.discountType(), manualCouponCreationResult.discountValue(),
+                manualCouponCreationResult.couponName().getValue(), manualCouponCreationResult.couponType().name(),
+                manualCouponCreationResult.discountType().name(), manualCouponCreationResult.discountValue(),
                 manualCouponCreationResult.promoCode(), manualCouponCreationResult.issueCount(),
                 manualCouponCreationResult.remainingCount(), manualCouponCreationResult.startDate(),
                 manualCouponCreationResult.endDate());

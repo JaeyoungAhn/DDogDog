@@ -8,8 +8,8 @@ public record ManualCouponClaimResponse(Long couponUsageId, String couponName, S
 
     public static ManualCouponClaimResponse of(ManualCouponClaimResult manualCouponClaimResult) {
         return new ManualCouponClaimResponse(manualCouponClaimResult.couponUsageId(),
-                manualCouponClaimResult.couponName(),
-                manualCouponClaimResult.couponType(), manualCouponClaimResult.discountType(),
+                manualCouponClaimResult.couponName().getValue(),
+                manualCouponClaimResult.couponType().name(), manualCouponClaimResult.discountType().name(),
                 manualCouponClaimResult.discountValue(), manualCouponClaimResult.endDate());
     }
 }

@@ -8,8 +8,8 @@ public record InstantCouponFindResponse(Long couponId, Long roomId, String coupo
 
     public static InstantCouponFindResponse of(InstantCouponFindResult instantCouponFindResult) {
         return new InstantCouponFindResponse(instantCouponFindResult.couponId(), instantCouponFindResult.roomId(),
-                instantCouponFindResult.couponName(), instantCouponFindResult.couponType(),
-                instantCouponFindResult.discountType(),
+                instantCouponFindResult.couponName(), instantCouponFindResult.couponType().name(),
+                instantCouponFindResult.discountType().name(),
                 instantCouponFindResult.discountValue(), instantCouponFindResult.endDate());
     }
 }
