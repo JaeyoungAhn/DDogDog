@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.coupon.domain;
+package com.babyblackdog.ddogdog.coupon.domain.vo;
 
 public enum CouponUsageStatus {
     CLAIMED,
