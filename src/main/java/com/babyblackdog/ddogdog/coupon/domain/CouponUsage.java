@@ -40,6 +40,18 @@ public class CouponUsage {
     @Enumerated(EnumType.STRING)
     private CouponUsageStatus couponUsageStatus;
 
+    public CouponUsage(Email email, Coupon coupon) {
+        this.email = email;
+        this.coupon = coupon;
+    }
+
+    protected CouponUsage() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
     public Coupon getCoupon() {
         return coupon;
     }

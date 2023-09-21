@@ -70,6 +70,10 @@ public class Coupon {
         return id;
     }
 
+    public Long getRoomId() {
+        return roomId;
+    }
+
     public CouponName getCouponName() {
         return couponName;
     }
