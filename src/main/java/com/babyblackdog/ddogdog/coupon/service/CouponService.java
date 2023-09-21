@@ -68,12 +68,12 @@ public interface CouponService {
     Coupon findCouponByPromoCode(String promoCode);
 
     /**
-     * email, couponId 를 이용해 수동 할인권 수령
+     * email, coupon 를 이용해 수동 할인권 수령
      *
-     * @param email, promoCode
+     * @param email, coupon
      * @return ManualCouponClaimResult
      */
-    ManualCouponClaimResult registerManualCouponUsage(Email email, Long couponId);
+    ManualCouponClaimResult registerManualCouponUsage(Email email, Coupon coupon);
 
     /**
      * couponId 를 통해 Coupon 을 조회
@@ -84,12 +84,12 @@ public interface CouponService {
     Coupon findCouponById(Long couponId);
 
     /**
-     * email, couponId를 받아 email이 couponId에 저장된 값과 같으면 상태 변경
+     * email, coupon 을 받아 즉시 할인 쿠폰 적용
      *
-     * @param email, couponId
+     * @param email, coupon
      * @return InstantCouponUsageResult
      */
-    InstantCouponUsageResult useInstantCoupon(Email email, Long couponId);
+    InstantCouponUsageResult useInstantCoupon(Email email, Coupon coupon);
 
     /**
      * couponId 를 통해 RoomId 를 조회

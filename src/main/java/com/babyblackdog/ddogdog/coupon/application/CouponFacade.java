@@ -76,7 +76,7 @@ public class CouponFacade {
         Coupon retrievedCoupon = service.findCouponByPromoCode(promoCode);
 
         // todo : 동시성 문제
-        return service.registerManualCouponUsage(email, retrievedCoupon.getId());
+        return service.registerManualCouponUsage(email, retrievedCoupon);
     }
 
     @Transactional
@@ -118,7 +118,7 @@ public class CouponFacade {
             throw new CouponException(INVALID_INSTANT_COUPON_DATE);
         }
 
-        return service.useInstantCoupon(email, couponId);
+        return service.useInstantCoupon(email, retrievedCoupon);
 
         // todo : 실제 가격 변동 처리
         // todo : order에 couponUsageId가 notNull인 경우, 쿠폰 측에 할인 후 가격을 요청

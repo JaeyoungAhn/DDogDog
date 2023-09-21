@@ -89,8 +89,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    public ManualCouponClaimResult registerManualCouponUsage(Email email, Long couponId) {
-        CouponUsage savingCouponUsage = new CouponUsage(email, couponId);
+    public ManualCouponClaimResult registerManualCouponUsage(Email email, Coupon coupon) {
+        CouponUsage savingCouponUsage = new CouponUsage(email, coupon);
         CouponUsage savedCouponUsage = store.registerCouponUsage(savingCouponUsage);
 
         return ManualCouponClaimResult.of(savedCouponUsage);
@@ -103,8 +103,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    public InstantCouponUsageResult useInstantCoupon(Email email, Long couponId) {
-        CouponUsage savingCouponUsage = new CouponUsage(email, couponId);
+    public InstantCouponUsageResult useInstantCoupon(Email email, Coupon coupon) {
+        CouponUsage savingCouponUsage = new CouponUsage(email, coupon);
         CouponUsage savedCouponUsage = store.registerCouponUsage(savingCouponUsage);
 
         return InstantCouponUsageResult.of(savedCouponUsage);
