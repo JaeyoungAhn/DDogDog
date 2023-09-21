@@ -1,7 +1,9 @@
 package com.babyblackdog.ddogdog.coupon.service.dto;
 
-import com.babyblackdog.ddogdog.coupon.domain.CouponUsageStatus;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponUsageStatus;
 
 public record ManualCouponUsageResult(CouponUsageStatus status) {
 
+    public static ManualCouponUsageResult of(CouponUsageStatus changedCouponStatus) {
+    }
 }
