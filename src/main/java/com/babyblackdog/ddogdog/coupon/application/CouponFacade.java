@@ -1,6 +1,14 @@
 package com.babyblackdog.ddogdog.coupon.application;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INSTANT_COUPON_DATE_NOT_VALID;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON_STATUS;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.PERMISSION_DENIED_COUPON;
+
 import com.babyblackdog.ddogdog.common.auth.Email;
+import com.babyblackdog.ddogdog.coupon.domain.Coupon;
+import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
+import com.babyblackdog.ddogdog.coupon.domain.CouponUsageStatus;
+import com.babyblackdog.ddogdog.coupon.service.CouponService;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
@@ -8,91 +16,127 @@ import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponClaimResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponUsageResult;
+import com.babyblackdog.ddogdog.global.exception.CouponException;
+import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
+import com.babyblackdog.ddogdog.user.accessor.UserAccessorService;
 import java.time.LocalDate;
+import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CouponFacade {
+
+    private final CouponService service;
+    private final PlaceAccessService placeAccessService;
+    private final UserAccessorService userAccessorService;
+
+    public CouponFacade(CouponService service, PlaceAccessService placeAccessService,
+            UserAccessorService userAccessorService) {
+        this.service = service;
+        this.placeAccessService = placeAccessService;
+        this.userAccessorService = userAccessorService;
+    }
 
     public ManualCouponCreationResult registerManualCoupon(Email email, String couponName, String discountType,
             Double discountValue,
             String promoCode, Long issueCount, LocalDate startDate,
             LocalDate endDate) {
 
-        // todo: 똑독의 관리자가 아니면 접근 금지
+        if (!userAccessorService.isWoonYoungJa(email)) {
+            throw new CouponException(PERMISSION_DENIED_COUPON);
+        }
 
-        // todo: 유저 서비스에 이메일을 전달하고 관리자인지 문의 => 유저 도메인
-
-        return null;
+        return service.registerManualCoupon(couponName, discountType, discountValue, promoCode, issueCount, startDate,
+                endDate);
     }
 
     public InstantCouponCreationResult registerInstantCoupon(Email email, Long roomId, String couponName,
             String discountType, Double discountValue,
             LocalDate startDate, LocalDate endDate) {
 
-        // todo: roomId의 주인이 아니면 접근 금지
+        if (!placeAccessService.hasRoomAccess(email, roomId)) {
+            throw new CouponException(PERMISSION_DENIED_COUPON);
+        }
 
-        // todo: email과 roomId를 place도메인에 전달해서 email의 소유주와 숙소들 중 roomId가 존재하는지 확인
-
-        return null;
+        return service.registerInstantCoupon(roomId, couponName, discountType, discountValue, startDate, endDate);
     }
 
     public ManualCouponFindResults findAvailableManualCouponsByEmail(Email email) {
-
-        return null;
+        return service.findAvailableManualCouponsByEmail(email);
     }
 
     public InstantCouponFindResults findAvailableInstantCouponsByHotelId(Long hotelId) {
+        List<Long> roomIds = placeAccessService.findRoomIdsOfHotel(hotelId);
 
-        // todo: Place에 HotelId를 주고 해당하는 List<roomId>를 받아옴
-
-        // todo: roomIds를 이용해서
-
-        return null;
+        return service.findAvailableInstantCouponsByRoomIds(roomIds);
     }
 
     public ManualCouponClaimResult claimManualCoupon(Email email, String promoCode) {
+        Coupon retrievedCoupon = service.findCouponByPromoCode(promoCode);
 
-        // todo: promoCode를 이용해서 couponId 받아오기 => 서비스1
-
-        // todo: couponId와 email을 이용해 couponUsage 만들기 => 서비스2
-
-        // todo : 동시성 문제 1개를 빼고 나머지는 순차적으로 받아오면 되지만 마지막 1개의 경우는?
-
-        return null;
+        // todo : 동시성 문제
+        return service.registerManualCouponUsage(email, retrievedCoupon.getId());
     }
 
+    @Transactional
     public ManualCouponUsageResult useManualCoupon(Email email, Long couponUsageId) {
 
-        // todo: couponUsageId의 이메일과 일치하지 않으면 접근 금지
+        CouponUsage retrievedCouponUsage = service.findCouponUsageById(couponUsageId);
+
+        if (doesNotMatch(email, retrievedCouponUsage.getEmail())) {
+            throw new CouponException(PERMISSION_DENIED_COUPON);
+        }
+
+        if (statusNotValid(retrievedCouponUsage)) {
+            throw new CouponException(INVALID_COUPON_STATUS);
+        }
+
+        CouponUsageStatus changedCouponStatus = CouponUsageStatus.USED;
+
+        retrievedCouponUsage.setCouponUsageStatus(changedCouponStatus);
+        retrievedCouponUsage.setActivationDate(LocalDate.now());
+
+        return new ManualCouponUsageResult(changedCouponStatus);
 
         // todo : 실제 가격 변동 처리..
-
         // todo : order에 couponUsageId가 notNull인 경우, 쿠폰 측에 할인후 가격을 요청
-        // todo : coupon
+    }
 
-        return null;
+    private static boolean statusNotValid(CouponUsage retrievedCouponUsage) {
+        return retrievedCouponUsage.getCouponUsageStatus() != CouponUsageStatus.CLAIMED;
+    }
+
+    private static boolean doesNotMatch(Email email, Email retrievedEmail) {
+        return !retrievedEmail.getValue().equals(email.getValue());
     }
 
     public InstantCouponUsageResult useInstantCoupon(Email email, Long couponId) {
+        Coupon retrievedCoupon = service.findCouponById(couponId);
 
-        // todo : email과 couponId에 저장된 이메일이 같으면 상태 변경
+        if (isDateNotBetween(retrievedCoupon.getStartDate(), retrievedCoupon.getEndDate())) {
+            throw new CouponException(INSTANT_COUPON_DATE_NOT_VALID);
+        }
+
+        return service.useInstantCoupon(email, couponId);
 
         // todo : 실제 가격 변동 처리
-
         // todo : order에 couponUsageId가 notNull인 경우, 쿠폰 측에 할인 후 가격을 요청
-
-        return null;
     }
 
+    private static boolean isDateNotBetween(LocalDate startDate, LocalDate endDate) {
+        LocalDate timeNow = LocalDate.now();
+        return (timeNow.isBefore(startDate) || timeNow.isAfter(endDate));
+    }
+
+    @Transactional
     public void deleteInstantCoupon(Email email, Long couponId) {
+        Long roomId = service.findRoomIdByCouponId(couponId);
 
-        // todo: couponId의 roomId 주인이 아니면 접근 금지
+        if (!placeAccessService.hasRoomAccess(email, roomId)) {
+            throw new CouponException(PERMISSION_DENIED_COUPON);
+        }
 
-        // todo: couponId를 통해 roomId를 받아옴 => 쿠폰 도메인
-
-        // todo: email과 roomId를 place도메인에 전달해서 email의 소유주와 숙소들 중 roomId가 존재하는지 확인
-
-        return;
+        service.deleteInstantCoupon(couponId);
     }
 }
