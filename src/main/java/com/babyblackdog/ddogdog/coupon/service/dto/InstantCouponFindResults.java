@@ -1,7 +1,7 @@
 package com.babyblackdog.ddogdog.coupon.service.dto;
 
-import org.springframework.data.domain.Page;
+import java.util.List;
 
-public record InstantCouponFindResults(Page<InstantCouponFindResult> instantCouponResultPage) {
+public record InstantCouponFindResults(List<InstantCouponFindResult> instantCouponResultPage) {
 
 }
