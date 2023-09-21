@@ -2,8 +2,10 @@ package com.babyblackdog.ddogdog.coupon.service;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
-import com.babyblackdog.ddogdog.coupon.domain.vo.CouponType;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponName;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponPeriod;
+import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountValue;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
@@ -22,15 +24,25 @@ public class CouponServiceImpl implements CouponService {
     private final CouponStore store;
     private final CouponReader reader;
 
+    public CouponServiceImpl(CouponStore store, CouponReader reader) {
+        this.store = store;
+        this.reader = reader;
+    }
+
     @Override
     @Transactional
     public ManualCouponCreationResult registerManualCoupon(String couponName, String discountType, Double discountValue,
             String promoCode, Long issueCount, LocalDate startDate, LocalDate endDate) {
-        Coupon savingCoupon = new Coupon(couponName, discountType, discountValue, promoCode, issueCount, startDate, endDate);
+        Coupon savingCoupon = new Coupon(
+                new CouponName(couponName),
+                DiscountValue.from(discountType, discountValue),
+                promoCode,
+                issueCount,
+                new CouponPeriod(startDate, endDate)
+        );
 
-        savingCoupon.setCouponType(CouponType.MANUAL);
         savingCoupon.setRemainingCount(issueCount);
-        Coupon savedCoupon = store.registerManualCoupon(savingCoupon);
+        Coupon savedCoupon = store.registerCoupon(savingCoupon);
 
         return ManualCouponCreationResult.of(savedCoupon);
     }
@@ -39,60 +51,73 @@ public class CouponServiceImpl implements CouponService {
     @Transactional
     public InstantCouponCreationResult registerInstantCoupon(Long roomId, String couponName, String discountType,
             Double discountValue, LocalDate startDate, LocalDate endDate) {
-        return null;
+        Coupon savingCoupon = new Coupon(
+                roomId,
+                new CouponName(couponName),
+                DiscountValue.from(discountType, discountValue),
+                new CouponPeriod(startDate, endDate)
+        );
+
+        Coupon savedCoupon = store.registerCoupon(savingCoupon);
+
+        return InstantCouponCreationResult.of(savedCoupon);
     }
 
     @Override
     public ManualCouponFindResults findAvailableManualCouponsByEmail(Email email) {
-        return null;
+        List<CouponUsage> retrievedManualCoupons = reader.findManualCouponsByEmail(email);
+
+        return ManualCouponFindResults.of(retrievedManualCoupons);
     }
 
     @Override
     public InstantCouponFindResults findAvailableInstantCouponsByRoomIds(List<Long> roomIds) {
-        return null;
-    }
+        List<Coupon> retrievedInstantCoupons = reader.findInstantCouponsByRoomIds(roomIds);
 
-    @Override
-    @Transactional
-    public ManualCouponClaimResult claimManualCoupon(Email email, String promoCode) {
-        return null;
+        return InstantCouponFindResults.of(retrievedInstantCoupons);
     }
 
     @Override
     public CouponUsage findCouponUsageById(Long couponUsageId) {
-        return null;
+        return reader.findCouponUsageById(couponUsageId);
     }
 
     @Override
     public Coupon findCouponByPromoCode(String promoCode) {
-        return null;
+        return reader.findCouponByPromoCode(promoCode);
     }
 
     @Override
     @Transactional
     public ManualCouponClaimResult registerManualCouponUsage(Email email, Long couponId) {
-        return null;
+        CouponUsage savingCouponUsage = new CouponUsage(email, couponId);
+        CouponUsage savedCouponUsage = store.registerCouponUsage(savingCouponUsage);
+
+        return ManualCouponClaimResult.of(savedCouponUsage);
     }
 
     @Override
     public Coupon findCouponById(Long couponId) {
-        return null;
+        return reader.findCouponById(couponId);
     }
 
     @Override
     @Transactional
     public InstantCouponUsageResult useInstantCoupon(Email email, Long couponId) {
-        return null;
+        CouponUsage savingCouponUsage = new CouponUsage(email, couponId);
+        CouponUsage savedCouponUsage = store.registerCouponUsage(savingCouponUsage);
+
+        return InstantCouponUsageResult.of(savedCouponUsage);
     }
 
     @Override
     public Long findRoomIdByCouponId(Long couponId) {
-        return null;
+        return reader.findRoomIdByCouponId(couponId);
     }
 
     @Override
     @Transactional
     public void deleteInstantCoupon(Long couponId) {
-
+        store.deleteInstantCoupon(couponId);
     }
 }

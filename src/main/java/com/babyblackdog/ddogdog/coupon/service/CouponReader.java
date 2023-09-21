@@ -10,4 +10,12 @@ public interface CouponReader {
     List<CouponUsage> findManualCouponsByEmail(Email email);
 
     List<Coupon> findInstantCouponsByRoomIds(List<Long> roomIds);
+
+    CouponUsage findCouponUsageById(Long couponUsageId);
+
+    Coupon findCouponByPromoCode(String promoCode);
+
+    Coupon findCouponById(Long couponId);
+
+    Long findRoomIdByCouponId(Long couponId);
 }

@@ -52,14 +52,6 @@ public interface CouponService {
     InstantCouponFindResults findAvailableInstantCouponsByRoomIds(List<Long> roomIds);
 
     /**
-     * email, promoCode 를 이용해 유저가 수동 할인 쿠폰을 수령
-     *
-     * @param email, promoCode
-     * @return ManualCouponClaimResult
-     */
-    ManualCouponClaimResult claimManualCoupon(Email email, String promoCode);
-
-    /**
      * couponUsageId 를 이용해 CouponUsage를 조회
      *
      * @param couponUsageId
