@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.coupon.domain;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponUsageStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

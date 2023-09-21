@@ -2,12 +2,16 @@ package com.babyblackdog.ddogdog.coupon.domain;
 
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponType;
 import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountType;
+import com.babyblackdog.ddogdog.place.model.Room;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
@@ -18,6 +22,10 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private Room room;
 
     @Column(name = "coupon_name")
     private String couponName;
@@ -43,14 +51,13 @@ public class Coupon {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    public Coupon(String couponName, CouponType couponType, DiscountType discountType, String redemptionCode,
-            Long issueCount, Long remainingCount, LocalDate startDate, LocalDate endDate) {
+    public Coupon(String couponName, DiscountType discountType, String redemptionCode, Long issueCount,
+            LocalDate startDate,
+            LocalDate endDate) {
         this.couponName = couponName;
-        this.couponType = couponType;
         this.discountType = discountType;
         this.redemptionCode = redemptionCode;
         this.issueCount = issueCount;
-        this.remainingCount = remainingCount;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -92,5 +99,13 @@ public class Coupon {
 
     public LocalDate getEndDate() {
         return endDate;
+    }
+
+    public void setCouponType(CouponType couponType) {
+        this.couponType = couponType;
+    }
+
+    public void setRemainingCount(Long remainingCount) {
+        this.remainingCount = remainingCount;
     }
 }
