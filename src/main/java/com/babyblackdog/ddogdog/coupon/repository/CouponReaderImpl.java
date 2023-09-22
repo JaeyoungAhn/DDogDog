@@ -53,4 +53,11 @@ public class CouponReaderImpl implements CouponReader {
     public Long findRoomIdByCouponId(Long couponId) {
         return couponRepository.findRoomIdById(couponId);
     }
+
+    @Override
+    public Coupon findCouponByCouponUsageId(Long couponUsageId) {
+        CouponUsage retrievedCouponUsage = couponUsageRepository.findWithCouponById(couponUsageId)
+                .orElseThrow(() -> new CouponException(COUPON_USAGE_NOT_FOUND));
+        return retrievedCouponUsage.getCoupon();
+    }
 }
