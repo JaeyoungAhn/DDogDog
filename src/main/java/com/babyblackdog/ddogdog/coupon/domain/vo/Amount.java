@@ -14,7 +14,15 @@ public record Amount(Double value) implements Discountable {
 
     @Override
     public Point getDiscountAmount(Point originalPrice) {
+        if (discountAmountIsBiggerThanOriginalPrice(originalPrice)) {
+            return originalPrice;
+        }
+
         return new Point(value().longValue());
+    }
+
+    private boolean discountAmountIsBiggerThanOriginalPrice(Point originalPrice) {
+        return originalPrice.getValue() < value().longValue();
     }
 
     private void assertHasNoDecimalPart(Double value) {
