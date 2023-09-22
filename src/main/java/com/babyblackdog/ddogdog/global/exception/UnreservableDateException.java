@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.global.exception;
 
 public class UnreservableDateException extends RuntimeException {
+
     private final ErrorCode errorCode;
 
     public UnreservableDateException(ErrorCode errorCode) {
