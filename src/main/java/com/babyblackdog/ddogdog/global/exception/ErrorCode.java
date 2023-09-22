@@ -71,6 +71,7 @@ public enum ErrorCode {
     INVALID_COUPON_STATUS(BAD_REQUEST, "C-200", "이미 사용된 쿠폰입니다."),
     INVALID_INSTANT_COUPON_DATE(BAD_REQUEST, "C-210", "이미 만료된 즉시 할인 쿠폰입니다."),
     COUPON_ALREADY_CLAIMED(BAD_REQUEST, "C-220", "이미 수령한 쿠폰입니다."),
+    COUPON_OUT_OF_STOCK(BAD_REQUEST, "C-230", "쿠폰이 전부 소진 되었습니다."),
     COUPON_PERMISSION_DENIED(FORBIDDEN, "C-300", "쿠폰 생성에 대한 권한이 없습니다.");
 
 

@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.coupon.application;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_NOT_FOUND;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_OUT_OF_STOCK;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_PERMISSION_DENIED;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON_STATUS;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_DISCOUNT_TYPE;
@@ -98,12 +99,17 @@ public class CouponFacade {
         return service.findAvailableInstantCouponsByRoomIds(roomIds);
     }
 
+    @Transactional
     public ManualCouponClaimResult claimManualCoupon(Email email, String promoCode) {
         Coupon retrievedCoupon = service.findCouponByPromoCode(promoCode);
 
-        // todo : 수령 전 1개 이상이어야만 수령 가능
+        Long remainingCount = retrievedCoupon.getRemainingCount();
 
-        // todo : 수령 전 남은 갯수 줄이기
+        if (remainingCount <= 0) {
+            throw new CouponException(COUPON_OUT_OF_STOCK);
+        }
+
+        retrievedCoupon.setRemainingCount(remainingCount - 1);
 
         // todo : 동시성 문제
         return service.registerManualCouponUsage(email, retrievedCoupon);
