@@ -3,6 +3,7 @@ package com.babyblackdog.ddogdog.place.service;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.HOTEL_NOT_FOUND;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.ROOM_NOT_FOUND;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
 import com.babyblackdog.ddogdog.place.model.Hotel;
@@ -93,5 +94,11 @@ public class PlaceServiceImpl implements
     @Override
     public boolean existsHotel(Long hotelId) {
         return hotelRepository.existsById(hotelId);
+    }
+
+    @Override
+    public HotelResult findHotelByEmail(Email email) {
+        Hotel hotel = hotelRepository.findByAdminEmail(email);
+        return HotelResult.of(hotel);
     }
 }

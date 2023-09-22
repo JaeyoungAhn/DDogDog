@@ -2,10 +2,12 @@ package com.babyblackdog.ddogdog.place.accessor;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.HOTEL_NOT_FOUND;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.global.exception.RatingException;
 import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
 import com.babyblackdog.ddogdog.place.repository.RatingRepository;
 import com.babyblackdog.ddogdog.place.service.PlaceService;
+import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import com.babyblackdog.ddogdog.place.service.dto.RoomResult;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -49,5 +51,10 @@ public class PlaceAccessServiceImpl implements PlaceAccessService {
     @Override
     public boolean isHotelValid(Long hotelId) {
         return placeService.existsHotel(hotelId);
+    }
+
+    @Override
+    public HotelResult findHotelByEmail(Email email) {
+        return placeService.findHotelByEmail(email);
     }
 }
