@@ -112,26 +112,26 @@ public class CouponRestController {
                 .body(ManualCouponClaimResponse.of(manualCouponClaimResult));
     }
 
-    @PatchMapping(value = "/manual/{couponUsageId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ManualCouponUsageResponse> useManualCoupon(@PathVariable Long couponUsageId) {
-        Email email = authentication.getEmail();
-
-        ManualCouponUsageResult manualCouponUsageResult = facade.useManualCoupon(email, couponUsageId);
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .body(ManualCouponUsageResponse.of(manualCouponUsageResult));
-    }
-
-    @PostMapping(value = "/{couponId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InstantCouponUsageResponse> useInstantCoupon(@PathVariable Long couponId) {
-        Email email = authentication.getEmail();
-
-        InstantCouponUsageResult instantCouponUsageResult = facade.useInstantCoupon(email, couponId);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(InstantCouponUsageResponse.of(instantCouponUsageResult));
-    }
+//    @PatchMapping(value = "/manual/{couponUsageId}", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+//    public ResponseEntity<ManualCouponUsageResponse> useManualCoupon(@PathVariable Long couponUsageId) {
+//        Email email = authentication.getEmail();
+//
+//        ManualCouponUsageResult manualCouponUsageResult = facade.useManualCoupon(email, couponUsageId);
+//        return ResponseEntity
+//                .status(HttpStatus.NO_CONTENT)
+//                .body(ManualCouponUsageResponse.of(manualCouponUsageResult));
+//    }
+//
+//    @PostMapping(value = "/{couponId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<InstantCouponUsageResponse> useInstantCoupon(@PathVariable Long couponId) {
+//        Email email = authentication.getEmail();
+//
+//        InstantCouponUsageResult instantCouponUsageResult = facade.useInstantCoupon(email, couponId);
+//
+//        return ResponseEntity
+//                .status(HttpStatus.CREATED)
+//                .body(InstantCouponUsageResponse.of(instantCouponUsageResult));
+//    }
 
     @DeleteMapping(value = "/{couponId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> removeInstantCoupon(@PathVariable Long couponId) {

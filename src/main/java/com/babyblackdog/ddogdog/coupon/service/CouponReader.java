@@ -18,4 +18,6 @@ public interface CouponReader {
     Coupon findCouponById(Long couponId);
 
     Long findRoomIdByCouponId(Long couponId);
+
+    Coupon findCouponByCouponUsageId(Long couponUsageId);
 }

@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.coupon.domain.vo;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_DISCOUNT_VALUE;
 
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.CouponException;
 
 public record Amount(Double value) implements Discountable {
@@ -12,8 +13,8 @@ public record Amount(Double value) implements Discountable {
     }
 
     @Override
-    public Double applyDiscount(Double originalPrice) {
-        return originalPrice - value();
+    public Point getDiscountAmount(Point originalPrice) {
+        return new Point(value().longValue());
     }
 
     private void assertHasNoDecimalPart(Double value) {

@@ -1,10 +1,13 @@
 package com.babyblackdog.ddogdog.coupon.application;
 
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_INSTANT_COUPON_DATE;
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON_STATUS;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_PERMISSION_DENIED;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON_STATUS;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_DISCOUNT_TYPE;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_INSTANT_COUPON_DATE;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
+import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponUsageStatus;
@@ -30,12 +33,14 @@ public class CouponFacade {
     private final CouponService service;
     private final PlaceAccessService placeAccessService;
     private final UserAccessorService userAccessorService;
+    private final JwtSimpleAuthentication authentication;
 
     public CouponFacade(CouponService service, PlaceAccessService placeAccessService,
-            UserAccessorService userAccessorService) {
+            UserAccessorService userAccessorService, JwtSimpleAuthentication authentication) {
         this.service = service;
         this.placeAccessService = placeAccessService;
         this.userAccessorService = userAccessorService;
+        this.authentication = authentication;
     }
 
     public ManualCouponCreationResult registerManualCoupon(Email email, String couponName, String discountType,
@@ -75,6 +80,10 @@ public class CouponFacade {
     public ManualCouponClaimResult claimManualCoupon(Email email, String promoCode) {
         Coupon retrievedCoupon = service.findCouponByPromoCode(promoCode);
 
+        // todo : 수령 전 1개 이상이어야만 수령 가능
+
+        // todo : 수령 전 남은 갯수 줄이기
+
         // todo : 동시성 문제
         return service.registerManualCouponUsage(email, retrievedCoupon);
     }
@@ -98,9 +107,6 @@ public class CouponFacade {
         retrievedCouponUsage.setActivationDate(LocalDate.now());
 
         return ManualCouponUsageResult.of(changedCouponStatus);
-
-        // todo : 실제 가격 변동 처리..
-        // todo : order에 couponUsageId가 notNull인 경우, 쿠폰 측에 할인후 가격을 요청
     }
 
     private static boolean statusNotValid(CouponUsage retrievedCouponUsage) {
@@ -119,9 +125,6 @@ public class CouponFacade {
         }
 
         return service.useInstantCoupon(email, retrievedCoupon);
-
-        // todo : 실제 가격 변동 처리
-        // todo : order에 couponUsageId가 notNull인 경우, 쿠폰 측에 할인 후 가격을 요청
     }
 
     private static boolean isDateNotBetween(LocalDate startDate, LocalDate endDate) {
@@ -138,4 +141,22 @@ public class CouponFacade {
 
         service.deleteInstantCoupon(couponId);
     }
+
+    @Transactional
+    public Point calculateDiscountAmount(Point originalPoint, Long referenceId, String couponType) {
+        Email email = authentication.getEmail();
+
+        switch (couponType.toLowerCase()) {
+            case "manual" -> {
+                this.useManualCoupon(email, referenceId);
+                return service.calculateDiscountAmountForManualCoupon(originalPoint, referenceId);
+            }
+            case "instant" -> {
+                this.useInstantCoupon(email, referenceId);
+                return service.calculateDiscountAmountForInstantCoupon(originalPoint, referenceId);
+            }
+            default -> throw new CouponException(INVALID_DISCOUNT_TYPE);
+        }
+    }
+
 }

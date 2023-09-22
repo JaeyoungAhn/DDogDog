@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.coupon.domain.vo;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_DISCOUNT_TYPE;
 
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.CouponException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -34,8 +35,8 @@ public class DiscountValue {
         };
     }
 
-    public Double getDiscount(Double originalPrice) {
-        return getDiscountable().applyDiscount(originalPrice);
+    public Point getDiscount(Point originalPrice) {
+        return getDiscountable().getDiscountAmount(originalPrice);
     }
 
     public Double getValue() {

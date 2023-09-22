@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.coupon.service;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponName;
@@ -119,5 +120,17 @@ public class CouponServiceImpl implements CouponService {
     @Transactional
     public void deleteInstantCoupon(Long couponId) {
         store.deleteInstantCoupon(couponId);
+    }
+
+    @Override
+    public Point calculateDiscountAmountForManualCoupon(Point originalPoint, Long couponUsageId) {
+        Coupon retrievedCoupon = reader.findCouponByCouponUsageId(couponUsageId);
+        return retrievedCoupon.getDiscountValue().getDiscount(originalPoint);
+    }
+
+    @Override
+    public Point calculateDiscountAmountForInstantCoupon(Point originalPoint, Long couponId) {
+        Coupon retrievedCoupon = reader.findCouponById(couponId);
+        return retrievedCoupon.getDiscountValue().getDiscount(originalPoint);
     }
 }

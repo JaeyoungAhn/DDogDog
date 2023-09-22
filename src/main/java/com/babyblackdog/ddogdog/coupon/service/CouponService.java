@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.coupon.service;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
+import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
@@ -106,4 +107,22 @@ public interface CouponService {
      * @return void
      */
     void deleteInstantCoupon(Long couponId);
+
+    /**
+     * referenceId(couponUsageId) 에 해당하는 수동 할인 쿠폰 감면액을 반환
+     *
+     * @param originalPoint
+     * @param referenceId
+     * @return Point
+     */
+    Point calculateDiscountAmountForManualCoupon(Point originalPoint, Long referenceId);
+
+    /**
+     * referenceId(couponId) 에 해당하는 즉시 할인 쿠폰 감면액을 반환
+     *
+     * @param originalPoint
+     * @param referenceId
+     * @return Point
+     */
+    Point calculateDiscountAmountForInstantCoupon(Point originalPoint, Long referenceId);
 }
