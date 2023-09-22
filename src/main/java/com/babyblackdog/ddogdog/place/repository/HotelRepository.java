@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.place.repository;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.place.model.Hotel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,5 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query("select p from Hotel p where p.address.value like %:address%")
     Page<Hotel> findContainsAddress(@Param("address") String address, Pageable pageable);
 
+    Hotel findByAdminEmail(Email adminEmail);
 }

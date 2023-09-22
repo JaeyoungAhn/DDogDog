@@ -30,8 +30,9 @@ public class Hotel {
     @Embedded
     private Province address;
 
-    @Column(name = "admin_id", nullable = false)
-    private Long adminId;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "admin_email"))
+    private Email adminEmail;
 
     @Embedded
     private PhoneNumber contact;
