@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.place.service.dto;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.place.model.Hotel;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
@@ -14,7 +15,7 @@ public record AddHotelParam(
         @NotNull
         Province province,
         @NotNull
-        Long adminId,
+        Email adminEmail,
         @NotNull
         PhoneNumber contact,
         @NotNull
@@ -27,7 +28,7 @@ public record AddHotelParam(
         return new Hotel(
                 param.hotelName,
                 param.province,
-                param.adminId,
+                param.adminEmail,
                 param.contact,
                 param.representative,
                 param.businessName
