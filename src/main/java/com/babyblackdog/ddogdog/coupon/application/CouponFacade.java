@@ -111,7 +111,6 @@ public class CouponFacade {
 
         retrievedCoupon.setRemainingCount(remainingCount - 1);
 
-        // todo : 동시성 문제
         return service.registerManualCouponUsage(email, retrievedCoupon);
     }
 
