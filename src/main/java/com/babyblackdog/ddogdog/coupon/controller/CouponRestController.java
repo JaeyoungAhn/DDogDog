@@ -65,8 +65,9 @@ public class CouponRestController {
     @PostMapping(value = "/instant", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InstantCouponCreationResponse> createInstantCoupon(
             @RequestBody InstantCouponCreationRequest instantCouponCreationRequest) {
+        Email email = authentication.getEmail();
 
-        InstantCouponCreationResult instantCouponCreationResult = facade.registerInstantCoupon(
+        InstantCouponCreationResult instantCouponCreationResult = facade.registerInstantCoupon(email,
                 instantCouponCreationRequest.roomId(), instantCouponCreationRequest.couponName(),
                 instantCouponCreationRequest.discountType(),
                 instantCouponCreationRequest.discountValue(), instantCouponCreationRequest.startDate(),
@@ -133,8 +134,9 @@ public class CouponRestController {
 
     @DeleteMapping(value = "/instant/{couponId}")
     public ResponseEntity<Void> removeInstantCoupon(@PathVariable Long couponId) {
+        Email email = authentication.getEmail();
 
-        facade.deleteInstantCoupon(couponId);
+        facade.deleteInstantCoupon(email, couponId);
 
         return ResponseEntity.noContent().build();
     }

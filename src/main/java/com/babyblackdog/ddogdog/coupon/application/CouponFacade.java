@@ -22,6 +22,7 @@ import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponUsageResult;
 import com.babyblackdog.ddogdog.global.exception.CouponException;
 import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
+import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import com.babyblackdog.ddogdog.user.accessor.UserAccessorService;
 import java.time.LocalDate;
 import java.util.List;
@@ -58,15 +59,32 @@ public class CouponFacade {
                 endDate);
     }
 
-    public InstantCouponCreationResult registerInstantCoupon(Long roomId, String couponName,
+    public InstantCouponCreationResult registerInstantCoupon(Email email, Long roomId, String couponName,
             String discountType, Double discountValue,
             LocalDate startDate, LocalDate endDate) {
 
-        if (!placeAccessService.hasRoomAccess(roomId)) {
+        if (isNotRoomOwner(email, roomId)) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
         return service.registerInstantCoupon(roomId, couponName, discountType, discountValue, startDate, endDate);
+    }
+
+    public void deleteInstantCoupon(Email email, Long couponId) {
+        Long roomId = service.findRoomIdByCouponId(couponId);
+
+        if (isNotRoomOwner(email, roomId)) {
+            throw new CouponException(COUPON_PERMISSION_DENIED);
+        }
+
+        service.deleteInstantCoupon(couponId);
+    }
+
+    private boolean isNotRoomOwner(Email email, Long roomId) {
+        HotelResult retrievedHotelResult = placeAccessService.findHotelByEmail(email);
+        List<Long> roomIds = placeAccessService.findRoomIdsOfHotel(retrievedHotelResult.id());
+
+        return !roomIds.contains(roomId);
     }
 
     public ManualCouponFindResults findAvailableManualCouponsByEmail(Email email) {
@@ -142,16 +160,6 @@ public class CouponFacade {
     private static boolean isDateNotBetween(LocalDate startDate, LocalDate endDate) {
         LocalDate timeNow = LocalDate.now();
         return (timeNow.isBefore(startDate) || timeNow.isAfter(endDate));
-    }
-
-    public void deleteInstantCoupon(Long couponId) {
-        Long roomId = service.findRoomIdByCouponId(couponId);
-
-        if (!placeAccessService.hasRoomAccess(roomId)) {
-            throw new CouponException(COUPON_PERMISSION_DENIED);
-        }
-
-        service.deleteInstantCoupon(couponId);
     }
 
     @Transactional
