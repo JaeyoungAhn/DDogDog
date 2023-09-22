@@ -45,12 +45,12 @@ public class CouponFacade {
         this.authentication = authentication;
     }
 
-    public ManualCouponCreationResult registerManualCoupon(Email email, String couponName, String discountType,
+    public ManualCouponCreationResult registerManualCoupon(String couponName, String discountType,
             Double discountValue,
             String promoCode, Long issueCount, LocalDate startDate,
             LocalDate endDate) {
 
-        if (!userAccessorService.isWoonYoungJa(email)) {
+        if (!userAccessorService.isAdmin()) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
@@ -58,11 +58,11 @@ public class CouponFacade {
                 endDate);
     }
 
-    public InstantCouponCreationResult registerInstantCoupon(Email email, Long roomId, String couponName,
+    public InstantCouponCreationResult registerInstantCoupon(Long roomId, String couponName,
             String discountType, Double discountValue,
             LocalDate startDate, LocalDate endDate) {
 
-        if (!placeAccessService.hasRoomAccess(email, roomId)) {
+        if (!placeAccessService.hasRoomAccess(roomId)) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
@@ -144,10 +144,10 @@ public class CouponFacade {
         return (timeNow.isBefore(startDate) || timeNow.isAfter(endDate));
     }
 
-    public void deleteInstantCoupon(Email email, Long couponId) {
+    public void deleteInstantCoupon(Long couponId) {
         Long roomId = service.findRoomIdByCouponId(couponId);
 
-        if (!placeAccessService.hasRoomAccess(email, roomId)) {
+        if (!placeAccessService.hasRoomAccess(roomId)) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
