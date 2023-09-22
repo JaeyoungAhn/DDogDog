@@ -11,4 +11,8 @@ public interface UserAccessorService {
 
     void debitPoint(Point point);
 
+    boolean isAdmin();
+
+    boolean isOwner();
+
 }

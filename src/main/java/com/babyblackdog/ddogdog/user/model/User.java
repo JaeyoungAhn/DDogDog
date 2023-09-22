@@ -47,7 +47,11 @@ public class User {
         return email;
     }
 
-    public String getRole() {
+    public Role getRole() {
+        return role;
+    }
+
+    public String getRoleName() {
         return role.name();
     }
 
@@ -63,7 +67,7 @@ public class User {
     public String toString() {
         return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
                 .add("email='" + email + "'")
-                .add("role=" + getRole())
+                .add("role=" + getRoleName())
                 .add("point=" + getPointValue())
                 .toString();
     }

@@ -30,7 +30,7 @@ public class Hotel {
     @Embedded
     private Province address;
 
-    @Column(name = "admin_id", nullable = false)
+    @Column(name = "admin_email", nullable = false)
     private Long adminId;
 
     @Embedded

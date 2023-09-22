@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.global.exception;
 
 public class ReserveException extends RuntimeException {
+
     private final ErrorCode errorCode;
 
     public ReserveException(ErrorCode errorCode) {

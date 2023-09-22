@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog;
+package com.babyblackdog.ddogdog.util;
 
 import com.babyblackdog.ddogdog.global.jwt.JwtAuthenticationPrincipal;
 import com.babyblackdog.ddogdog.global.jwt.JwtAuthenticationToken;
