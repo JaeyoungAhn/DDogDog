@@ -50,9 +50,8 @@ public class CouponRestController {
     @PostMapping(value = "/manual", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ManualCouponCreationResponse> createManualCoupon(
             @RequestBody ManualCouponCreationRequest manualCouponCreationRequest) {
-        Email email = authentication.getEmail();
 
-        ManualCouponCreationResult addedManualCouponResult = facade.registerManualCoupon(email,
+        ManualCouponCreationResult addedManualCouponResult = facade.registerManualCoupon(
                 manualCouponCreationRequest.couponName(),
                 manualCouponCreationRequest.discountType(), manualCouponCreationRequest.discountValue(),
                 manualCouponCreationRequest.promoCode(), manualCouponCreationRequest.issueCount(),
@@ -66,9 +65,8 @@ public class CouponRestController {
     @PostMapping(value = "/instant", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InstantCouponCreationResponse> createInstantCoupon(
             @RequestBody InstantCouponCreationRequest instantCouponCreationRequest) {
-        Email email = authentication.getEmail();
 
-        InstantCouponCreationResult instantCouponCreationResult = facade.registerInstantCoupon(email,
+        InstantCouponCreationResult instantCouponCreationResult = facade.registerInstantCoupon(
                 instantCouponCreationRequest.roomId(), instantCouponCreationRequest.couponName(),
                 instantCouponCreationRequest.discountType(),
                 instantCouponCreationRequest.discountValue(), instantCouponCreationRequest.startDate(),
@@ -135,9 +133,8 @@ public class CouponRestController {
 
     @DeleteMapping(value = "/instant/{couponId}")
     public ResponseEntity<Void> removeInstantCoupon(@PathVariable Long couponId) {
-        Email email = authentication.getEmail();
 
-        facade.deleteInstantCoupon(email, couponId);
+        facade.deleteInstantCoupon(couponId);
 
         return ResponseEntity.noContent().build();
     }
