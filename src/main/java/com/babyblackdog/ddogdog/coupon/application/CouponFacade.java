@@ -20,8 +20,10 @@ import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponClaimResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponGiftResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponUsageResult;
 import com.babyblackdog.ddogdog.global.exception.CouponException;
+import com.babyblackdog.ddogdog.notification.NotificationService;
 import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
 import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import com.babyblackdog.ddogdog.user.accessor.UserAccessorService;
@@ -38,13 +40,16 @@ public class CouponFacade {
     private final PlaceAccessService placeAccessService;
     private final UserAccessorService userAccessorService;
     private final JwtSimpleAuthentication authentication;
+    private final NotificationService notificationService;
 
     public CouponFacade(CouponService service, PlaceAccessService placeAccessService,
-            UserAccessorService userAccessorService, JwtSimpleAuthentication authentication) {
+            UserAccessorService userAccessorService, JwtSimpleAuthentication authentication,
+            NotificationService notificationService) {
         this.service = service;
         this.placeAccessService = placeAccessService;
         this.userAccessorService = userAccessorService;
         this.authentication = authentication;
+        this.notificationService = notificationService;
     }
 
     public ManualCouponCreationResult registerManualCoupon(String couponName, String discountType,
@@ -56,8 +61,15 @@ public class CouponFacade {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
-        return service.registerManualCoupon(couponName, discountType, discountValue, promoCode, issueCount, startDate,
+        ManualCouponCreationResult manualCouponCreationResult = service.registerManualCoupon(couponName, discountType,
+                discountValue, promoCode, issueCount, startDate,
                 endDate);
+
+        ManualCouponGiftResult manualCouponGiftResult = ManualCouponGiftResult.of(manualCouponCreationResult);
+
+        notificationService.notify(manualCouponGiftResult);
+
+        return manualCouponCreationResult;
     }
 
     public InstantCouponCreationResult registerInstantCoupon(Email email, Long roomId, String couponName,
