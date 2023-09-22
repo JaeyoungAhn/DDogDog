@@ -9,6 +9,7 @@ import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponName;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponPeriod;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponType;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponUsageStatus;
 import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountValue;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
@@ -116,7 +117,10 @@ public class CouponServiceImpl implements CouponService {
     @Transactional
     public InstantCouponUsageResult useInstantCoupon(Email email, Coupon coupon) {
         CouponUsage savingCouponUsage = new CouponUsage(email, coupon);
+
         savingCouponUsage.setActivationDate(LocalDate.now());
+        savingCouponUsage.setCouponUsageStatus(CouponUsageStatus.USED);
+
         CouponUsage savedCouponUsage = store.registerCouponUsage(savingCouponUsage);
 
         return InstantCouponUsageResult.of(savedCouponUsage);
