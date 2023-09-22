@@ -6,6 +6,7 @@ import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_USAGE_N
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponUsageStatus;
 import com.babyblackdog.ddogdog.coupon.service.CouponReader;
 import com.babyblackdog.ddogdog.global.exception.CouponException;
 import java.util.List;
@@ -24,12 +25,12 @@ public class CouponReaderImpl implements CouponReader {
 
     @Override
     public List<CouponUsage> findManualCouponsByEmail(Email email) {
-        return couponUsageRepository.findCouponUsagesByEmail(email);
+        return couponUsageRepository.findCouponUsagesByEmailAndCouponUsageStatus(email, CouponUsageStatus.CLAIMED);
     }
 
     @Override
-    public List<Coupon> findInstantCouponsByRoomIds(List<Long> roomIds) {
-        return couponRepository.findCouponsByRoomIdIn(roomIds);
+    public List<Coupon> findAvailableInstantCouponsByRoomIds(List<Long> roomIds) {
+        return couponRepository.findByRoomIdInAndRemainingCountIsNull(roomIds);
     }
 
     @Override
@@ -59,5 +60,10 @@ public class CouponReaderImpl implements CouponReader {
         CouponUsage retrievedCouponUsage = couponUsageRepository.findWithCouponById(couponUsageId)
                 .orElseThrow(() -> new CouponException(COUPON_USAGE_NOT_FOUND));
         return retrievedCouponUsage.getCoupon();
+    }
+
+    @Override
+    public boolean doesCouponUsageExistByEmailAndCouponId(Email email, Long couponId) {
+        return couponUsageRepository.existsByEmailAndCouponId(email, couponId);
     }
 }

@@ -63,6 +63,16 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
+    @ExceptionHandler(CouponException.class)
+    public ResponseEntity<ErrorResponse> couponExceptionHandler(CouponException exception) {
+        ErrorCode errorCode = exception.getErrorCode();
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+        logger.info("CouponException: {}", errorResponse);
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
+                .body(errorResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> internalServerErrorExceptionHandler(Exception exception) {
         ErrorCode errorCode = INTERNAL_SERVER_ERROR;

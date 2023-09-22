@@ -1,11 +1,14 @@
 package com.babyblackdog.ddogdog.coupon.service;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_ALREADY_CLAIMED;
+
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponName;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponPeriod;
+import com.babyblackdog.ddogdog.coupon.domain.vo.CouponType;
 import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountValue;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
@@ -13,6 +16,7 @@ import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponClaimResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
+import com.babyblackdog.ddogdog.global.exception.CouponException;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -36,6 +40,7 @@ public class CouponServiceImpl implements CouponService {
             String promoCode, Long issueCount, LocalDate startDate, LocalDate endDate) {
         Coupon savingCoupon = new Coupon(
                 new CouponName(couponName),
+                CouponType.MANUAL,
                 DiscountValue.from(discountType, discountValue),
                 promoCode,
                 issueCount,
@@ -54,6 +59,7 @@ public class CouponServiceImpl implements CouponService {
             Double discountValue, LocalDate startDate, LocalDate endDate) {
         Coupon savingCoupon = new Coupon(
                 roomId,
+                CouponType.INSTANT,
                 new CouponName(couponName),
                 DiscountValue.from(discountType, discountValue),
                 new CouponPeriod(startDate, endDate)
@@ -73,7 +79,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public InstantCouponFindResults findAvailableInstantCouponsByRoomIds(List<Long> roomIds) {
-        List<Coupon> retrievedInstantCoupons = reader.findInstantCouponsByRoomIds(roomIds);
+        List<Coupon> retrievedInstantCoupons = reader.findAvailableInstantCouponsByRoomIds(roomIds);
 
         return InstantCouponFindResults.of(retrievedInstantCoupons);
     }
@@ -91,6 +97,10 @@ public class CouponServiceImpl implements CouponService {
     @Override
     @Transactional
     public ManualCouponClaimResult registerManualCouponUsage(Email email, Coupon coupon) {
+        if (reader.doesCouponUsageExistByEmailAndCouponId(email, coupon.getId())) {
+            throw new CouponException(COUPON_ALREADY_CLAIMED);
+        }
+
         CouponUsage savingCouponUsage = new CouponUsage(email, coupon);
         CouponUsage savedCouponUsage = store.registerCouponUsage(savingCouponUsage);
 
@@ -106,6 +116,7 @@ public class CouponServiceImpl implements CouponService {
     @Transactional
     public InstantCouponUsageResult useInstantCoupon(Email email, Coupon coupon) {
         CouponUsage savingCouponUsage = new CouponUsage(email, coupon);
+        savingCouponUsage.setActivationDate(LocalDate.now());
         CouponUsage savedCouponUsage = store.registerCouponUsage(savingCouponUsage);
 
         return InstantCouponUsageResult.of(savedCouponUsage);
@@ -119,7 +130,11 @@ public class CouponServiceImpl implements CouponService {
     @Override
     @Transactional
     public void deleteInstantCoupon(Long couponId) {
-        store.deleteInstantCoupon(couponId);
+        Coupon retrievedCoupon = reader.findCouponById(couponId);
+
+        Long deletionMarker = -1L;
+
+        retrievedCoupon.setRemainingCount(deletionMarker);
     }
 
     @Override

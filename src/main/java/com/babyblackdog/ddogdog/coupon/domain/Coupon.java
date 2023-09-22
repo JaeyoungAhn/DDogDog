@@ -7,6 +7,8 @@ import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountValue;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,7 +29,8 @@ public class Coupon {
     @Embedded
     private CouponName couponName;
 
-    @Embedded
+    @Column(name = "coupon_type")
+    @Enumerated(EnumType.STRING)
     private CouponType couponType;
 
     @Embedded
@@ -45,19 +48,21 @@ public class Coupon {
     @Embedded
     private CouponPeriod couponPeriod;
 
-    public Coupon(CouponName couponName, DiscountValue discountValue, String promoCode,
+    public Coupon(CouponName couponName, CouponType couponType, DiscountValue discountValue, String promoCode,
             Long issueCount,
             CouponPeriod couponPeriod) {
         this.couponName = couponName;
+        this.couponType = couponType;
         this.discountValue = discountValue;
         this.promoCode = promoCode;
         this.issueCount = issueCount;
         this.couponPeriod = couponPeriod;
     }
 
-    public Coupon(Long roomId, CouponName couponName, DiscountValue discountValue,
+    public Coupon(Long roomId, CouponType couponType, CouponName couponName, DiscountValue discountValue,
             CouponPeriod couponPeriod) {
         this.roomId = roomId;
+        this.couponType = couponType;
         this.couponName = couponName;
         this.discountValue = discountValue;
         this.couponPeriod = couponPeriod;

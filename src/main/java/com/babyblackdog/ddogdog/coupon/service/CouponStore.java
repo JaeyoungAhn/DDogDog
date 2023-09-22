@@ -8,7 +8,4 @@ public interface CouponStore {
     Coupon registerCoupon(Coupon savingCoupon);
 
     CouponUsage registerCouponUsage(CouponUsage couponUsage);
-
-    void deleteInstantCoupon(Long couponId);
-
 }

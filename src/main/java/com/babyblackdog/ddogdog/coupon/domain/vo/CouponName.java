@@ -12,8 +12,9 @@ public class CouponName {
     @Column(name = "coupon_name")
     private String value;
 
-    public CouponName(String couponName) {
-        validateNameLength(couponName);
+    public CouponName(String value) {
+        validateNameLength(value);
+        this.value = value;
     }
 
     protected CouponName() {

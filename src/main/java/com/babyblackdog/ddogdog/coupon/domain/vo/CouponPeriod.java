@@ -4,8 +4,10 @@ import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON
 
 import com.babyblackdog.ddogdog.global.exception.CouponException;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
 
+@Embeddable
 public class CouponPeriod {
 
     @Column(name = "start_date")
@@ -17,6 +19,11 @@ public class CouponPeriod {
     public CouponPeriod(LocalDate startDate, LocalDate endDate) {
         assertIsEndDateAfterOrSameAsStartDate(startDate, endDate);
         assertIsDifferenceLessThanOneMonth(startDate, endDate);
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    protected CouponPeriod() {
     }
 
     private void assertIsEndDateAfterOrSameAsStartDate(LocalDate startDate, LocalDate endDate) {

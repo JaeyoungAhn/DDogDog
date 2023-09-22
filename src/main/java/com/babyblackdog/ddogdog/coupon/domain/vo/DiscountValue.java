@@ -29,7 +29,7 @@ public class DiscountValue {
 
     public static DiscountValue from(String discountTypeStr, Double discountValue) {
         return switch (discountTypeStr.toLowerCase()) {
-            case "amount" -> new DiscountValue(DiscountType.FIXED, new Amount(discountValue));
+            case "amount" -> new DiscountValue(DiscountType.AMOUNT, new Amount(discountValue));
             case "percent" -> new DiscountValue(DiscountType.PERCENT, new Percent(discountValue));
             default -> throw new CouponException(INVALID_DISCOUNT_TYPE);
         };
@@ -49,7 +49,7 @@ public class DiscountValue {
 
     private Discountable getDiscountable() {
         return switch (discountType) {
-            case FIXED -> new Amount(value);
+            case AMOUNT -> new Amount(value);
             case PERCENT -> new Percent(value);
         };
     }

@@ -25,9 +25,4 @@ public class CouponStoreImpl implements CouponStore {
     public CouponUsage registerCouponUsage(CouponUsage couponUsage) {
         return couponUsageRepository.save(couponUsage);
     }
-
-    @Override
-    public void deleteInstantCoupon(Long couponId) {
-        couponRepository.deleteById(couponId);
-    }
 }

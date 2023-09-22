@@ -9,7 +9,7 @@ public interface CouponReader {
 
     List<CouponUsage> findManualCouponsByEmail(Email email);
 
-    List<Coupon> findInstantCouponsByRoomIds(List<Long> roomIds);
+    List<Coupon> findAvailableInstantCouponsByRoomIds(List<Long> roomIds);
 
     CouponUsage findCouponUsageById(Long couponUsageId);
 
@@ -20,4 +20,6 @@ public interface CouponReader {
     Long findRoomIdByCouponId(Long couponId);
 
     Coupon findCouponByCouponUsageId(Long couponUsageId);
+
+    boolean doesCouponUsageExistByEmailAndCouponId(Email email, Long couponId);
 }

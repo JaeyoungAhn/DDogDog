@@ -101,7 +101,7 @@ public interface CouponService {
     Long findRoomIdByCouponId(Long couponId);
 
     /**
-     * couponId에 해당하는 즉시 할인 쿠폰 삭제
+     * couponId에 해당하는 즉시 할인 쿠폰 소프트 딜리트
      *
      * @param couponId
      * @return void

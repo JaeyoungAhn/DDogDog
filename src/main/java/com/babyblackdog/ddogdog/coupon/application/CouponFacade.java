@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.coupon.application;
 
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_NOT_FOUND;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_PERMISSION_DENIED;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON_STATUS;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_DISCOUNT_TYPE;
@@ -24,6 +25,7 @@ import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
 import com.babyblackdog.ddogdog.user.accessor.UserAccessorService;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +70,7 @@ public class CouponFacade {
     }
 
     public ManualCouponFindResults findAvailableManualCouponsByEmail(Email email) {
+
         return service.findAvailableManualCouponsByEmail(email);
     }
 
@@ -124,7 +127,16 @@ public class CouponFacade {
             throw new CouponException(INVALID_INSTANT_COUPON_DATE);
         }
 
+        if (isCancelled(retrievedCoupon)) {
+            throw new CouponException(COUPON_NOT_FOUND);
+        }
+
         return service.useInstantCoupon(email, retrievedCoupon);
+    }
+
+    private boolean isCancelled(Coupon retrievedCoupon) {
+        Long deletionMarker = -1L;
+        return (Objects.equals(deletionMarker, retrievedCoupon.getRemainingCount()));
     }
 
     private static boolean isDateNotBetween(LocalDate startDate, LocalDate endDate) {
