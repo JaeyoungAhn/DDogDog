@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.place.service;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
 import com.babyblackdog.ddogdog.place.service.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.service.dto.AddRoomParam;
@@ -28,4 +29,5 @@ public interface PlaceService {
 
     boolean existsHotel(Long hotelId);
 
+    HotelResult findHotelByEmail(Email email);
 }

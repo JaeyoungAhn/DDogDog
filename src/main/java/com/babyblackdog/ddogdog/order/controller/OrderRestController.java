@@ -59,7 +59,8 @@ public class OrderRestController {
             @RequestBody @Valid OrderCreateRequest request) {
         StayPeriod stayPeriod = new StayPeriod(request.checkIn(), request.checkOut(), timeProvider);
 
-        OrderCreateResult result = facade.order(request.roomId(), stayPeriod);
+        OrderCreateResult result = facade.order(request.roomId(), stayPeriod, request.couponReferenceId(),
+                request.couponType());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderCreateResponse.of(result));
     }

@@ -1,6 +1,8 @@
 package com.babyblackdog.ddogdog.place.accessor;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
+import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import java.util.List;
 
 public interface PlaceAccessService {
@@ -28,5 +30,19 @@ public interface PlaceAccessService {
      */
     List<Long> findRoomIdsOfHotel(Long hotelId);
 
+    /**
+     * 리뷰 등록을 위해 호텔이 존재하는지 조회
+     *
+     * @param hotelId
+     * @return boolean
+     */
     boolean isHotelValid(Long hotelId);
+
+    /**
+     * 쿠폰 생성을 위해 점주가 가지고 있는 호텔 조회
+     *
+     * @param email
+     * @return 숙소
+     */
+    HotelResult findHotelByEmail(Email email);
 }

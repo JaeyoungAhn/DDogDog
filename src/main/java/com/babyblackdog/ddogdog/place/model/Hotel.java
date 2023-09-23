@@ -33,7 +33,7 @@ public class Hotel {
     private Province address;
 
     @Embedded
-    @AttributeOverride(name = "email", column = @Column(name = "admin_email"))
+    @AttributeOverride(name = "value", column = @Column(name = "admin_email"))
     private Email adminEmail;
 
     @Embedded

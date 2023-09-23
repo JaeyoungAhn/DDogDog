@@ -61,6 +61,19 @@ public enum ErrorCode {
     // point
     INVALID_POINT(BAD_REQUEST, "P-100", "포인트 값은 양수여야 합니다."),
 
+    // coupon
+    COUPON_NOT_FOUND(BAD_REQUEST, "C-100", "존재하지 않는 쿠폰입니다."),
+    COUPON_USAGE_NOT_FOUND(BAD_REQUEST, "C-110", "존재하지 않는 쿠폰 보유 내역입니다."),
+    INVALID_DISCOUNT_TYPE(BAD_REQUEST, "C-120", "유효하지 않은 쿠폰 타입입니다."),
+    INVALID_DISCOUNT_VALUE(BAD_REQUEST, "C-130", "유효하지 않은 할인 값입니다."),
+    INVALID_COUPON_PERIOD(BAD_REQUEST, "C-140", "유효하지 않은 쿠폰 기간입니다."),
+    INVALID_COUPON_NAME(BAD_REQUEST, "C-120", "유효하지 않은 쿠폰명입니다."),
+    INVALID_COUPON_STATUS(BAD_REQUEST, "C-200", "이미 사용된 쿠폰입니다."),
+    INVALID_INSTANT_COUPON_DATE(BAD_REQUEST, "C-210", "이미 만료된 즉시 할인 쿠폰입니다."),
+    COUPON_ALREADY_CLAIMED(BAD_REQUEST, "C-220", "이미 수령한 쿠폰입니다."),
+    COUPON_OUT_OF_STOCK(BAD_REQUEST, "C-230", "쿠폰이 전부 소진 되었습니다."),
+    COUPON_PERMISSION_DENIED(FORBIDDEN, "C-300", "쿠폰 생성에 대한 권한이 없습니다.");
+
     // reservation
     UNRESERVED_PERIOD(BAD_REQUEST, "RSV-100", "예약할 수 없는 날짜가 포함되어 있습니다."),
     NOT_COMPLETE(BAD_REQUEST, "RSV-210", "주문을 완료할 수 없습니다."),
@@ -70,7 +83,6 @@ public enum ErrorCode {
     // Order
     ORDER_NOT_FOUND(NOT_FOUND, "ORD-200", "주문을 찾을 수 없습니다."),
     UNAUTHORIZED_TO_VIEW_ORDER(FORBIDDEN, "ORD-210", "주문을 한 유저만 내역을 확인할 수 있습니다.");
-
 
     private final HttpStatus httpStatus;
     private final String code;

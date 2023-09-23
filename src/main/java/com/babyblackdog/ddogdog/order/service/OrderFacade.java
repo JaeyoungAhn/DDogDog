@@ -1,6 +1,7 @@
 package com.babyblackdog.ddogdog.order.service;
 
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.coupon.application.CouponFacade;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
@@ -21,15 +22,17 @@ public class OrderFacade {
     private final ReservationService reservationService;
     private final UserAccessorService userAccessorService;
     private final StayCostEstimator stayCostEstimator;
+    private final CouponFacade couponFacade;
 
     public OrderFacade(OrderService service, PlaceAccessService placeAccessService,
             ReservationService reservationService, UserAccessorService userAccessorService,
-            StayCostEstimator stayCostEstimator) {
+            StayCostEstimator stayCostEstimator, CouponFacade couponFacade) {
         this.service = service;
         this.placeAccessService = placeAccessService;
         this.reservationService = reservationService;
         this.userAccessorService = userAccessorService;
         this.stayCostEstimator = stayCostEstimator;
+        this.couponFacade = couponFacade;
     }
 
     @Transactional(readOnly = true)
@@ -47,10 +50,16 @@ public class OrderFacade {
         );
     }
 
-    public OrderCreateResult order(Long roomId, StayPeriod stayPeriod) {
+    public OrderCreateResult order(Long roomId, StayPeriod stayPeriod, Long couponReferenceId, String couponType) {
         RoomSimpleResult roomInfo = placeAccessService.findRoomSimpleInfo(roomId);
 
         Point pointToPay = stayCostEstimator.calculateTotalCost(stayPeriod, roomInfo.point());
+
+        if (isCouponApplicable(couponReferenceId, couponType)) {
+            Point pointToBeDiscounted = couponFacade.calculateDiscountAmount(pointToPay, couponReferenceId, couponType);
+            pointToPay = Point.subPoint(pointToPay, pointToBeDiscounted);
+        }
+
         userAccessorService.debitPoint(pointToPay);
 
         Long createdOrderId = service.create(stayPeriod, pointToPay);
@@ -59,6 +68,10 @@ public class OrderFacade {
         service.complete(createdOrderId);
 
         return new OrderCreateResult(createdOrderId);
+    }
+
+    private static boolean isCouponApplicable(Long couponReferenceId, String couponType) {
+        return couponReferenceId != null && couponType != null;
     }
 
     // order
