@@ -46,7 +46,6 @@ public class CouponFacade {
     }
 
     public ManualCouponCreationResult registerManualCoupon(ManualCouponCreationCommand manualCouponCreationCommand) {
-
         if (!userAccessorService.isAdmin()) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
@@ -64,17 +63,17 @@ public class CouponFacade {
     public InstantCouponCreationResult registerInstantCoupon(
             InstantCouponCreationCommand instantCouponCreationCommand) {
 
-        if (isNotRoomOwner(instantCouponCreationCommand.email(), instantCouponCreationCommand.roomId())) {
+        if (isNotRoomOwner(authentication.getEmail(), instantCouponCreationCommand.roomId())) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
         return service.registerInstantCoupon(instantCouponCreationCommand);
     }
 
-    public void deleteInstantCoupon(Email email, Long couponId) {
+    public void deleteInstantCoupon(Long couponId) {
         Long roomId = service.findRoomIdByCouponId(couponId);
 
-        if (isNotRoomOwner(email, roomId)) {
+        if (isNotRoomOwner(authentication.getEmail(), roomId)) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 

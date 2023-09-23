@@ -48,15 +48,8 @@ public class CouponRestController {
     public ResponseEntity<ManualCouponCreationResponse> createManualCoupon(
             @RequestBody ManualCouponCreationRequest manualCouponCreationRequest) {
 
-        ManualCouponCreationCommand manualCouponCreationCommand = new ManualCouponCreationCommand(
-                manualCouponCreationRequest.couponName(),
-                manualCouponCreationRequest.discountType(),
-                manualCouponCreationRequest.discountValue(),
-                manualCouponCreationRequest.promoCode(),
-                manualCouponCreationRequest.issueCount(),
-                manualCouponCreationRequest.startDate(),
-                manualCouponCreationRequest.endDate()
-        );
+        ManualCouponCreationCommand manualCouponCreationCommand = ManualCouponCreationCommand.of(
+                manualCouponCreationRequest);
 
         ManualCouponCreationResult addedManualCouponResult = facade.registerManualCoupon(manualCouponCreationCommand);
 
@@ -68,17 +61,9 @@ public class CouponRestController {
     @PostMapping(value = "/instant", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<InstantCouponCreationResponse> createInstantCoupon(
             @RequestBody InstantCouponCreationRequest instantCouponCreationRequest) {
-        Email email = authentication.getEmail();
 
-        InstantCouponCreationCommand instantCouponCreationCommand = new InstantCouponCreationCommand(
-                email,
-                instantCouponCreationRequest.roomId(),
-                instantCouponCreationRequest.couponName(),
-                instantCouponCreationRequest.discountType(),
-                instantCouponCreationRequest.discountValue(),
-                instantCouponCreationRequest.startDate(),
-                instantCouponCreationRequest.endDate()
-        );
+        InstantCouponCreationCommand instantCouponCreationCommand = InstantCouponCreationCommand.of(
+                instantCouponCreationRequest);
 
         InstantCouponCreationResult instantCouponCreationResult = facade.registerInstantCoupon(
                 instantCouponCreationCommand);
@@ -103,6 +88,7 @@ public class CouponRestController {
     public ResponseEntity<InstantCouponFindResponses> getAvailableInstantCoupon(@RequestParam Long hotelId) {
 
         InstantCouponFindResults instantCouponFindResults = facade.findAvailableInstantCouponsByHotelId(hotelId);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(InstantCouponFindResponses.of(instantCouponFindResults));
@@ -111,6 +97,7 @@ public class CouponRestController {
     @PostMapping(value = "/manual/claim", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ManualCouponClaimResponse> claimManualCoupon(
             @RequestBody ManualCouponClaimRequest manualCouponClaimRequest) {
+
         Email email = authentication.getEmail();
 
         ManualCouponClaimResult manualCouponClaimResult = facade.claimManualCoupon(email,
@@ -123,9 +110,7 @@ public class CouponRestController {
 
     @DeleteMapping(value = "/instant/{couponId}")
     public ResponseEntity<Void> removeInstantCoupon(@PathVariable Long couponId) {
-        Email email = authentication.getEmail();
-
-        facade.deleteInstantCoupon(email, couponId);
+        facade.deleteInstantCoupon(couponId);
 
         return ResponseEntity.noContent().build();
     }
