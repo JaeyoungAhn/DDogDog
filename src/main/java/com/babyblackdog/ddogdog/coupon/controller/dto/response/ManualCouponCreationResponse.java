@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.coupon.controller.dto.response;
 
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponCreationResult;
 import java.time.LocalDate;
 
 public record ManualCouponCreationResponse(Long couponId, String couponName, String couponType, String discountType,

@@ -3,14 +3,15 @@ package com.babyblackdog.ddogdog.coupon.service;
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
-import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponClaimResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
-import java.time.LocalDate;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.InstantCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.ManualCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponUsageResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponClaimResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponUsageResult;
 import java.util.List;
 
 public interface CouponService {
@@ -18,23 +19,18 @@ public interface CouponService {
     /**
      * 수동 할인 쿠폰을 발급
      *
-     * @param couponName, discountType, discountValue, promoCode, issueCount, startDate, endDate
+     * @param manualCouponCreationCommand
      * @return ManualCouponCreationResult
      */
-    ManualCouponCreationResult registerManualCoupon(String couponName, String discountType,
-            Double discountValue,
-            String promoCode, Long issueCount, LocalDate startDate,
-            LocalDate endDate);
+    ManualCouponCreationResult registerManualCoupon(ManualCouponCreationCommand manualCouponCreationCommand);
 
     /**
      * 즉시 할인 쿠폰을 발급
      *
-     * @param roomId, couponName, discountType, discountValue, startDate, endDate
+     * @param instantCouponCreationCommand
      * @return InstantCouponCreationResult
      */
-    InstantCouponCreationResult registerInstantCoupon(Long roomId, String couponName,
-            String discountType, Double discountValue,
-            LocalDate startDate, LocalDate endDate);
+    InstantCouponCreationResult registerInstantCoupon(InstantCouponCreationCommand instantCouponCreationCommand);
 
     /**
      * email 의 유저가 가지고 있는 수동 할인 쿠폰을 전체 조회
@@ -53,14 +49,6 @@ public interface CouponService {
     InstantCouponFindResults findAvailableInstantCouponsByRoomIds(List<Long> roomIds);
 
     /**
-     * couponUsageId 를 이용해 CouponUsage를 조회
-     *
-     * @param couponUsageId
-     * @return CouponUsage
-     */
-    CouponUsage findCouponUsageById(Long couponUsageId);
-
-    /**
      * promoCode 를 이용해 Coupon 을 조회
      *
      * @param promoCode
@@ -77,20 +65,20 @@ public interface CouponService {
     ManualCouponClaimResult registerManualCouponUsage(Email email, Coupon coupon);
 
     /**
-     * couponId 를 통해 Coupon 을 조회
+     * email, referenceId를 받아 수동 할인 쿠폰 적용
      *
-     * @param couponId
-     * @return Coupon
+     * @param email, referenceId
+     * @return ManualCouponUsageResult
      */
-    Coupon findCouponById(Long couponId);
+    ManualCouponUsageResult useManualCoupon(Email email, Long referenceId);
 
     /**
-     * email, coupon 을 받아 즉시 할인 쿠폰 적용
+     * email, referenceId를 받아 즉시 할인 쿠폰 적용
      *
-     * @param email, coupon
+     * @param email, referenceId
      * @return InstantCouponUsageResult
      */
-    InstantCouponUsageResult useInstantCoupon(Email email, Coupon coupon);
+    InstantCouponUsageResult useInstantCoupon(Email email, Long referenceId);
 
     /**
      * couponId 를 통해 RoomId 를 조회

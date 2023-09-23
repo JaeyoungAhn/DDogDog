@@ -1,35 +1,28 @@
 package com.babyblackdog.ddogdog.coupon.application;
 
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_NOT_FOUND;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_OUT_OF_STOCK;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_PERMISSION_DENIED;
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON_STATUS;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_DISCOUNT_TYPE;
-import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_INSTANT_COUPON_DATE;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
-import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
-import com.babyblackdog.ddogdog.coupon.domain.vo.CouponUsageStatus;
 import com.babyblackdog.ddogdog.coupon.service.CouponService;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponClaimResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponGiftResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponUsageResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.InstantCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.ManualCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponClaimResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponGiftResult;
 import com.babyblackdog.ddogdog.global.exception.CouponException;
 import com.babyblackdog.ddogdog.notification.NotificationService;
 import com.babyblackdog.ddogdog.place.accessor.PlaceAccessService;
 import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import com.babyblackdog.ddogdog.user.accessor.UserAccessorService;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,18 +45,14 @@ public class CouponFacade {
         this.notificationService = notificationService;
     }
 
-    public ManualCouponCreationResult registerManualCoupon(String couponName, String discountType,
-            Double discountValue,
-            String promoCode, Long issueCount, LocalDate startDate,
-            LocalDate endDate) {
+    public ManualCouponCreationResult registerManualCoupon(ManualCouponCreationCommand manualCouponCreationCommand) {
 
         if (!userAccessorService.isAdmin()) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
-        ManualCouponCreationResult manualCouponCreationResult = service.registerManualCoupon(couponName, discountType,
-                discountValue, promoCode, issueCount, startDate,
-                endDate);
+        ManualCouponCreationResult manualCouponCreationResult = service.registerManualCoupon(
+                manualCouponCreationCommand);
 
         ManualCouponGiftResult manualCouponGiftResult = ManualCouponGiftResult.of(manualCouponCreationResult);
 
@@ -72,15 +61,14 @@ public class CouponFacade {
         return manualCouponCreationResult;
     }
 
-    public InstantCouponCreationResult registerInstantCoupon(Email email, Long roomId, String couponName,
-            String discountType, Double discountValue,
-            LocalDate startDate, LocalDate endDate) {
+    public InstantCouponCreationResult registerInstantCoupon(
+            InstantCouponCreationCommand instantCouponCreationCommand) {
 
-        if (isNotRoomOwner(email, roomId)) {
+        if (isNotRoomOwner(instantCouponCreationCommand.email(), instantCouponCreationCommand.roomId())) {
             throw new CouponException(COUPON_PERMISSION_DENIED);
         }
 
-        return service.registerInstantCoupon(roomId, couponName, discountType, discountValue, startDate, endDate);
+        return service.registerInstantCoupon(instantCouponCreationCommand);
     }
 
     public void deleteInstantCoupon(Email email, Long couponId) {
@@ -101,7 +89,6 @@ public class CouponFacade {
     }
 
     public ManualCouponFindResults findAvailableManualCouponsByEmail(Email email) {
-
         return service.findAvailableManualCouponsByEmail(email);
     }
 
@@ -127,69 +114,16 @@ public class CouponFacade {
     }
 
     @Transactional
-    public ManualCouponUsageResult useManualCoupon(Email email, Long couponUsageId) {
-
-        CouponUsage retrievedCouponUsage = service.findCouponUsageById(couponUsageId);
-
-        if (doesNotMatch(email, retrievedCouponUsage.getEmail())) {
-            throw new CouponException(COUPON_PERMISSION_DENIED);
-        }
-
-        if (statusNotValid(retrievedCouponUsage)) {
-            throw new CouponException(INVALID_COUPON_STATUS);
-        }
-
-        CouponUsageStatus changedCouponStatus = CouponUsageStatus.USED;
-
-        retrievedCouponUsage.setCouponUsageStatus(changedCouponStatus);
-        retrievedCouponUsage.setActivationDate(LocalDate.now());
-
-        return ManualCouponUsageResult.of(changedCouponStatus);
-    }
-
-    private static boolean statusNotValid(CouponUsage retrievedCouponUsage) {
-        return retrievedCouponUsage.getCouponUsageStatus() != CouponUsageStatus.CLAIMED;
-    }
-
-    private static boolean doesNotMatch(Email email, Email retrievedEmail) {
-        return !retrievedEmail.getValue().equals(email.getValue());
-    }
-
-    public InstantCouponUsageResult useInstantCoupon(Email email, Long couponId) {
-        Coupon retrievedCoupon = service.findCouponById(couponId);
-
-        if (isDateNotBetween(retrievedCoupon.getStartDate(), retrievedCoupon.getEndDate())) {
-            throw new CouponException(INVALID_INSTANT_COUPON_DATE);
-        }
-
-        if (isCancelled(retrievedCoupon)) {
-            throw new CouponException(COUPON_NOT_FOUND);
-        }
-
-        return service.useInstantCoupon(email, retrievedCoupon);
-    }
-
-    private boolean isCancelled(Coupon retrievedCoupon) {
-        Long deletionMarker = -1L;
-        return (Objects.equals(deletionMarker, retrievedCoupon.getRemainingCount()));
-    }
-
-    private static boolean isDateNotBetween(LocalDate startDate, LocalDate endDate) {
-        LocalDate timeNow = LocalDate.now();
-        return (timeNow.isBefore(startDate) || timeNow.isAfter(endDate));
-    }
-
-    @Transactional
     public Point calculateDiscountAmount(Point originalPoint, Long referenceId, String couponType) {
         Email email = authentication.getEmail();
 
         switch (couponType.toLowerCase()) {
             case "manual" -> {
-                this.useManualCoupon(email, referenceId);
+                service.useManualCoupon(email, referenceId);
                 return service.calculateDiscountAmountForManualCoupon(originalPoint, referenceId);
             }
             case "instant" -> {
-                this.useInstantCoupon(email, referenceId);
+                service.useInstantCoupon(email, referenceId);
                 return service.calculateDiscountAmountForInstantCoupon(originalPoint, referenceId);
             }
             default -> throw new CouponException(INVALID_DISCOUNT_TYPE);

@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog.coupon.service.dto;
+package com.babyblackdog.ddogdog.coupon.service.dto.result;
 
 import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import java.util.List;

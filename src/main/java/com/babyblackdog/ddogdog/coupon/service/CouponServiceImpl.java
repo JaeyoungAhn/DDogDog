@@ -1,6 +1,10 @@
 package com.babyblackdog.ddogdog.coupon.service;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_ALREADY_CLAIMED;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_NOT_FOUND;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.COUPON_PERMISSION_DENIED;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_COUPON_STATUS;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_INSTANT_COUPON_DATE;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.point.Point;
@@ -8,18 +12,21 @@ import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.CouponUsage;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponName;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponPeriod;
-import com.babyblackdog.ddogdog.coupon.domain.vo.CouponType;
 import com.babyblackdog.ddogdog.coupon.domain.vo.CouponUsageStatus;
 import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountValue;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponClaimResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.InstantCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.ManualCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponUsageResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponClaimResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponUsageResult;
 import com.babyblackdog.ddogdog.global.exception.CouponException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,18 +44,21 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    public ManualCouponCreationResult registerManualCoupon(String couponName, String discountType, Double discountValue,
-            String promoCode, Long issueCount, LocalDate startDate, LocalDate endDate) {
+    public ManualCouponCreationResult registerManualCoupon(ManualCouponCreationCommand manualCouponCreationCommand) {
         Coupon savingCoupon = new Coupon(
-                new CouponName(couponName),
-                CouponType.MANUAL,
-                DiscountValue.from(discountType, discountValue),
-                promoCode,
-                issueCount,
-                new CouponPeriod(startDate, endDate)
+                new CouponName(manualCouponCreationCommand.couponName()),
+                DiscountValue.from(
+                        manualCouponCreationCommand.discountType(),
+                        manualCouponCreationCommand.discountValue()
+                ),
+                manualCouponCreationCommand.promoCode(),
+                manualCouponCreationCommand.issueCount(),
+                new CouponPeriod(
+                        manualCouponCreationCommand.startDate(),
+                        manualCouponCreationCommand.endDate()
+                )
         );
 
-        savingCoupon.setRemainingCount(issueCount);
         Coupon savedCoupon = store.registerCoupon(savingCoupon);
 
         return ManualCouponCreationResult.of(savedCoupon);
@@ -56,14 +66,19 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    public InstantCouponCreationResult registerInstantCoupon(Long roomId, String couponName, String discountType,
-            Double discountValue, LocalDate startDate, LocalDate endDate) {
+    public InstantCouponCreationResult registerInstantCoupon(
+            InstantCouponCreationCommand instantCouponCreationCommand) {
         Coupon savingCoupon = new Coupon(
-                roomId,
-                CouponType.INSTANT,
-                new CouponName(couponName),
-                DiscountValue.from(discountType, discountValue),
-                new CouponPeriod(startDate, endDate)
+                instantCouponCreationCommand.roomId(),
+                new CouponName(instantCouponCreationCommand.couponName()),
+                DiscountValue.from(
+                        instantCouponCreationCommand.discountType(),
+                        instantCouponCreationCommand.discountValue()
+                ),
+                new CouponPeriod(
+                        instantCouponCreationCommand.startDate(),
+                        instantCouponCreationCommand.endDate()
+                )
         );
 
         Coupon savedCoupon = store.registerCoupon(savingCoupon);
@@ -86,11 +101,6 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public CouponUsage findCouponUsageById(Long couponUsageId) {
-        return reader.findCouponUsageById(couponUsageId);
-    }
-
-    @Override
     public Coupon findCouponByPromoCode(String promoCode) {
         return reader.findCouponByPromoCode(promoCode);
     }
@@ -109,14 +119,48 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Coupon findCouponById(Long couponId) {
-        return reader.findCouponById(couponId);
+    @Transactional
+    public ManualCouponUsageResult useManualCoupon(Email email, Long referenceId) {
+        CouponUsage retrievedCouponUsage = reader.findCouponUsageById(referenceId);
+
+        if (doesNotMatch(email, retrievedCouponUsage.getEmail())) {
+            throw new CouponException(COUPON_PERMISSION_DENIED);
+        }
+
+        if (statusNotValid(retrievedCouponUsage)) {
+            throw new CouponException(INVALID_COUPON_STATUS);
+        }
+
+        CouponUsageStatus changedCouponStatus = CouponUsageStatus.USED;
+
+        retrievedCouponUsage.setCouponUsageStatus(changedCouponStatus);
+        retrievedCouponUsage.setActivationDate(LocalDate.now());
+
+        return ManualCouponUsageResult.of(changedCouponStatus);
+    }
+
+    private static boolean statusNotValid(CouponUsage retrievedCouponUsage) {
+        return retrievedCouponUsage.getCouponUsageStatus() != CouponUsageStatus.CLAIMED;
+    }
+
+    private static boolean doesNotMatch(Email email, Email retrievedEmail) {
+        return !retrievedEmail.getValue().equals(email.getValue());
     }
 
     @Override
     @Transactional
-    public InstantCouponUsageResult useInstantCoupon(Email email, Coupon coupon) {
-        CouponUsage savingCouponUsage = new CouponUsage(email, coupon);
+    public InstantCouponUsageResult useInstantCoupon(Email email, Long referenceId) {
+        Coupon retrievedCoupon = reader.findCouponById(referenceId);
+
+        if (isDateNotBetween(retrievedCoupon.getStartDate(), retrievedCoupon.getEndDate())) {
+            throw new CouponException(INVALID_INSTANT_COUPON_DATE);
+        }
+
+        if (isCancelled(retrievedCoupon)) {
+            throw new CouponException(COUPON_NOT_FOUND);
+        }
+
+        CouponUsage savingCouponUsage = new CouponUsage(email, retrievedCoupon);
 
         savingCouponUsage.setActivationDate(LocalDate.now());
         savingCouponUsage.setCouponUsageStatus(CouponUsageStatus.USED);
@@ -124,6 +168,16 @@ public class CouponServiceImpl implements CouponService {
         CouponUsage savedCouponUsage = store.registerCouponUsage(savingCouponUsage);
 
         return InstantCouponUsageResult.of(savedCouponUsage);
+    }
+
+    private boolean isCancelled(Coupon retrievedCoupon) {
+        Long deletionMarker = -1L;
+        return (Objects.equals(deletionMarker, retrievedCoupon.getRemainingCount()));
+    }
+
+    private static boolean isDateNotBetween(LocalDate startDate, LocalDate endDate) {
+        LocalDate timeNow = LocalDate.now();
+        return (timeNow.isBefore(startDate) || timeNow.isAfter(endDate));
     }
 
     @Override

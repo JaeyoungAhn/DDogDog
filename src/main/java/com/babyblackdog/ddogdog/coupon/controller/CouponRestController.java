@@ -10,24 +10,21 @@ import com.babyblackdog.ddogdog.coupon.controller.dto.request.ManualCouponClaimR
 import com.babyblackdog.ddogdog.coupon.controller.dto.request.ManualCouponCreationRequest;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.InstantCouponCreationResponse;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.InstantCouponFindResponses;
-import com.babyblackdog.ddogdog.coupon.controller.dto.response.InstantCouponUsageResponse;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponClaimResponse;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponCreationResponse;
 import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponFindResponses;
-import com.babyblackdog.ddogdog.coupon.controller.dto.response.ManualCouponUsageResponse;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResults;
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponUsageResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponClaimResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponCreationResult;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponUsageResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.InstantCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.ManualCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponClaimResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponFindResults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,11 +48,17 @@ public class CouponRestController {
     public ResponseEntity<ManualCouponCreationResponse> createManualCoupon(
             @RequestBody ManualCouponCreationRequest manualCouponCreationRequest) {
 
-        ManualCouponCreationResult addedManualCouponResult = facade.registerManualCoupon(
+        ManualCouponCreationCommand manualCouponCreationCommand = new ManualCouponCreationCommand(
                 manualCouponCreationRequest.couponName(),
-                manualCouponCreationRequest.discountType(), manualCouponCreationRequest.discountValue(),
-                manualCouponCreationRequest.promoCode(), manualCouponCreationRequest.issueCount(),
-                manualCouponCreationRequest.startDate(), manualCouponCreationRequest.endDate());
+                manualCouponCreationRequest.discountType(),
+                manualCouponCreationRequest.discountValue(),
+                manualCouponCreationRequest.promoCode(),
+                manualCouponCreationRequest.issueCount(),
+                manualCouponCreationRequest.startDate(),
+                manualCouponCreationRequest.endDate()
+        );
+
+        ManualCouponCreationResult addedManualCouponResult = facade.registerManualCoupon(manualCouponCreationCommand);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -67,11 +70,18 @@ public class CouponRestController {
             @RequestBody InstantCouponCreationRequest instantCouponCreationRequest) {
         Email email = authentication.getEmail();
 
-        InstantCouponCreationResult instantCouponCreationResult = facade.registerInstantCoupon(email,
-                instantCouponCreationRequest.roomId(), instantCouponCreationRequest.couponName(),
+        InstantCouponCreationCommand instantCouponCreationCommand = new InstantCouponCreationCommand(
+                email,
+                instantCouponCreationRequest.roomId(),
+                instantCouponCreationRequest.couponName(),
                 instantCouponCreationRequest.discountType(),
-                instantCouponCreationRequest.discountValue(), instantCouponCreationRequest.startDate(),
-                instantCouponCreationRequest.endDate());
+                instantCouponCreationRequest.discountValue(),
+                instantCouponCreationRequest.startDate(),
+                instantCouponCreationRequest.endDate()
+        );
+
+        InstantCouponCreationResult instantCouponCreationResult = facade.registerInstantCoupon(
+                instantCouponCreationCommand);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -109,27 +119,6 @@ public class CouponRestController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ManualCouponClaimResponse.of(manualCouponClaimResult));
-    }
-
-    @PatchMapping(value = "/manual/{couponUsageId}")
-    public ResponseEntity<ManualCouponUsageResponse> useManualCoupon(@PathVariable Long couponUsageId) {
-        Email email = authentication.getEmail();
-
-        ManualCouponUsageResult manualCouponUsageResult = facade.useManualCoupon(email, couponUsageId);
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .body(ManualCouponUsageResponse.of(manualCouponUsageResult));
-    }
-
-    @PostMapping(value = "/instant/{couponId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InstantCouponUsageResponse> useInstantCoupon(@PathVariable Long couponId) {
-        Email email = authentication.getEmail();
-
-        InstantCouponUsageResult instantCouponUsageResult = facade.useInstantCoupon(email, couponId);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(InstantCouponUsageResponse.of(instantCouponUsageResult));
     }
 
     @DeleteMapping(value = "/instant/{couponId}")
