@@ -3,13 +3,13 @@ package com.babyblackdog.ddogdog.user.accessor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.babyblackdog.ddogdog.WithMockCustomUser;
 import com.babyblackdog.ddogdog.common.auth.Role;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.PointException;
 import com.babyblackdog.ddogdog.user.model.User;
 import com.babyblackdog.ddogdog.user.repository.UserRepository;
 import com.babyblackdog.ddogdog.user.service.dto.UserResult;
+import com.babyblackdog.ddogdog.util.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

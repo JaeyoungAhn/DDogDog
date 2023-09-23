@@ -3,6 +3,7 @@ package com.babyblackdog.ddogdog.user.accessor;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.USER_NOT_FOUND;
 
 import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
+import com.babyblackdog.ddogdog.common.auth.Role;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.UserException;
 import com.babyblackdog.ddogdog.user.model.User;
@@ -39,6 +40,16 @@ public class UserAccessorServiceImpl implements
     @Transactional
     public void debitPoint(Point point) {
         getUser().subPoint(point);
+    }
+
+    @Override
+    public boolean isAdmin() {
+        return getUser().getRole() == Role.ADMIN;
+    }
+
+    @Override
+    public boolean isOwner() {
+        return getUser().getRole() == Role.OWNER;
     }
 
     private User getUser() {

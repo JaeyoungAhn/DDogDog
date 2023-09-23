@@ -1,5 +1,6 @@
 package com.babyblackdog.ddogdog.place.controller.dto;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
@@ -16,7 +17,7 @@ public record AddHotelRequest(
         @NotBlank
         String province,
         @Positive @NotNull
-        Long adminId,
+        String adminEmail,
         @NotBlank
         String contact,
         @NotBlank
@@ -29,7 +30,7 @@ public record AddHotelRequest(
         return new AddHotelParam(
                 new HotelName(request.hotelName),
                 new Province(request.province),
-                request.adminId,
+                new Email(request.adminEmail),
                 new PhoneNumber(request.contact),
                 new HumanName(request.representative),
                 new BusinessName(request.businessName)

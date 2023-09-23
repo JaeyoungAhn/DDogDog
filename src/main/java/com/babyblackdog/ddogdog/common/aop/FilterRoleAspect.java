@@ -12,21 +12,32 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class FilterAdminAspect {
+public class FilterRoleAspect {
 
     private final JwtSimpleAuthentication authentication;
 
-    public FilterAdminAspect(JwtSimpleAuthentication authentication) {
+    public FilterRoleAspect(JwtSimpleAuthentication authentication) {
         this.authentication = authentication;
     }
 
     @Pointcut("@annotation(com.babyblackdog.ddogdog.common.aop.FilterAdmin)")
-    private void enableFilter() {
+    private void enableAdminFilter() {
     }
 
-    @Before("enableFilter()")
-    public void before() {
-        if (authentication.getRole() == Role.USER) {
+    @Pointcut("@annotation(com.babyblackdog.ddogdog.common.aop.FilterOwner)")
+    private void enableOwnerFilter() {
+    }
+
+    @Before("enableAdminFilter()")
+    public void filterAdminBefore() {
+        if (authentication.getRole() != Role.USER) {
+            throw new UserException(FORBIDDEN_ROLE);
+        }
+    }
+
+    @Before("enableOwnerFilter()")
+    public void filterOwnerBefore() {
+        if (authentication.getRole() != Role.OWNER) {
             throw new UserException(FORBIDDEN_ROLE);
         }
     }

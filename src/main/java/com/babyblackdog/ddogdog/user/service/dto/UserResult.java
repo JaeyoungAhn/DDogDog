@@ -11,7 +11,7 @@ public record UserResult(
     public static UserResult of(User user) {
         return new UserResult(
                 user.getEmail(),
-                user.getRole(),
+                user.getRoleName(),
                 user.getPointValue()
         );
     }

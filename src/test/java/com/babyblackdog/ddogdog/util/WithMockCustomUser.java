@@ -1,4 +1,4 @@
-package com.babyblackdog.ddogdog;
+package com.babyblackdog.ddogdog.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

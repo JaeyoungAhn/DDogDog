@@ -1,10 +1,12 @@
 package com.babyblackdog.ddogdog.place.model;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.model.vo.PhoneNumber;
 import com.babyblackdog.ddogdog.place.model.vo.Province;
 import com.babyblackdog.ddogdog.user.model.vo.HumanName;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -30,8 +32,9 @@ public class Hotel {
     @Embedded
     private Province address;
 
-    @Column(name = "admin_id", nullable = false)
-    private Long adminId;
+    @Embedded
+    @AttributeOverride(name = "email", column = @Column(name = "admin_email"))
+    private Email adminEmail;
 
     @Embedded
     private PhoneNumber contact;
@@ -49,11 +52,11 @@ public class Hotel {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Rating rating;
 
-    public Hotel(HotelName name, Province address, Long adminId, PhoneNumber contact,
+    public Hotel(HotelName name, Province address, Email adminEmail, PhoneNumber contact,
             HumanName representative, BusinessName businessName) {
         this.name = name;
         this.address = address;
-        this.adminId = adminId;
+        this.adminEmail = adminEmail;
         this.contact = contact;
         this.representative = representative;
         this.businessName = businessName;
@@ -78,8 +81,12 @@ public class Hotel {
         return address.getValue();
     }
 
-    public Long getAdminId() {
-        return adminId;
+    public Email getEmail() {
+        return adminEmail;
+    }
+
+    public String getEmailAddress() {
+        return adminEmail.getValue();
     }
 
     public String getContact() {
