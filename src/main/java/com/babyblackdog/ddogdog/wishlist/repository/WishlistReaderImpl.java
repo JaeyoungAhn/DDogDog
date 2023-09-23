@@ -2,6 +2,7 @@ package com.babyblackdog.ddogdog.wishlist.repository;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.WISHLIST_NOT_FOUND;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.global.exception.WishlistException;
 import com.babyblackdog.ddogdog.wishlist.model.Wishlist;
 import com.babyblackdog.ddogdog.wishlist.service.WishlistReader;
@@ -18,7 +19,7 @@ public class WishlistReaderImpl implements WishlistReader {
         this.repository = repository;
     }
 
-    public Page<Wishlist> findWishlistsByEmail(String email, Pageable pageable) {
+    public Page<Wishlist> findWishlistsByEmail(Email email, Pageable pageable) {
         return repository.findWishlistsByEmail(email, pageable);
     }
 
@@ -29,7 +30,7 @@ public class WishlistReaderImpl implements WishlistReader {
     }
 
     @Override
-    public Boolean existsByEmailAndPlaceId(String email, Long placeId) {
+    public Boolean existsByEmailAndPlaceId(Email email, Long placeId) {
         return repository.existsByEmailAndPlaceId(email, placeId);
     }
 }

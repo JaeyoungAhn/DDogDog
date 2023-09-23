@@ -6,6 +6,7 @@ import static com.babyblackdog.ddogdog.global.exception.ErrorCode.ROOM_NOT_FOUND
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.global.exception.HotelException;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
+import com.babyblackdog.ddogdog.notification.NotificationService;
 import com.babyblackdog.ddogdog.place.model.Hotel;
 import com.babyblackdog.ddogdog.place.model.Rating;
 import com.babyblackdog.ddogdog.place.model.Room;
@@ -28,10 +29,13 @@ public class PlaceServiceImpl implements
 
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
+    private final NotificationService notificationService;
 
-    public PlaceServiceImpl(HotelRepository hotelRepository, RoomRepository roomRepository) {
+    public PlaceServiceImpl(HotelRepository hotelRepository, RoomRepository roomRepository,
+            NotificationService notificationService) {
         this.hotelRepository = hotelRepository;
         this.roomRepository = roomRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -72,8 +76,8 @@ public class PlaceServiceImpl implements
     }
 
     @Override
-    public HotelResult findHotel(Long id) {
-        Hotel hotel = hotelRepository.findById(id)
+    public HotelResult findHotel(Long hotelId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new HotelException(HOTEL_NOT_FOUND));
         return HotelResult.of(hotel);
     }

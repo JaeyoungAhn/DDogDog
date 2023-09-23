@@ -21,7 +21,7 @@ public interface PlaceService {
 
     Page<HotelResult> findHotelsInProvince(Province province, Pageable pageable);
 
-    HotelResult findHotel(Long id);
+    HotelResult findHotel(Long hotelId);
 
     RoomResult findRoom(Long roomId);
 

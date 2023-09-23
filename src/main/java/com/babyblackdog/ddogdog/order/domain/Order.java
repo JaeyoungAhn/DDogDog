@@ -2,6 +2,8 @@ package com.babyblackdog.ddogdog.order.domain;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.global.exception.ErrorCode;
+import com.babyblackdog.ddogdog.global.exception.UnorderableStateException;
 import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -71,7 +73,7 @@ public class Order {
 
     public void complete() {
         if (this.orderStatus != OrderStatus.PREPARED) {
-            throw new IllegalStateException("주문을 완료할 수 없습니다.");
+            throw new UnorderableStateException(ErrorCode.NOT_COMPLETE);
         }
         this.orderStatus = OrderStatus.COMPLETED;
     }
@@ -82,7 +84,7 @@ public class Order {
 
     public void cancel(Email userEmail) {
         if (!canCanceled(userEmail)) {
-            throw new IllegalStateException("주문을 취소할 수 없습니다.");
+            throw new UnorderableStateException(ErrorCode.NOT_CANCEL);
         }
         this.orderStatus = OrderStatus.CANCELED;
     }

@@ -1,5 +1,7 @@
 package com.babyblackdog.ddogdog.reservation.domain;
 
+import com.babyblackdog.ddogdog.global.exception.ErrorCode;
+import com.babyblackdog.ddogdog.global.exception.ReserveException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,10 +9,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
+import java.util.Objects;
 import org.apache.commons.lang3.Validate;
 
-@Entity
+@Entity(name = "reservations")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"roomId", "date"}))
 public class Reservation {
 
     @Id
@@ -50,9 +56,32 @@ public class Reservation {
 
     public void reserve(Long orderId) {
         if (isReserved()) {
-            throw new IllegalStateException("이미 예약이 되어 있습니다.");
+            throw new ReserveException(ErrorCode.ALREADY_RESERVED);
         }
         this.status = ReservationStatus.RESERVED;
         this.orderId = orderId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Reservation that = (Reservation) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(roomId, that.roomId)
+                && Objects.equals(date, that.date) && Objects.equals(orderId, that.orderId)
+                && status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), roomId, date, orderId, status);
+    }
+
+    public boolean isAvailable() {
+        return !isReserved();
     }
 }
