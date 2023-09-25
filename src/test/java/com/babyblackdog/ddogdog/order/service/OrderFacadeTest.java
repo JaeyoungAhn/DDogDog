@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.coupon.application.CouponFacade;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCancelResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.OrderCreateResult;
 import com.babyblackdog.ddogdog.order.service.dto.result.RoomOrderPageResult;
@@ -42,6 +43,9 @@ class OrderFacadeTest {
 
     @MockBean
     private UserAccessorService userAccessorService;
+
+    @MockBean
+    private CouponFacade couponFacade;
 
     @Autowired
     private TimeProvider timeProvider;
@@ -135,7 +139,7 @@ class OrderFacadeTest {
             given(reservationService.reserve(roomId, stayPeriod, createdOrderId)).willReturn(reservationIdList);
 
             // When
-            OrderCreateResult actual = orderFacade.order(roomId, stayPeriod);
+            OrderCreateResult actual = orderFacade.order(roomId, stayPeriod, null, null);
 
             // Then
             assertThat(actual.orderId()).isEqualTo(createdOrderId);
@@ -156,7 +160,7 @@ class OrderFacadeTest {
             given(placeAccessService.findRoomSimpleInfo(roomId)).willThrow(RuntimeException.class);
 
             // When & Then
-            assertThatThrownBy(() -> orderFacade.order(roomId, stayPeriod))
+            assertThatThrownBy(() -> orderFacade.order(roomId, stayPeriod, null, null))
                     .isInstanceOf(RuntimeException.class);
         }
 
@@ -185,7 +189,7 @@ class OrderFacadeTest {
             willThrow(IllegalStateException.class).given(userAccessorService).debitPoint(dailyPoint);
 
             // When & Then
-            assertThatThrownBy(() -> orderFacade.order(roomId, stayPeriod))
+            assertThatThrownBy(() -> orderFacade.order(roomId, stayPeriod, null, null))
                     .isInstanceOf(IllegalStateException.class);
         }
     }
