@@ -3,9 +3,14 @@ package com.babyblackdog.ddogdog;
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.auth.Role;
 import com.babyblackdog.ddogdog.common.point.Point;
+import com.babyblackdog.ddogdog.coupon.domain.Coupon;
 import com.babyblackdog.ddogdog.coupon.domain.vo.DiscountType;
 import com.babyblackdog.ddogdog.coupon.service.CouponService;
+import com.babyblackdog.ddogdog.coupon.service.dto.command.InstantCouponCreationCommand;
 import com.babyblackdog.ddogdog.coupon.service.dto.command.ManualCouponCreationCommand;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponCreationResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponClaimResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponCreationResult;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.model.vo.Occupancy;
@@ -39,29 +44,48 @@ public class TestConfig {
     @Autowired
     private UserService userService;
 
-    Long roomId;
+    String jwtUserToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYWJ5LWJsYWNrZG9nIiwiaWF0IjoxNjk1NjE1NjE5LCJleHAiOjIwNDI2ODQ0MTksImF1ZCI6IiIsInN1YiI6IiIsImVtYWlsIjoieW91bmdzb29AZ21haWwuY29tIiwicm9sZSI6InVzZXIifQ.AU9NkmViz5qx0eJWJO5dTgNzz-EEbdYbJeflM8iVSRutCu-j923FFT387nOOINTbIp-xsa5NuF7bBN419biJxA";
+
+    String jwtOwnerToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYWJ5LWJsYWNrZG9nIiwiaWF0IjoxNjk1NjE1NjE5LCJleHAiOjIwNDI2ODQ0MTksImF1ZCI6IiIsInN1YiI6IiIsImVtYWlsIjoiYm9vamlubGVlQGdtYWlsLmNvbSIsInJvbGUiOiJvd25lciJ9.iPRkPycu1IHkzLXhUMQeEAuZc7qqAJ7F0ASMSVED8WAdFHvaaqmYotJY-3tKybRNBB9p3AmVoaDtY1QGnk1TPg";
+
+    String jwtAdminToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYWJ5LWJsYWNrZG9nIiwiaWF0IjoxNjk1NjE1NjE5LCJleHAiOjIwNDI2ODQ0MTksImF1ZCI6IiIsInN1YiI6IiIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6IltBRE1JTl0ifQ.ymIW44wJwhIPZrEkpXebWXO_KU5TGgPSME-bfm9rsto6Zs-TpO97PsoTkC77uCaO0BKG2aIa3iA9pSeLhhqcDw";
+
+    Long hotelId;
+
+    RoomResult room;
+
+    Email userEmail;
 
     Email userOwnerEmail;
+
+    ManualCouponCreationResult manualCoupon;
+
+    ManualCouponClaimResult claimedManualCoupon;
+
+    InstantCouponCreationResult instantCoupon;
 
     @Bean
     public ApplicationRunner applicationRunner() {
         return args -> {
-            addUser();
+            userEmail = addUser();
 
             userOwnerEmail = addOwner();
-            Long hotelId = addHotel(userOwnerEmail.getValue());
-            roomId = addRoom(hotelId, userOwnerEmail.getValue());
+            hotelId = addHotel();
+            room = addRoom();
 
             String userAdminEmail = addAdmin();
-            addManualCoupon();
-            System.out.println("hello");
+            manualCoupon = addManualCoupon();
+            instantCoupon = addInstantCoupon();
 
+            claimedManualCoupon = claimManualCoupon();
         };
     }
 
 
-    private void addUser() {
+    private Email addUser() {
+        Email userEmail = new Email("youngsoo@gmail.com");
         userService.save(new User("youngsoo@gmail.com", Role.USER, new Point(1000000L)));
+        return userEmail;
     }
 
     private Email addOwner() {
@@ -75,11 +99,11 @@ public class TestConfig {
         return "admin@gmail.com";
     }
 
-    private Long addHotel(String userOwnerEmail) {
+    private Long addHotel() {
         AddHotelParam addHotelParam = new AddHotelParam(
                 new HotelName("서울신라호텔"),
                 new Province("서울"),
-                new Email(userOwnerEmail),
+                new Email(userOwnerEmail.getValue()),
                 new PhoneNumber("010-2023-1593"),
                 new HumanName("이부진"),
                 new BusinessName("호텔신라")
@@ -88,7 +112,7 @@ public class TestConfig {
         return hotelResult.id();
     }
 
-    private Long addRoom(Long hotelId, String userOwnerEmail) {
+    private RoomResult addRoom() {
         AddRoomParam addRoomParam = new AddRoomParam(
                 RoomType.DELUXE,
                 hotelId,
@@ -101,12 +125,10 @@ public class TestConfig {
                 new Point(200_000)
         );
 
-        RoomResult roomResult = placeService.registerRoomOfHotel(addRoomParam);
-
-        return roomResult.id();
+        return placeService.registerRoomOfHotel(addRoomParam);
     }
 
-    private void addManualCoupon() {
+    private ManualCouponCreationResult addManualCoupon() {
         ManualCouponCreationCommand manualCouponCreationCommand = new ManualCouponCreationCommand(
                 "한정 수량 무료 쿠폰",
                 DiscountType.AMOUNT.name(),
@@ -117,14 +139,65 @@ public class TestConfig {
                 LocalDate.now().plusMonths(1)
         );
 
-        couponService.registerManualCoupon(manualCouponCreationCommand);
+        return couponService.registerManualCoupon(manualCouponCreationCommand);
     }
 
-    public Long getRoomId() {
-        return roomId;
+    private ManualCouponClaimResult claimManualCoupon() {
+        Coupon retrievedCoupon = couponService.findCouponByPromoCode(manualCoupon.promoCode());
+
+        return couponService.registerManualCouponUsage(userEmail, retrievedCoupon);
+    }
+
+    private InstantCouponCreationResult addInstantCoupon() {
+        InstantCouponCreationCommand instantCouponCreationCommand = new InstantCouponCreationCommand(
+                room.id(),
+                "삭제 예정인 즉시 할인 쿠폰",
+                "percent",
+                100.0,
+                LocalDate.now(),
+                LocalDate.now().plusDays(1)
+        );
+
+        return couponService.registerInstantCoupon(instantCouponCreationCommand);
+    }
+
+    public Long getHotelId() {
+        return hotelId;
+    }
+
+    public RoomResult getRoom() {
+        return room;
+    }
+
+    public Email getUserEmail() {
+        return userEmail;
     }
 
     public Email getUserOwnerEmail() {
         return userOwnerEmail;
+    }
+
+    public InstantCouponCreationResult getInstantCoupon() {
+        return instantCoupon;
+    }
+
+    public ManualCouponCreationResult getManualCoupon() {
+        return manualCoupon;
+    }
+
+    public ManualCouponClaimResult getClaimedManualCoupon() {
+        return claimedManualCoupon;
+    }
+
+    public String getJwtUserToken() {
+        return jwtUserToken;
+    }
+
+    public String getJwtOwnerToken() {
+        return jwtOwnerToken;
+    }
+
+    public String getJwtAdminToken() {
+        return jwtAdminToken;
     }
 }
