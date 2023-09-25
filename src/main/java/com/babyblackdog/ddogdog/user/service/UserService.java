@@ -34,6 +34,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User userEntity = this.findByEmail(email)
                 .map(user -> {
@@ -55,6 +56,10 @@ public class UserService implements UserDetailsService {
         userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserException(USER_NOT_FOUND))
                 .addPoint(charge);
+    }
+
+    public void save(User newUser) {
+        userRepository.save(newUser);
     }
 
     @Transactional
