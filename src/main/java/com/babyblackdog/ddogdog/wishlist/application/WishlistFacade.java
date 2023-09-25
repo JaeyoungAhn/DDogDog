@@ -29,8 +29,8 @@ public class WishlistFacade {
         return service.registerWishlist(email, hotelId);
     }
 
-    public void deleteWishlist(Long wishlistId) {
-        service.deleteWishlist(wishlistId);
+    public void deleteWishlist(Long hotelId) {
+        service.deleteWishlist(hotelId);
     }
 
     public WishlistResults findWishlistsByEmail(String email, Pageable pageable) {

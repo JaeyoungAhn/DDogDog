@@ -30,6 +30,7 @@ import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
 import com.babyblackdog.ddogdog.user.model.User;
 import com.babyblackdog.ddogdog.user.model.vo.HumanName;
 import com.babyblackdog.ddogdog.user.service.UserService;
+import com.babyblackdog.ddogdog.wishlist.service.WishlistService;
 import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -54,6 +55,9 @@ public class TestConfig {
 
     @Autowired
     private TimeProvider timeProvider;
+
+    @Autowired
+    private WishlistService wishlistService;
 
     String jwtUserToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYWJ5LWJsYWNrZG9nIiwiaWF0IjoxNjk1NjE1NjE5LCJleHAiOjIwNDI2ODQ0MTksImF1ZCI6IiIsInN1YiI6IiIsImVtYWlsIjoieW91bmdzb29AZ21haWwuY29tIiwicm9sZSI6InVzZXIifQ.AU9NkmViz5qx0eJWJO5dTgNzz-EEbdYbJeflM8iVSRutCu-j923FFT387nOOINTbIp-xsa5NuF7bBN419biJxA";
 
@@ -93,7 +97,12 @@ public class TestConfig {
             claimedManualCoupon = claimManualCoupon();
 
             order = addOrder();
+//            addWishlist();
         };
+    }
+
+    private void addWishlist() {
+        wishlistService.registerWishlist(userEmail.getValue(), hotelId);
     }
 
 

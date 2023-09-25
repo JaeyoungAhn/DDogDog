@@ -41,15 +41,15 @@ public class WishlistServiceImpl implements WishlistService {
 
     @Transactional
     @Override
-    public void deleteWishlist(Long wishlistId) {
+    public void deleteWishlist(Long placeId) {
         Email email = authentication.getEmail();
 
-        Wishlist wishlist = reader.findWishlistById(wishlistId);
+        Wishlist wishlist = reader.findWishlistByPlaceId(placeId);
         if (doesNotMatch(email, wishlist)) {
             throw new WishlistException(INVALID_WISHLIST_PERMISSION);
         }
 
-        store.deleteWishlist(wishlistId);
+        store.deleteWishlist(wishlist);
     }
 
     private static boolean doesNotMatch(Email email, Wishlist wishlist) {

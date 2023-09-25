@@ -15,12 +15,12 @@ public interface WishlistService {
     WishlistResult registerWishlist(String email, Long hotelId);
 
     /**
-     * wishlistId에 해당하는 wishlist 를 삭제한다.
+     * hotelId 해당하는 wishlist 를 삭제한다.
      *
-     * @param wishlistId
+     * @param hotelId
      * @return void
      */
-    void deleteWishlist(Long wishlistId);
+    void deleteWishlist(Long hotelId);
 
     /**
      * email, pageable 에 해당하는 WishlistResults 를 얻어온다.
