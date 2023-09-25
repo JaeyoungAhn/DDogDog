@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.coupon.controller.dto.response;
 
-import com.babyblackdog.ddogdog.coupon.service.dto.InstantCouponFindResult;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponFindResult;
 import java.time.LocalDate;
 
 public record InstantCouponFindResponse(Long couponId, Long roomId, String couponName, String couponType,

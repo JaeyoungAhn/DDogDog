@@ -48,21 +48,30 @@ public class Coupon {
     @Embedded
     private CouponPeriod couponPeriod;
 
-    public Coupon(CouponName couponName, CouponType couponType, DiscountValue discountValue, String promoCode,
+    public Coupon(
+            CouponName couponName,
+            DiscountValue discountValue,
+            String promoCode,
             Long issueCount,
-            CouponPeriod couponPeriod) {
+            CouponPeriod couponPeriod
+    ) {
         this.couponName = couponName;
-        this.couponType = couponType;
+        this.couponType = CouponType.MANUAL;
         this.discountValue = discountValue;
         this.promoCode = promoCode;
         this.issueCount = issueCount;
         this.couponPeriod = couponPeriod;
+        this.remainingCount = issueCount;
     }
 
-    public Coupon(Long roomId, CouponType couponType, CouponName couponName, DiscountValue discountValue,
-            CouponPeriod couponPeriod) {
+    public Coupon(
+            Long roomId,
+            CouponName couponName,
+            DiscountValue discountValue,
+            CouponPeriod couponPeriod
+    ) {
         this.roomId = roomId;
-        this.couponType = couponType;
+        this.couponType = CouponType.INSTANT;
         this.couponName = couponName;
         this.discountValue = discountValue;
         this.couponPeriod = couponPeriod;

@@ -1,6 +1,6 @@
 package com.babyblackdog.ddogdog.coupon.controller.dto.response;
 
-import com.babyblackdog.ddogdog.coupon.service.dto.ManualCouponFindResults;
+import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponFindResults;
 import java.util.List;
 
 public record ManualCouponFindResponses(List<ManualCouponFindResponse> manualCouponResponses) {
