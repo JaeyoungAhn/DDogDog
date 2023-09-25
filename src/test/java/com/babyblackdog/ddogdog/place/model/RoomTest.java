@@ -3,6 +3,7 @@ package com.babyblackdog.ddogdog.place.model;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.RoomException;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
@@ -26,7 +27,7 @@ class RoomTest {
         hotel = new Hotel(
                 new HotelName("신라호텔"),
                 new Province("서울"),
-                1L,
+                new Email("2bj@sinla.com"),
                 new PhoneNumber("010-1234-1234"),
                 new HumanName("이부진"),
                 new BusinessName("신세계")
