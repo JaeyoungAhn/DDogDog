@@ -101,6 +101,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    @Transactional
     public Coupon findCouponByPromoCode(String promoCode) {
         return reader.findCouponByPromoCode(promoCode);
     }
