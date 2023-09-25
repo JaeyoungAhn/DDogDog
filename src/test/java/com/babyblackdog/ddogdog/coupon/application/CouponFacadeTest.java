@@ -219,8 +219,6 @@ class CouponFacadeTest {
     @DisplayName("퍼센트 단위의 즉시 쿠폰 적용을 통해 할인 받는 액수를 확인한다.")
     void calculateDiscountAmountForInstantCoupon_returnDiscountAmount() {
         // Given
-//        given(jwtSimpleAuthentication.getEmail()).willReturn(config.getUserEmail());
-//        given(jwtSimpleAuthentication.getRole()).willReturn(Role.USER);
         RoomResult room = config.getRoom();
         InstantCouponCreationResult createdInstantCoupon = config.getInstantCoupon();
         long discountValue = createdInstantCoupon.discountValue().longValue(); // PERCENT:100%
