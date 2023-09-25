@@ -17,10 +17,10 @@ public interface PlaceAccessService {
     /**
      * 리뷰 추가 시 해당 리뷰 점수를 평균 별점에 갱신
      *
-     * @param hotelId
+     * @param roomId
      * @param ratingScore
      */
-    void addRatingScoreOfHotel(Long hotelId, double ratingScore);
+    void addRatingScoreOfHotel(Long roomId, double ratingScore);
 
     /**
      * 리뷰 등록을 위해 호텔에 대한 객실 조회

@@ -12,11 +12,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlaceTestData {
 
+    public String getJwtToken() {
+        return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYWJ5LWJsYWNrZG9nIiwiaWF0IjoxNjk1NjE2MTkzLCJleHAiOjE3MjcxNTIxOTMsImF1ZCI6IiIsInN1YiI6IiIsImVtYWlsIjoiMmJqQHNpbmxhLmNvbSIsInJvbGUiOiJPV05FUiJ9.0R3k2AoHSnDPZII4yZkto_qoispGto2FYlEx_xaWz55l-1EeC_e7DijrxnDqpoJOBNJCB_KlHfBh8IfB3m05rg";
+    }
+
     public AddHotelRequest addHotelRequest() {
         return new AddHotelRequest(
                 "신라호텔",
                 "서울",
-                1L,
+                "2bj@sinla.com",
                 "010-1234-4321",
                 "이부진",
                 "신세계"
@@ -31,7 +35,7 @@ public class PlaceTestData {
         return AddHotelParam.to(addHotelParam());
     }
 
-    private AddRoomRequest addRoomRequest() {
+    public AddRoomRequest addRoomRequest() {
         return new AddRoomRequest(
                 "더블",
                 "침대가 두 개지요",
