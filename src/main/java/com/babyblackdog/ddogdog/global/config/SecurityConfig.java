@@ -7,6 +7,7 @@ import com.babyblackdog.ddogdog.global.jwt.JwtAuthenticationProvider;
 import com.babyblackdog.ddogdog.global.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.babyblackdog.ddogdog.global.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.babyblackdog.ddogdog.user.service.UserService;
+import java.util.List;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,9 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -36,6 +40,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // 이 부분 추가
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(
                                 antMatcher("/login")).permitAll()
@@ -56,8 +61,7 @@ public class SecurityConfig {
                                 jwtAuthenticationProvider(), applicationContext.getBean(UserService.class))))
                 .addFilterBefore(
                         jwtAuthenticationFilter(jwtAuthenticationProvider()),
-                        AnonymousAuthenticationFilter.class)
-        ;
+                        AnonymousAuthenticationFilter.class);
         return http.build();
     }
 
@@ -81,6 +85,19 @@ public class SecurityConfig {
 
     public JwtAuthenticationFilter jwtAuthenticationFilter(JwtAuthenticationProvider jwtProvider) {
         return new JwtAuthenticationFilter(jwtProvider);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedMethods(List.of("*"));
+        configuration.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 
     @Bean
