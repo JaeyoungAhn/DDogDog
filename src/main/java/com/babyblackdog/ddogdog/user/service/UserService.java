@@ -58,6 +58,7 @@ public class UserService implements UserDetailsService {
                 .addPoint(charge);
     }
 
+    @Transactional
     public void save(User newUser) {
         userRepository.save(newUser);
     }
