@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(properties = {"spring.profiles.active=test"})
 @Transactional
 class PlaceAccessServiceImplTest {
 
@@ -47,9 +47,10 @@ class PlaceAccessServiceImplTest {
         // Given
         double expect = 4.5;
         HotelResult hotelResult = placeService.registerHotel(placeTestData.addHotelParam());
+        RoomResult roomResult = placeService.registerRoomOfHotel(placeTestData.addRoomParam(hotelResult.id()));
 
         // When
-        placeAccessService.addRatingScoreOfHotel(hotelResult.id(), expect);
+        placeAccessService.addRatingScoreOfHotel(roomResult.id(), expect);
 
         // Then
         HotelResult hotel = placeService.findHotel(hotelResult.id());
