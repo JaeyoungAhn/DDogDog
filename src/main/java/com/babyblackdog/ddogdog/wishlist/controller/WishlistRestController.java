@@ -32,7 +32,7 @@ public class WishlistRestController {
         this.authentication = authentication;
     }
 
-    @PutMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PutMapping(produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<WishlistResponse> createWishlist(@RequestParam Long hotelId) {
         Email email = authentication.getEmail();
 
@@ -43,9 +43,9 @@ public class WishlistRestController {
                 .body(WishlistResponse.of(addedWishlistResult));
     }
 
-    @DeleteMapping("/{wishlistId}")
-    public ResponseEntity<Void> removeWishlist(@PathVariable Long wishlistId) {
-        facade.deleteWishlist(wishlistId);
+    @DeleteMapping("/{hotelId}")
+    public ResponseEntity<Void> removeWishlist(@PathVariable Long hotelId) {
+        facade.deleteWishlist(hotelId);
         return ResponseEntity.noContent().build();
     }
 

@@ -24,8 +24,8 @@ public class WishlistReaderImpl implements WishlistReader {
     }
 
     @Override
-    public Wishlist findWishlistById(Long wishlistId) {
-        return repository.findById(wishlistId)
+    public Wishlist findWishlistByPlaceId(Long placeId) {
+        return repository.findByPlaceId(placeId)
                 .orElseThrow(() -> new WishlistException(WISHLIST_NOT_FOUND));
     }
 

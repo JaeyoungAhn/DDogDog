@@ -15,12 +15,11 @@ public class WishlistStoreImpl implements WishlistStore {
 
     @Override
     public Wishlist registerWishlist(Wishlist wishlist) {
-        repository.existsByEmailAndPlaceId(wishlist.getEmail(), wishlist.getPlaceId());
         return repository.save(wishlist);
     }
 
     @Override
-    public void deleteWishlist(Long wishlistId) {
-        repository.deleteById(wishlistId);
+    public void deleteWishlist(Wishlist wishlist) {
+        repository.delete(wishlist);
     }
 }

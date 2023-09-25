@@ -9,7 +9,7 @@ public interface WishlistReader {
 
     Page<Wishlist> findWishlistsByEmail(Email email, Pageable pageable);
 
-    Wishlist findWishlistById(Long wishlistId);
-
     Boolean existsByEmailAndPlaceId(Email email, Long placeId);
+
+    Wishlist findWishlistByPlaceId(Long placeId);
 }

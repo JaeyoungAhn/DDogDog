@@ -6,5 +6,5 @@ public interface WishlistStore {
 
     Wishlist registerWishlist(Wishlist wishlist);
 
-    void deleteWishlist(Long wishlistId);
+    void deleteWishlist(Wishlist wishlist);
 }
