@@ -1,11 +1,15 @@
 package com.babyblackdog.ddogdog.place.accessor;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.HOTEL_NOT_FOUND;
+import static com.babyblackdog.ddogdog.global.exception.ErrorCode.ROOM_NOT_FOUND;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.global.exception.RatingException;
+import com.babyblackdog.ddogdog.global.exception.RoomException;
 import com.babyblackdog.ddogdog.place.accessor.vo.RoomSimpleResult;
+import com.babyblackdog.ddogdog.place.model.Room;
 import com.babyblackdog.ddogdog.place.repository.RatingRepository;
+import com.babyblackdog.ddogdog.place.repository.RoomRepository;
 import com.babyblackdog.ddogdog.place.service.PlaceService;
 import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import com.babyblackdog.ddogdog.place.service.dto.RoomResult;
@@ -19,10 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaceAccessServiceImpl implements PlaceAccessService {
 
     private final PlaceService placeService;
+    private final RoomRepository roomRepository;
     private final RatingRepository ratingRepository;
 
-    public PlaceAccessServiceImpl(PlaceService placeService, RatingRepository ratingRepository) {
+    public PlaceAccessServiceImpl(PlaceService placeService, RoomRepository roomRepository, RatingRepository ratingRepository) {
         this.placeService = placeService;
+        this.roomRepository = roomRepository;
         this.ratingRepository = ratingRepository;
     }
 
@@ -35,7 +41,9 @@ public class PlaceAccessServiceImpl implements PlaceAccessService {
     @Override
     @Transactional
     public void addRatingScoreOfHotel(Long roomId, double ratingScore) {
-        ratingRepository.findByHotelId(placeService.findRoom(roomId).id())
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND));
+        ratingRepository.findByHotelId(room.getHotel().getId())
                 .orElseThrow(() -> new RatingException(HOTEL_NOT_FOUND))
                 .addRatingScore(ratingScore);
     }

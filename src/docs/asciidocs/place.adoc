@@ -1,0 +1,536 @@
+= Place API 명세
+
+[NOTE]
+====
+이 문서는 Place API의 명세를 설명합니다.
+====
+
+== 숙소 추가 요청으로 숙소를 등록한다.
+
+=== 요청
+[options="header"]
+|===
+| 헤더 이름 | 설명
+| Authorization | JWT 토큰
+|===
+
+[options="header"]
+|===
+| 필드 이름 | 타입 | 설명
+| hotelName | 문자열 | 숙소 이름
+| province | 문자열 | 지역 이름
+| adminEmail | 문자열 | 관리자 이메일
+| contact | 문자열 | 문의처
+| representative | 문자열 | 대표자명
+| businessName | 문자열 | 사업장명
+|===
+
+[options="header"]
+|===
+| URL | 메서드 | 설명
+| /places | POST | 숙소 추가 요청
+|===
+
+=== HTTP 요청 예제
+[source,http]
+----
+POST /places HTTP/1.1
+Host: example.com
+Authorization: Bearer [JWT Token]
+Content-Type: application/json
+Accept: application/json
+
+{
+    "hotelName": "예시 호텔",
+    "province": "예시 지역",
+    "adminEmail": "admin@example.com",
+    "contact": "123-456-7890",
+    "representative": "예시 대표",
+    "businessName": "예시 사업장"
+}
+----
+
+=== HTTP 응답 예제
+[source,http]
+----
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "예시 호텔",
+    "address": "예시 지역",
+    "adminEmail": "admin@example.com",
+    "contact": "123-456-7890",
+    "representative": "예시 대표",
+    "businessName": "예시 사업장",
+    "ratingScore": 0
+}
+----
+
+== 숙소 아이디로 숙소와 숙소 내 객실을 제거한다.
+
+=== 요청
+[options="header"]
+|===
+| 헤더 이름 | 설명
+| Authorization | JWT 토큰
+|===
+
+[options="header"]
+|===
+| 경로 변수 | 설명
+| hotelId | 호텔 아이디
+|===
+
+[options="header"]
+|===
+| URL | 메서드 | 설명
+| /places/{hotelId} | DELETE | 숙소 제거 요청
+|===
+
+=== HTTP 요청 예제
+[source,http]
+----
+DELETE /places/1 HTTP/1.1
+Host: example.com
+Authorization: Bearer [JWT Token]
+Content-Type: application/json
+Accept: application/json
+----
+
+=== HTTP 응답 예제
+[source,http]
+----
+HTTP/1.1 204 No Content
+----
+
+== 숙소 아이디로 숙소를 조회한다.
+
+=== 요청
+[options="header"]
+|===
+| 헤더 이름 | 설명
+| Authorization | JWT 토큰
+|===
+
+[options="header"]
+|===
+| 경로 변수 | 설명
+| hotelId | 숙소 아이디
+|===
+
+[options="header"]
+|===
+| URL | 메서드 | 설명
+| /places/{hotelId} | GET | 숙소 조회 요청
+|===
+
+=== HTTP 요청 예제
+[source,http]
+----
+GET /places/1 HTTP/1.1
+Host: example.com
+Authorization: Bearer [JWT Token]
+Accept: application/json
+----
+
+=== HTTP 응답 예제
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "예시 호텔",
+    "address": "예시 지역",
+    "adminEmail": "admin@example.com",
+    "contact": "123-456-7890",
+    "representative": "예시 대표",
+    "businessName": "예시 사업장",
+    "ratingScore": 0
+}
+----
+
+== 지역 이름으로 숙소를 조회한다.
+
+=== 요청
+[options="header"]
+|===
+| 헤더 이름 | 설명
+| Authorization | JWT 토큰
+|===
+
+[options="header"]
+|===
+| 쿼리 매개변수 | 설명
+| province | 지역 이름
+| page | 페이지
+| size | 크기
+|===
+
+[options="header"]
+|===
+| URL | 메서드 | 설명
+| /places | GET | 지역별 숙소 조회 요청
+|===
+
+=== HTTP 요청 예제
+[source,http]
+----
+GET /places?province=예시지역&page=0&size=5 HTTP/1.1
+Host: example.com
+Authorization: Bearer [JWT Token]
+Accept: application/json
+----
+
+=== HTTP 응답 예제
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+    "hotelResponses": {
+        "content": [
+            {
+                "id": 1,
+                "name": "예시 호텔",
+                "address": "예시 지역",
+                "adminEmail": "admin@example.com",
+                "contact": "123-456-7890",
+                "representative": "예시 대표",
+                "businessName": "예시 사업장",
+                "ratingScore": 0
+            }
+        ],
+        "pageable": {
+            "pageNumber": 0,
+            "pageSize": 5,
+            "sort": {
+                "empty": false,
+                "unsorted": false,
+                "sorted": false
+            },
+            "offset": 0,
+            "paged": false,
+            "unpaged": false
+        },
+        "last": true,
+        "totalPages": 1,
+        "totalElements": 1,
+        "first": true,
+        "size": 5,
+        "number": 0,
+        "sort": {
+            "empty": false,
+            "unsorted": false,
+            "sorted": false
+        },
+        "numberOfElements": 1,
+        "empty": false
+    }
+}
+----
+
+== 존재하는 호텔에 객실을 추가한다.
+
+[options="header"]
+|===
+|메서드|URL|설명
+
+|POST|/places/{hotelId}|존재하는 호텔에 객실을 추가한다.
+|===
+
+=== 요청
+
+[options="header"]
+|===
+|필드|타입|설명
+
+|roomType|문자열|객실 타입
+|description|문자열|객실 설명
+|occupancy|숫자|객실 최대 수용 인원
+|hasBed|부울|객실 침대 여부
+|hasAmenities|부울|객실 생필품 여부
+|smokingAvailable|부울|객실 흡연 여부
+|roomNumber|문자열|객실 방 번호
+|point|숫자|객실 기본 요금
+|===
+[source,http]
+----
+POST /places/{hotelId} HTTP/1.1
+Host: your-api-host.com
+Authorization: Bearer your-jwt-token
+Content-Type: application/json
+Accept: application/json
+
+{
+  "roomType": "Single",
+  "description": "Single room with a view",
+  "occupancy": 1,
+  "hasBed": true,
+  "hasAmenities": true,
+  "smokingAvailable": false,
+  "roomNumber": "101",
+  "point": 100
+}
+----
+
+
+=== 응답
+
+[options="header"]
+|===
+|필드|타입|설명
+
+|id|숫자|객실 아이디
+|hotelName|문자열|호텔 이름
+|roomType|문자열|객실 타입
+|description|문자열|객실 설명
+|occupancy|숫자|객실 최대 수용 인원
+|hasBed|부울|객실 침대 여부
+|hasAmenities|부울|객실 생필품 여부
+|smokingAvailable|부울|객실 흡연 가능 여부
+|roomNumber|문자열|객실 방 번호
+|point|숫자|객실 기본 가격
+|===
+[source,http]
+----
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "id": 1,
+  "hotelName": "Hotel ABC",
+  "roomType": "Single",
+  "description": "Single room with a view",
+  "occupancy": 1,
+  "hasBed": true,
+  "hasAmenities": true,
+  "smokingAvailable": false,
+  "roomNumber": "101",
+  "point": 100
+}
+----
+
+== 존재하는 호텔에 객실을 제거한다.
+
+[options="header"]
+|===
+|메서드|URL|설명
+
+|DELETE|/places/{hotelId}/{roomId}|존재하는 호텔에 객실을 제거한다.
+|===
+
+=== 경로 매개변수
+
+[options="header"]
+|===
+|파라미터|설명
+
+|hotelId|호텔 아이디
+|roomId|객실 아이디
+|===
+
+[source,http]
+----
+DELETE /places/{hotelId}/{roomId} HTTP/1.1
+Host: your-api-host.com
+Authorization: Bearer your-jwt-token
+Accept: application/json
+Content-Type: application/json
+----
+[source,http]
+----
+HTTP/1.1 204 No Content
+----
+
+
+== 객실 정보를 조회한다.
+
+[options="header"]
+|===
+|메서드|URL|설명
+
+|GET|/places/{hotelId}/{roomId}|객실 정보를 조회한다.
+|===
+
+=== 경로 매개변수
+
+[options="header"]
+|===
+|파라미터|설명
+
+|hotelId|숙소 아이디
+|roomId|객실 아이디
+|===
+[source,http]
+----
+GET /places/{hotelId}/{roomId} HTTP/1.1
+Host: your-api-host.com
+Authorization: Bearer your-jwt-token
+Accept: application/json
+Content-Type: application/json
+----
+
+=== 응답
+
+[options="header"]
+|===
+|필드|타입|설명
+
+|id|숫자|객실 아이디
+|hotelName|문자열|호텔 이름
+|roomType|문자열|객실 타입
+|description|문자열|객실 설명
+|occupancy|숫자|객실 최대 수용 인원
+|hasBed|부울|객실 침대 여부
+|hasAmenities|부울|객실 생필품 여부
+|smokingAvailable|부울|객실 흡연 가능 여부
+|roomNumber|문자열|객실 방 번호
+|point|숫자|객실 기본 가격
+|===
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 1,
+  "hotelName": "Hotel ABC",
+  "roomType": "Single",
+  "description": "Single room with a view",
+  "occupancy": 1,
+  "hasBed": true,
+  "hasAmenities": true,
+  "smokingAvailable": false,
+  "roomNumber": "101",
+  "point": 100
+}
+----
+
+== 호텔의 모든 객실 정보를 조회한다.
+
+[options="header"]
+|===
+|메서드|URL|설명
+
+|GET|/places/{hotelId}/rooms|호텔의 모든 객실 정보를 조회한다.
+|===
+
+=== 경로 매개변수
+
+[options="header"]
+|===
+|파라미터|설명
+|hotelId|호텔 아이디
+|===
+
+=== 쿼리 매개변수
+
+[options="header"]
+|===
+|파라미터|설명
+|page|페이지
+|size|크기
+|===
+[source,http]
+----
+GET /places/{hotelId}/rooms?page=0&size=5 HTTP/1.1
+Host: your-api-host.com
+Authorization: Bearer your-jwt-token
+Accept: application/json
+Content-Type: application/json
+----
+
+=== 응답
+
+[options="header"]
+|===
+|필드|타입|설명
+|roomResponses|객체|객실 응답
+|roomResponses.content|배열|객실 정보 배열
+|roomResponses.content[].id|숫자|객실 아이디
+|roomResponses.content[].hotelName|문자열|호텔 이름
+|roomResponses.content[].roomType|문자열|객실 타입
+|roomResponses.content[].description|문자열|객실 설명
+|roomResponses.content[].occupancy|숫자|객실 최대 수용 인원
+|roomResponses.content[].hasBed|부울|객실 침대 여부
+|roomResponses.content[].hasAmenities|부울|객실 생필품 여부
+|roomResponses.content[].smokingAvailable|부울|객실 흡연 가능 여부
+|roomResponses.content[].roomNumber|문자열|객실 방 번호
+|roomResponses.content[].point|숫자|객실 기본 가격
+|roomResponses.pageable|객체|pageable (무시됨)
+|roomResponses.pageable.pageNumber|숫자|pageNumber
+|roomResponses.pageable.pageSize|숫자|pageSize
+|roomResponses.pageable.sort|객체|pageSize (무시됨)
+|roomResponses.pageable.sort.empty|부울|pageSize (무시됨)
+|roomResponses.pageable.sort.unsorted|부울|pageSize (무시됨)
+|roomResponses.pageable.sort.sorted|부울|pageSize (무시됨)
+|roomResponses.pageable.offset|숫자|offset
+|roomResponses.pageable.paged|부울|paged
+|roomResponses.pageable.unpaged|부울|unpaged
+|roomResponses.last|부울|last (무시됨)
+|roomResponses.totalPages|숫자|totalPages
+|roomResponses.totalElements|숫자|totalElements
+|roomResponses.first|부울|first (무시됨)
+|roomResponses.size|숫자|size (무시됨)
+|roomResponses.number|숫자|number (무시됨)
+|roomResponses.sort|객체|sort (무시됨)
+|roomResponses.sort.empty|부울|sort.empty (무시됨)
+|roomResponses.sort.unsorted|부울|sort.unsorted (무시됨)
+|roomResponses.sort.sorted|부울|sort.sorted (무시됨)
+|roomResponses.numberOfElements|숫자|numberOfElements (무시됨)
+|roomResponses.empty|부울|empty (무시됨)
+|===
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "roomResponses": {
+    "content": [
+      {
+        "id": 1,
+        "hotelName": "Hotel ABC",
+        "roomType": "Single",
+        "description": "Single room with a view",
+        "occupancy": 1,
+        "hasBed": true,
+        "hasAmenities": true,
+        "smokingAvailable": false,
+        "roomNumber": "101",
+        "point": 100
+      }
+    ],
+    "pageable": {
+      "pageNumber": 0,
+      "pageSize": 5,
+      "sort": {
+        "empty": true,
+        "unsorted": true,
+        "sorted": false
+      },
+      "offset": 0,
+      "paged": true,
+      "unpaged": false
+    },
+    "last": true,
+    "totalPages": 1,
+    "totalElements": 1,
+    "first": true,
+    "size": 5,
+    "number": 0,
+    "sort": {
+      "empty": true,
+      "unsorted": true,
+      "sorted": false
+    },
+    "numberOfElements": 1,
+    "empty": false
+  }
+}
+----

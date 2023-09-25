@@ -15,14 +15,6 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
 
-  logging:
-    level:
-      org:
-        hibernate:
-          type:
-            descriptor:
-              sql: debug
-
   security:
     oauth2:
       client:

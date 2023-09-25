@@ -26,11 +26,9 @@ public class UserService implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final UserRepository userRepository;
-    private final JwtSimpleAuthentication authentication;
 
-    public UserService(UserRepository userRepository, JwtSimpleAuthentication authentication) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.authentication = authentication;
     }
 
     @Override
@@ -61,13 +59,6 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void save(User newUser) {
         userRepository.save(newUser);
-    }
-
-    @Transactional
-    public String test() {
-        Email email = authentication.getEmail();
-        Role role = authentication.getRole();
-        return authentication.getEmailAddress();
     }
 
 }

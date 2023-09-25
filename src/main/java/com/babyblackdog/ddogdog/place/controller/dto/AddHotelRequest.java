@@ -16,7 +16,7 @@ public record AddHotelRequest(
         String hotelName,
         @NotBlank
         String province,
-        @Positive @NotNull
+        @NotBlank
         String adminEmail,
         @NotBlank
         String contact,

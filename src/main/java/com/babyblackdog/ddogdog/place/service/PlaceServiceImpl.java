@@ -29,13 +29,10 @@ public class PlaceServiceImpl implements
 
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
-    private final NotificationService notificationService;
 
-    public PlaceServiceImpl(HotelRepository hotelRepository, RoomRepository roomRepository,
-            NotificationService notificationService) {
+    public PlaceServiceImpl(HotelRepository hotelRepository, RoomRepository roomRepository) {
         this.hotelRepository = hotelRepository;
         this.roomRepository = roomRepository;
-        this.notificationService = notificationService;
     }
 
     @Override
