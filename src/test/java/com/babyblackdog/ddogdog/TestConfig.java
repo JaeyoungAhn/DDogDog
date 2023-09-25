@@ -11,6 +11,8 @@ import com.babyblackdog.ddogdog.coupon.service.dto.command.ManualCouponCreationC
 import com.babyblackdog.ddogdog.coupon.service.dto.result.InstantCouponCreationResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponClaimResult;
 import com.babyblackdog.ddogdog.coupon.service.dto.result.ManualCouponCreationResult;
+import com.babyblackdog.ddogdog.order.domain.Order;
+import com.babyblackdog.ddogdog.order.domain.OrderRepository;
 import com.babyblackdog.ddogdog.place.model.vo.BusinessName;
 import com.babyblackdog.ddogdog.place.model.vo.HotelName;
 import com.babyblackdog.ddogdog.place.model.vo.Occupancy;
@@ -23,6 +25,8 @@ import com.babyblackdog.ddogdog.place.service.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.place.service.dto.AddRoomParam;
 import com.babyblackdog.ddogdog.place.service.dto.HotelResult;
 import com.babyblackdog.ddogdog.place.service.dto.RoomResult;
+import com.babyblackdog.ddogdog.reservation.service.StayPeriod;
+import com.babyblackdog.ddogdog.reservation.service.TimeProvider;
 import com.babyblackdog.ddogdog.user.model.User;
 import com.babyblackdog.ddogdog.user.model.vo.HumanName;
 import com.babyblackdog.ddogdog.user.service.UserService;
@@ -44,6 +48,13 @@ public class TestConfig {
     @Autowired
     private UserService userService;
 
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private TimeProvider timeProvider;
+
     String jwtUserToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYWJ5LWJsYWNrZG9nIiwiaWF0IjoxNjk1NjE1NjE5LCJleHAiOjIwNDI2ODQ0MTksImF1ZCI6IiIsInN1YiI6IiIsImVtYWlsIjoieW91bmdzb29AZ21haWwuY29tIiwicm9sZSI6InVzZXIifQ.AU9NkmViz5qx0eJWJO5dTgNzz-EEbdYbJeflM8iVSRutCu-j923FFT387nOOINTbIp-xsa5NuF7bBN419biJxA";
 
     String jwtOwnerToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJiYWJ5LWJsYWNrZG9nIiwiaWF0IjoxNjk1NjE1NjE5LCJleHAiOjIwNDI2ODQ0MTksImF1ZCI6IiIsInN1YiI6IiIsImVtYWlsIjoiYm9vamlubGVlQGdtYWlsLmNvbSIsInJvbGUiOiJvd25lciJ9.iPRkPycu1IHkzLXhUMQeEAuZc7qqAJ7F0ASMSVED8WAdFHvaaqmYotJY-3tKybRNBB9p3AmVoaDtY1QGnk1TPg";
@@ -57,6 +68,8 @@ public class TestConfig {
     Email userEmail;
 
     Email userOwnerEmail;
+
+    Order order;
 
     ManualCouponCreationResult manualCoupon;
 
@@ -78,6 +91,8 @@ public class TestConfig {
             instantCoupon = addInstantCoupon();
 
             claimedManualCoupon = claimManualCoupon();
+
+            order = addOrder();
         };
     }
 
@@ -161,6 +176,14 @@ public class TestConfig {
         return couponService.registerInstantCoupon(instantCouponCreationCommand);
     }
 
+    private Order addOrder() {
+        Order order = new Order(getUserEmail(),
+                new StayPeriod(LocalDate.now().minusDays(2), LocalDate.now().minusDays(1), timeProvider),
+                new Point(100));
+        order.complete();
+        return orderRepository.save(order);
+    }
+
     public Long getHotelId() {
         return hotelId;
     }
@@ -199,5 +222,9 @@ public class TestConfig {
 
     public String getJwtAdminToken() {
         return jwtAdminToken;
+    }
+
+    public Order getOrder() {
+        return order;
     }
 }
