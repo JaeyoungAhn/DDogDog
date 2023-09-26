@@ -2,8 +2,10 @@
 
 == Place API docs
 
-xref:place.adoc[Post API]
+xref:place.adoc[Place API]
 
 == User API docs
 
 xref:user.adoc[User API]
+
+==

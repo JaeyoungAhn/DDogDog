@@ -5,33 +5,4 @@
 [NOTE]
 이 API는 유저의 포인트를 충전하는데 사용됩니다.
 
-=== 요청
-
-[OPTIONS]
-- Method: `PATCH`
-- 경로: `/users/{email}`
-- 헤더: `Authorization` - Bearer 토큰
-
-[요청 매개변수]
-- `email` (패스 매개변수, 문자열): 충전할 유저의 이메일
-- `charge` (쿼리 매개변수, 문자열): 충전할 포인트 양
-
-[응답]
-
-[성공 응답]
-- 상태 코드: 200 OK
-- 응답 본문 형식: JSON
-- 응답 본문 내용: "{chargePoint} point charged to {userEmail}"
-
-[예시]
-
-[성공 예시]
-====
-$ curl -X PATCH -H "Authorization: Bearer {JWT 토큰}" "/users/{userEmail}?charge={chargePoint}"
-
-응답:
-HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-
-"{chargePoint} point charged to {userEmail}"
-====
+operation::charge-point[snippets="http-request,path-parameters,http-response,response-body"]
