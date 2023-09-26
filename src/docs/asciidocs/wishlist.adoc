@@ -1,0 +1,26 @@
+= Place API 명세
+
+[NOTE]
+====
+이 문서는 Place API 명세를 설명합니다.
+====
+
+=== 찜 등록
+====
+특정 숙소에 찜을 등록합니다.
+====
+operation::put-wishlist[snippets="http-request,http-response,response-fields"]
+---
+
+=== 찜 해지
+====
+특정 숙소에 찜을 해지합니다.
+====
+operation::delete-wishlist[snippets="http-request,http-response"]
+---
+
+=== 찜 조회
+====
+유저가 등록한 모든 찜을 조회합니다.
+====
+operation::get-wishlist-me[snippets="http-request,http-response,response-fields"]

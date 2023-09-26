@@ -1,8 +1,8 @@
 = UserRestController API 명세
 
-== 유저의 포인트 충전 API
+== User API 명세
 
 [NOTE]
-이 API는 유저의 포인트를 충전하는데 사용됩니다.
+이 문서는 User API 명세를 설명합니다.
 
 operation::charge-point[snippets="http-request,path-parameters,http-response,response-body"]

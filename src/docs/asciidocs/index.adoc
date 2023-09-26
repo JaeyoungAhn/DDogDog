@@ -8,4 +8,11 @@ xref:place.adoc[Place API]
 
 xref:user.adoc[User API]
 
-==
+== Wishlist API docs
+xref:wishlist.adoc[Wishlist API]
+
+== Coupon API docs
+xref:coupon.adoc[Coupon API]
+
+== Review API docs
+xref:review.adoc[Review API]
