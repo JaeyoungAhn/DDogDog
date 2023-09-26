@@ -1,0 +1,41 @@
+= Review API 명세
+
+[NOTE]
+====
+이 문서는 Review API 명세를 설명합니다.
+====
+
+== 리뷰 추가
+
+====
+숙박이 완료된 경우 리뷰를 추가합니다.
+====
+
+operation::post-review[snippets="http-request,request-headers,request-fields,http-response,response-fields"]
+
+== 리뷰 변경
+
+====
+리뷰의 내용만을 변경합니다.
+====
+
+operation::patch-review[snippets="http-request,request-headers,request-fields,http-response,response-fields"]
+
+== 리뷰 조회
+
+=== 호텔 아이디 조회
+
+====
+호텔 아이디로 하위 객실들에 대한 리뷰들을 조회합니다.
+객실은 응답에 포함되지 않습니다.
+====
+
+operation::get-review-hotel[snippets="http-request,path-parameters,http-response,response-fields"]
+
+=== 본인 조회
+
+====
+로그인 되어있는 유저가 작성한 리뷰들을 조회합니다.
+====
+
+operation::get-review-me[snippets="http-request,query-parameters,http-response,response-fields"]

@@ -1,0 +1,8 @@
+= UserRestController API 명세
+
+== User API 명세
+
+[NOTE]
+이 문서는 User API 명세를 설명합니다.
+
+operation::charge-point[snippets="http-request,path-parameters,http-response,response-body"]

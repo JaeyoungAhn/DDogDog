@@ -1,0 +1,77 @@
+= Place API 명세
+
+[NOTE]
+====
+이 문서는 Place API 명세를 설명합니다.
+====
+
+== 호텔 추가
+
+====
+호텔만 추가합니다.
+객실은 따로 추가해야 합니다.
+====
+
+operation::post-hotel[snippets="http-request,request-headers,request-fields,http-response,response-fields"]
+
+== 호텔 제거
+
+====
+호텔과 호텔 객실 모두 제거합니다.
+====
+
+operation::delete-hotel[snippets="http-request,path-parameters,http-response"]
+
+== 호텔 조회
+
+=== 호텔 아이디 조회
+
+====
+호텔 아이디로 정보를 조회합니다.
+객실은 응답에 포함되지 않습니다.
+====
+
+operation::hotel-get[snippets="http-request,path-parameters,http-response,response-fields"]
+
+=== 호텔 지역 조회
+
+====
+특정 지역 내 호텔 정보를 조회합니다.
+객실은 응답에 포함되지 않습니다.
+====
+
+operation::hotel-get-by-province[snippets="http-request,query-parameters,http-response,response-fields"]
+
+== 객실 등록
+
+====
+이미 등록된 호텔에 객실을 등록합니다.
+====
+
+operation::post-room[snippets="http-request,request-fields,http-response,response-fields"]
+
+== 객실 제거
+
+====
+객실을 제거합니다.
+====
+
+operation::delete-room[snippets="http-request,path-parameters,http-response"]
+
+== 객실 조회
+
+=== 객실 아이디 조회
+
+====
+이미 등록된 호텔에 객실을 등록합니다.
+====
+
+operation::room-get-for-duration[snippets="http-request,path-parameters,http-response,response-fields"]
+
+=== 모든 객실 조회
+
+====
+이미 등록된 호텔에 객실을 등록합니다.
+====
+
+operation::room-get-all-of-hotel-for-duration[snippets="http-request,path-parameters,query-parameters,http-response,response-fields"]

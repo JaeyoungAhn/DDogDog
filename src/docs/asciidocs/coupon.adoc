@@ -1,0 +1,58 @@
+= Coupon API 명세
+
+[NOTE]
+====
+이 문서는 Coupon API 명세를 설명합니다.
+====
+
+== 쿠폰 추가
+
+=== 즉시 할인 쿠폰 추가
+
+====
+숙소 주인은 객실마다 발급되는 즉시 할인 쿠폰을 생성합니다.
+====
+
+operation::post-manual-coupon-creation[snippets="http-request,request-headers,request-fields,http-response,response-fields"]
+
+=== 수동 할인 쿠폰 추가
+
+====
+운영진은 유저가 프로모션 코드로 수령 후 사용이 가능한 수동 할인 쿠폰을 생성합니다.
+====
+
+operation::post-instant-coupon-creation[snippets="http-request,request-headers,request-fields,http-response,response-fields"]
+
+== 쿠폰 조회
+
+=== 수동 할인 쿠폰 조회
+
+====
+유저가 수령 후 보유 중인 수동 할인 쿠폰을 조회합니다.
+====
+
+operation::get-manual-coupon-find[snippets="http-request,request-headers,request-fields,http-response,response-fields"]
+
+=== 즉시 할인 쿠폰 조회
+
+====
+호텔이 제공하는 즉시 할인 쿠폰을 조회합니다.
+====
+
+operation::get-instant-coupon-find[snippets="http-request,query-parameters,http-response,response-fields"]
+
+== 수동 쿠폰 수령
+
+====
+프로모션 코드를 이용해 수동 쿠폰을 수령합니다.
+====
+
+operation::post-manual-coupon-claim[snippets="http-request,request-fields,http-response,response-fields"]
+
+== 즉시 할인 쿠폰 삭제
+
+====
+숙소 주인은 객실에 배정된 즉시 할인 쿠폰을 삭제합니다.
+====
+
+operation::delete-instant-coupon[snippets="http-request,request-fields,http-response,response-fields"]
