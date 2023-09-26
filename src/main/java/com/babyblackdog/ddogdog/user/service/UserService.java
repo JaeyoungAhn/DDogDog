@@ -2,8 +2,6 @@ package com.babyblackdog.ddogdog.user.service;
 
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.USER_NOT_FOUND;
 
-import com.babyblackdog.ddogdog.common.auth.Email;
-import com.babyblackdog.ddogdog.common.auth.JwtSimpleAuthentication;
 import com.babyblackdog.ddogdog.common.auth.Role;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.UserException;

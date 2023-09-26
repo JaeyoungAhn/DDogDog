@@ -8,8 +8,6 @@ import com.babyblackdog.ddogdog.place.model.vo.Province;
 import com.babyblackdog.ddogdog.place.service.dto.AddHotelParam;
 import com.babyblackdog.ddogdog.user.model.vo.HumanName;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 public record AddHotelRequest(
         @NotBlank

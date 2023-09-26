@@ -1,8 +1,8 @@
 package com.babyblackdog.ddogdog.review.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.within;
-import static org.assertj.core.api.BDDAssertions.catchException;
 import static org.assertj.core.api.BDDAssertions.assertThat;
+import static org.assertj.core.api.BDDAssertions.catchException;
 
 import com.babyblackdog.ddogdog.common.auth.Email;
 import com.babyblackdog.ddogdog.global.exception.ReviewException;
@@ -17,7 +17,8 @@ class ReviewTest {
     @DisplayName("유효한 리뷰 정보로 생성할 수 있다.")
     void createReviewEntity_SuccessOnValid() {
         // Given & When
-        Review review = new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(2.5), new Email("test@ddog.dog"));
+        Review review = new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(2.5),
+                new Email("test@ddog.dog"));
 
         // Then
         assertThat(review.getOrderId()).isEqualTo(1L);
@@ -54,7 +55,8 @@ class ReviewTest {
     void createReviewEntity_FailOnExceedingMaxRating() {
         // Given & When
         Exception exception = catchException(
-                () -> new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(5.5), new Email("test@ddog.dog")));
+                () -> new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(5.5),
+                        new Email("test@ddog.dog")));
 
         // Then
         assertThat(exception).isInstanceOf(ReviewException.class);
@@ -65,7 +67,8 @@ class ReviewTest {
     void createReviewEntity_FailBelowMinRating() {
         // Given & When
         Exception exception = catchException(
-                () -> new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(-1.0), new Email("test@ddog.dog")));
+                () -> new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(-1.0),
+                        new Email("test@ddog.dog")));
 
         // Then
         assertThat(exception).isInstanceOf(ReviewException.class);
@@ -76,7 +79,8 @@ class ReviewTest {
     void createReviewEntity_FailOnInvalidDecimalPoint() {
         // Given & When
         Exception exception = catchException(
-                () -> new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(4.17), new Email("test@ddog.dog")));
+                () -> new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(4.17),
+                        new Email("test@ddog.dog")));
 
         // Then
         assertThat(exception).isInstanceOf(ReviewException.class);
@@ -87,7 +91,8 @@ class ReviewTest {
     void createReviewEntity_FailOnNullRating() {
         // Given & When
         Exception exception = catchException(
-                () -> new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(null), new Email("test@ddog.dog")));
+                () -> new Review(1L, 1L, new Content("객실에 모기가 많았습니다."), new RatingScore(null),
+                        new Email("test@ddog.dog")));
 
         // Then
         assertThat(exception).isInstanceOf(ReviewException.class);

@@ -3,7 +3,6 @@ package com.babyblackdog.ddogdog.user.accessor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.babyblackdog.ddogdog.util.WithMockCustomUser;
 import com.babyblackdog.ddogdog.common.auth.Role;
 import com.babyblackdog.ddogdog.common.point.Point;
 import com.babyblackdog.ddogdog.global.exception.PointException;

@@ -26,7 +26,8 @@ public class PlaceAccessServiceImpl implements PlaceAccessService {
     private final RoomRepository roomRepository;
     private final RatingRepository ratingRepository;
 
-    public PlaceAccessServiceImpl(PlaceService placeService, RoomRepository roomRepository, RatingRepository ratingRepository) {
+    public PlaceAccessServiceImpl(PlaceService placeService, RoomRepository roomRepository,
+            RatingRepository ratingRepository) {
         this.placeService = placeService;
         this.roomRepository = roomRepository;
         this.ratingRepository = ratingRepository;

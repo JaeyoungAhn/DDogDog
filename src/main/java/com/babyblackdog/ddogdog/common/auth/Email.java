@@ -3,7 +3,6 @@ package com.babyblackdog.ddogdog.common.auth;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.EMPTY_EMAIL;
 import static com.babyblackdog.ddogdog.global.exception.ErrorCode.INVALID_EMAIL_FORMAT;
 
-import com.babyblackdog.ddogdog.global.exception.ReviewException;
 import com.babyblackdog.ddogdog.global.exception.UserException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

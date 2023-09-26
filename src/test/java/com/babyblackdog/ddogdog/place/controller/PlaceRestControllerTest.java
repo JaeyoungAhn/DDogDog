@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.babyblackdog.ddogdog.TestConfig;
 import com.babyblackdog.ddogdog.place.PlaceTestData;
 import com.babyblackdog.ddogdog.place.controller.dto.AddHotelRequest;
 import com.babyblackdog.ddogdog.place.controller.dto.AddRoomRequest;
@@ -217,7 +216,8 @@ class PlaceRestControllerTest {
                                         .description("숙소 대표자명"),
                                 fieldWithPath("hotelResponses.content[].businessName").type(STRING)
                                         .description("숙소 사업장명"),
-                                fieldWithPath("hotelResponses.content[].ratingScore").type(NUMBER).description("숙소 평균 별점"),
+                                fieldWithPath("hotelResponses.content[].ratingScore").type(NUMBER)
+                                        .description("숙소 평균 별점"),
 
                                 fieldWithPath("hotelResponses.pageable").type(OBJECT).description("pageable").ignored(),
                                 fieldWithPath("hotelResponses.pageable.pageNumber").type(NUMBER)
