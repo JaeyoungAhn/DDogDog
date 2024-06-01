@@ -42,8 +42,8 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // 이 부분 추가
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(
-                                antMatcher("/login")).permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/docs/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(AbstractHttpConfigurer::disable)
@@ -69,7 +69,8 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 .requestMatchers(
-                        antMatcher("/assets/**")
+                        antMatcher("/assets/**"),
+                        antMatcher("/docs/**") // REST Docs 경로 예외 추가
                 );
     }
 
@@ -96,6 +97,7 @@ public class SecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
 
         return source;
     }

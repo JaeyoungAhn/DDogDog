@@ -5,6 +5,14 @@ plugins {
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
+configurations {
+    // config 추가
+    asciidoctorExtensions
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
 group = 'com.babyblackdog'
 version = '0.0.1-SNAPSHOT'
 
@@ -29,6 +37,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctorExtensions "org.springframework.restdocs:spring-restdocs-asciidoctor"
 
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -42,8 +51,23 @@ dependencies {
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
     outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+asciidoctor {
+    dependsOn test
+    // config 추가
+    configurations 'asciidoctorExtensions'
+    inputs.dir snippetsDir
+
+    // 변환할 adoc들을 명시한다.
+    sources{
+        include("**/*.adoc")
+    }
+
+    // include 연산을 사용할 때 base 디렉터리를 지정해줍니다.
+    baseDirFollowsSourceFile()
 }
 
 //기존에 존재하는 docs 삭제
@@ -64,7 +88,7 @@ bootJar {
 tasks.register('copyDocument', Copy) {
     dependsOn asciidoctor
     from file("build/docs/asciidoc")
-    into file("src/main/resources/static/doc")
+    into file("src/main/resources/static/docs")
 }
 
 build {
