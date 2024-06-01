@@ -75,15 +75,6 @@ asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
 }
 
-//bootJar 설정을 통해 html 파일을 BOOT-INF/classes/static/docs로 복사
-bootJar {
-    dependsOn asciidoctor
-    copy {
-        from "${asciidoctor.outputDir}"
-        into 'BOOT-INF/classes/static/docs'
-    }
-}
-
 // build/docs/asciidocs 파일을 src/main/resources/static/docs로 복사
 tasks.register('copyDocument', Copy) {
     dependsOn asciidoctor
