@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 1s
+
+scrape_configs:
+  - job_name: 'spring-boot-app'
+    bearer_token: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYWJ5LWJsYWNrZG9nIiwiaWF0IjoxNzE3MjQ1NTIyLCJleHAiOjE3MTk4Mzc1MjIsImVtYWlsIjoiZGtzd282QGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIn0.0PvLBnkP0zs13jDBXxZKcBbK4IeHhRuGbjZ1IwqnWMwKWp_4VMKh2IL0UBPJL2YAgNIrvhYa6CaP8bS--kfhXQ
+    static_configs:
+      - targets: ['spring-boot-app:8080']
+        labels:
+          __metrics_path__: /actuator/prometheus

@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/docs/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(AbstractHttpConfigurer::disable)
@@ -70,7 +71,8 @@ public class SecurityConfig {
         return web -> web.ignoring()
                 .requestMatchers(
                         antMatcher("/assets/**"),
-                        antMatcher("/docs/**") // REST Docs 경로 예외 추가
+                        antMatcher("/docs/**"), // REST Docs 경로 예외 추가
+                        antMatcher("/actuator/**")
                 );
     }
 
