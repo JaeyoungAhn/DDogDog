@@ -99,15 +99,13 @@ public class CouponFacade {
 
     @Transactional
     public ManualCouponClaimResult claimManualCoupon(Email email, String promoCode) {
-        Coupon retrievedCoupon = service.findCouponByPromoCode(promoCode);
+        int updatedRows = service.decrementCouponCount(promoCode);
 
-        Long remainingCount = retrievedCoupon.getRemainingCount();
-
-        if (remainingCount <= 0) {
+        if (updatedRows != 1) {
             throw new CouponException(COUPON_OUT_OF_STOCK);
         }
 
-        retrievedCoupon.setRemainingCount(remainingCount - 1);
+        Coupon retrievedCoupon = service.findCouponByPromoCode(promoCode);
 
         return service.registerManualCouponUsage(email, retrievedCoupon);
     }

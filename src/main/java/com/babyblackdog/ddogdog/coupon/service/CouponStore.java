@@ -8,4 +8,6 @@ public interface CouponStore {
     Coupon registerCoupon(Coupon savingCoupon);
 
     CouponUsage registerCouponUsage(CouponUsage couponUsage);
+
+    int decrementCouponCount(String promoCode);
 }

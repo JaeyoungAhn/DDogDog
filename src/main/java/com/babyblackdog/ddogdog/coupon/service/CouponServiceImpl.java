@@ -207,4 +207,9 @@ public class CouponServiceImpl implements CouponService {
         Coupon retrievedCoupon = reader.findCouponById(couponId);
         return retrievedCoupon.getDiscountValue().getDiscount(originalPoint);
     }
+
+    @Override
+    public int decrementCouponCount(String promoCode) {
+        return store.decrementCouponCount(promoCode);
+    }
 }

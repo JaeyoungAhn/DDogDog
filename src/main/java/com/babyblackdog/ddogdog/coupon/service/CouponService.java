@@ -113,4 +113,6 @@ public interface CouponService {
      * @return Point
      */
     Point calculateDiscountAmountForInstantCoupon(Point originalPoint, Long referenceId);
+
+    int decrementCouponCount(String promoCode);
 }
