@@ -1,4 +1,7 @@
 spring:
+  application:
+    name: ddogdog
+
   datasource:
     url: jdbc:mysql://localhost:3306/ddog_dog_test
     username: root
@@ -10,7 +13,7 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     open-in-view: false
@@ -39,5 +42,39 @@ spring:
 jwt:
   header: Authorization
   issuer: baby-blackdog
-  expirySeconds: 3600
+  expirySeconds: 2592000
   client-secret: YmFieS1ibGFjay1kb2ctZGRvZy1kb2c=
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    metrics:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
+    accesslog:
+      enabled: false
+
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: WARN
+    com.zaxxer.hikari: WARN
+    org.springframework.jdbc.datasource.init.ScriptUtils: WARN
+    org.springframework.jdbc.datasource.init.DataSourceInitializer: WARN
+    org.apache.catalina: WARN
+    org.apache.coyote: WARN
+    org.apache.tomcat: WARN
+    org.springframework.web.filter: WARN
+    org.springframework: WARN

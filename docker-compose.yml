@@ -4,35 +4,44 @@ services:
     image: mysql:8.0.29
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ddog_dog_test
+      MYSQL_DATABASE: ddog_dog
     ports:
       - "3306:3306"
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: '2'
           memory: 1g
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - monitoring
 
   spring-boot-app:
     image: ddogdog:latest
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ddog_dog_test
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/ddog_dog
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-      JAVA_OPTS: "-Xms1g -Xmx1g"
+      JAVA_OPTS: "-Xms3g -Xmx3g"
+#    volumes:
+#      - ./logback-spring.xml:/config/logback-spring.xml
+#    command: [ "java", "-Dlogging.config=/config/logback-spring.xml", "-jar", "/app/your-spring-boot-app.jar" ]
     deploy:
       resources:
         limits:
-          cpus: '1'
-          memory: 1g
+          cpus: '3'
+          memory: 3g
     depends_on:
       - mysql
     ports:
       - "8080:8080"
     networks:
       - monitoring
+    logging:
+      driver: "loki"
+      options:
+        loki-url: "http://loki:3100/loki/api/v1/push"
 
   prometheus:
     image: prom/prometheus:latest
@@ -44,7 +53,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '1'
           memory: 512m
     networks:
       - monitoring
@@ -56,6 +65,24 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512m
+    networks:
+      - monitoring
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
     deploy:
       resources:
         limits:
@@ -67,3 +94,7 @@ services:
 networks:
   monitoring:
     driver: bridge
+
+volumes:
+  mysql_data:
+  grafana-data:

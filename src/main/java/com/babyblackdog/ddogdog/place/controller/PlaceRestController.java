@@ -92,7 +92,6 @@ public class PlaceRestController {
     ) {
         HotelResult result = placeService.findHotel(hotelId);
         HotelResponse response = HotelResponse.of(result);
-        System.out.println("response = " + response);
         return ResponseEntity
                 .status(OK)
                 .body(response);
